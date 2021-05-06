@@ -47,6 +47,7 @@ class TopicList extends Component {
         variant="light"
         action
         href={"#link" + item.idx}
+        key={"topicIdx" + item.idx}
       >
         {item.title}
       </ListGroup.Item>
@@ -55,7 +56,7 @@ class TopicList extends Component {
   renderDebate = () => {
     return this.state.topicList.map((item) => (
       <Tab.Pane eventKey={"#link" + item.idx}>
-        <TopicDetail targetEvent={item} />
+        <TopicDetail targetEvent={item} key={"topicIdx" + item.idx} />
       </Tab.Pane>
     ));
   };

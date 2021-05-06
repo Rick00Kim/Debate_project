@@ -59,9 +59,9 @@ class TopicDetail extends Component {
     return this.state.debateList.map((item) => (
       <ListGroup.Item bsPrefix style={this.state.styles.listItem}>
         <Row style={this.state.styles.listItemRow}>
-          <Col sm={9}>{item.opinion}</Col>
-          <Col sm={1}>{item.username}</Col>
-          <Col sm={2}>2021/04/23 19:00</Col>
+          <Col sm={8}>{item.content}</Col>
+          <Col sm={2}>{item.username}</Col>
+          <Col sm={2}>{item.create_on}</Col>
         </Row>
       </ListGroup.Item>
     ));
@@ -84,7 +84,7 @@ class TopicDetail extends Component {
         </Container>
         <Container style={{ fontSize: `15px`, padding: 0 }}>
           <hr style={{ borderTop: `1px solid #e9ecef` }} />
-          <InputForm />
+          <InputForm targetTopicIdx={this.state.targetTopic.idx} />
         </Container>
       </div>
     );
