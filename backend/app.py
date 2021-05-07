@@ -8,9 +8,10 @@ from flask_mongoengine import MongoEngine
 
 app = Flask(__name__)
 app.config['MONGODB_SETTINGS'] = {
-    'host': "mongodb://192.168.0.8:27017/admin",
-    'username': "debate_user",
-    'password': "password",
+    'host': os.environ['MONGODB_HOST'],
+    'username': os.environ['MONGODB_USERNAME'],
+    'password': os.environ['MONGODB_PASSWORD'],
+    'db': 'webapp'
 }
 
 db = MongoEngine()
