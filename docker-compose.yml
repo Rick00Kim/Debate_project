@@ -1,55 +1,77 @@
 version: "3.7"
 services:
-  client:
+  nginx:
+    container_name: debate_server
+    image: nginx:1.15
+    volumes:
+      - ./:/var/www
+      - ./server_config/debate_nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 15101:80
+    networks:
+      - debate-network
+    depends_on:
+      - frontend
+      - backend
+
+  frontend:
+    container_name: debate_frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
     tty: true
     ports:
-      - "13102:3000"
+      - "13102:3300"
     volumes:
-      - ./frontend:/app
-      - /app/node_modules
-
-  mongodb:
-    image: mongo
-    container_name: mongo
-    restart: unless-stopped
-    command: mongod --auth
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: "admin"
-      MONGO_INITDB_ROOT_PASSWORD: "password"
-      MONGO_INITDB_DATABASE: webapp
-      MONGODB_DATA_DIR: /data/db
-    volumes:
-      - mongodbdata:/data/db
+      - appdata:/app
     networks:
-      - backend
+      debate-network:
+        aliases:
+          - frontend
 
-  api:
+  backend:
+    container_name: debate_backend
     build:
       context: ./backend
       dockerfile: Dockerfile
-    command: gunicorn --bind 0.0.0.0:5000 app:app
+    command: gunicorn --bind 0.0.0.0:5500 app:app
     ports:
-      - "5000:5000"
+      - 5500:5500
     environment:
-      MONGODB_HOST: mongodb
-      MONGODB_USERNAME: "apiuser"
-      MONGODB_PASSWORD: "apipassword"
+      MONGODB_HOST: debate_web
+      MONGODB_USERNAME: "debate_manager"
+      MONGODB_PASSWORD: "manPrd4892#"
     volumes:
       - appdata:/var/www/
     depends_on:
       - mongodb
     networks:
-      - frontend
-      - backend
+      debate-network:
+        aliases:
+          - backend
+
+  mongodb:
+    container_name: debate_db
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    image: mongo
+    restart: unless-stopped
+    command: mongod --auth
+    environment:
+      MONGODB_DATA_DIR: mongodbdata
+    volumes:
+      - mongodbdata:/data/db
+      - mongodbdata:/data/configdb
+    ports:
+      - 27017:27017
+    networks:
+      debate-network:
+        aliases:
+          - mongodb
 
 networks:
-  frontend:
-    driver: bridge
-  backend:
-    driver: bridge
+  debate-network:
 volumes:
   mongodbdata:
     driver: local

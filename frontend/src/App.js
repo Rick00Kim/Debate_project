@@ -1,11 +1,12 @@
+import React from "react";
 import "./App.css";
-import TopicList from "./components/TopicList";
+// import DebateMain from "./components/DebateMain";
+import DebateIndex from "./newComponents/Index";
+
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <TopicList />
-      </header>
+    <div className="App-header">
+      <DebateIndex />
     </div>
   );
 }

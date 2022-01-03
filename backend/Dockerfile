@@ -1,7 +1,7 @@
 FROM python:3.8
 
 # Expose ports
-EXPOSE 5000
+EXPOSE 5500
 
 # Tell Python to not generate .pyc
 ENV PYTHONDONTWRITEBYTECODE 1

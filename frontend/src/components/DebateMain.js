@@ -72,7 +72,6 @@ class TopicList extends Component {
                 {this.renderTopic()}
               </ListGroup>
             </Col>
-
             <Col sm={9} style={this.state.styles.contentColStyle}>
               <Tab.Content>{this.renderDebate()}</Tab.Content>
             </Col>

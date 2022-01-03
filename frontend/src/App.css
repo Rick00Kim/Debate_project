@@ -2,11 +2,8 @@ html {
   background-color: #282c34;
 }
 
-.App {
-  text-align: center;
-}
-
 .App-header {
+  text-align: center;
   background-color: #282c34;
   flex-direction: column;
   align-items: center;
