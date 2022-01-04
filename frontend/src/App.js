@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 // import DebateMain from "./components/DebateMain";
-import DebateIndex from "./newComponents/debate/Index";
+import DebateIndex from "./components/debate/Index";
 
 function App() {
   return (
