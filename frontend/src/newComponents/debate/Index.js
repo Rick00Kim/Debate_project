@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.css";
 import TopicListBar from "./TopicListBar";
 import TopicContent from "./TopicContent";
-import { DefaultPage } from "./CommonComponents";
+import { DefaultPage } from "../CommonComponents";
+import AddTopic from "../management/AddTopic";
+import axios from "axios";
+import "bootstrap/dist/css/bootstrap.css";
+import { NotFound } from "../error/NotFound";
 
 const componentStyle = {
   mainStyle: {
@@ -22,6 +25,18 @@ const componentStyle = {
 
 const DebateIndex = (props) => {
   const [currentTopic, setCurrentTopic] = useState({});
+  const [topicList, setTopicList] = useState([]);
+
+  useEffect(() => {
+    freshList();
+  }, []);
+
+  const freshList = () => {
+    axios
+      .get("/api/topic")
+      .then((res) => setTopicList(res.data))
+      .catch((err) => console.log(err));
+  };
 
   return (
     <div style={componentStyle.mainStyle}>
@@ -29,6 +44,7 @@ const DebateIndex = (props) => {
         <Row>
           <Col sm={3}>
             <TopicListBar
+              topicList={topicList}
               currentTopic={currentTopic}
               setCurrentTopic={setCurrentTopic}
             />
@@ -37,6 +53,13 @@ const DebateIndex = (props) => {
             <Routes>
               <Route exact path="/" element={<DefaultPage />} />
               <Route path="/debate/:topicId" element={<TopicContent />} />
+              <Route
+                path="/topic/add"
+                element={
+                  <AddTopic topicList={topicList} freshList={freshList} />
+                }
+              />
+              <Route path="/NotFound" element={<NotFound />} />
             </Routes>
           </Col>
         </Row>

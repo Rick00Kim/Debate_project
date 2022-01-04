@@ -1,5 +1,14 @@
 import React from "react";
 
+export const contentStyle = {
+  root: {
+    display: `flex`,
+    flexDirection: `column`,
+    justifyContent: `space-between`,
+    height: `95vh`,
+  },
+};
+
 export const DefaultPage = () => {
   return (
     <div

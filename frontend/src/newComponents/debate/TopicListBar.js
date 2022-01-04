@@ -1,7 +1,6 @@
-import React, { useState, useEffect, Fragment } from "react";
-import { ListGroup } from "react-bootstrap";
-import axios from "axios";
+import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
+import { ListGroup, Button } from "react-bootstrap";
 
 const componentStyle = {
   listGroupItemStyle: {
@@ -10,18 +9,16 @@ const componentStyle = {
 };
 
 const TopicListBar = (props) => {
-  const [topicList, setTopicList] = useState([]);
-  const { currentTopic, setCurrentTopic } = props;
+  const { topicList, currentTopic, setCurrentTopic } = props;
 
-  useEffect(() => {
-    axios
-      .get("/api/topic")
-      .then((res) => setTopicList(res.data))
-      .catch((err) => console.log(err));
-  }, []);
   return (
     <Fragment>
-      <h3 style={{ paddingBottom: 20, margin: 0 }}>Choose Topic</h3>
+      <h3 style={{ paddingBottom: 20, margin: 0 }}>
+        Choose Topic
+        <Link to={`topic/add`} style={{ position: "absolute", right: "5%" }}>
+          <Button variant="light">New</Button>
+        </Link>
+      </h3>
       <ListGroup style={{ fontSize: `20px`, borderRadius: `40px` }}>
         {topicList.map((e) => (
           <Link
@@ -29,7 +26,6 @@ const TopicListBar = (props) => {
             style={{ textDecoration: "none" }}
             key={`topicKey-${e._id}`}
           >
-            {console.log(e)}
             <ListGroup.Item
               style={componentStyle.listGroupItemStyle}
               action

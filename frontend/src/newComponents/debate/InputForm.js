@@ -8,7 +8,11 @@ import Button from "react-bootstrap/Button";
 import axios from "axios";
 
 export default function InputForm(props) {
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+    content: "",
+  });
   const { updateRow } = props;
   const setField = (field, value) => {
     setForm({

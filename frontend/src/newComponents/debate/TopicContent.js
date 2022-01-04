@@ -1,20 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 import { Col, Row, ButtonGroup, Dropdown } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import ListGroup from "react-bootstrap/ListGroup";
 import InputForm from "./InputForm";
 import axios from "axios";
+import { contentStyle } from "../CommonComponents";
 import "bootstrap/dist/css/bootstrap.css";
 
 const componentStyle = {
-  root: {
-    display: `flex`,
-    flexDirection: `column`,
-    justifyContent: `space-between`,
-    height: `95vh`,
-  },
+  root: contentStyle.root,
   header: {
     color: `#585858`,
   },
@@ -47,7 +43,6 @@ const TopicContent = (props) => {
       .get("/api/topic/" + topicId)
       .then((res) => setTargetTopic(res.data[0]))
       .catch((err) => console.log(err));
-
     axios
       .get("/api/debates/" + topicId)
       .then((res) => setDebateList(res.data))
@@ -93,7 +88,7 @@ const TopicContent = (props) => {
     ));
   };
 
-  return (
+  return targetTopic ? (
     <div style={componentStyle.root}>
       <Jumbotron
         fluid
@@ -115,6 +110,8 @@ const TopicContent = (props) => {
         />
       </Container>
     </div>
+  ) : (
+    <Navigate to="/NotFound" />
   );
 };
 
