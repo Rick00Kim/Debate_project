@@ -1,5 +1,12 @@
 import React from "react";
 
+export const defaultDebateForm = {
+  topicNum: "",
+  username: "",
+  email: "",
+  content: "",
+};
+
 export const contentStyle = {
   root: {
     display: `flex`,

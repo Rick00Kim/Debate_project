@@ -92,5 +92,26 @@ def register_debate():
     return Response(created_detail.to_json(), mimetype="application/json", status=201)
 
 
+@app.route("/api/debates/<int:debate_id>", methods=['DELETE'])
+def delete_debate(debate_id):
+    DebateDetails(id=debate_id).delete()
+
+    return Response("SUCCESS", mimetype="application/json", status=200)
+
+
+@app.route("/api/debates", methods=['PUT'])
+def put_debate():
+    task = request.json
+    DebateDetails(
+        id=task['_id'],
+        topic_num=task['topicNum'],
+        username=task['username'],
+        email=task['email'],
+        content=task['content']
+    ).save()
+
+    return Response("SUCCESS", mimetype="application/json", status=200)
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=5500)

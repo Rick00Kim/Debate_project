@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Navigate } from "react-router-dom";
-import { Col, Row, ButtonGroup, Dropdown } from "react-bootstrap";
+import { Col, Row, Button } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import ListGroup from "react-bootstrap/ListGroup";
 import InputForm from "./InputForm";
 import axios from "axios";
-import { contentStyle } from "../CommonComponents";
+import { contentStyle, defaultDebateForm } from "../CommonComponents";
 import "bootstrap/dist/css/bootstrap.css";
 
 const componentStyle = {
@@ -35,6 +35,8 @@ const componentStyle = {
 
 const TopicContent = (props) => {
   const { topicId } = useParams();
+  const [inputMode, setInputMode] = useState("C");
+  const [currentDebate, setCurrentDebate] = useState(defaultDebateForm);
   const [targetTopic, setTargetTopic] = useState({});
   const [debateList, setDebateList] = useState([]);
 
@@ -56,6 +58,18 @@ const TopicContent = (props) => {
       .catch((err) => console.log(err));
   };
 
+  const changeInputMode = (item) => {
+    setInputMode("U");
+    setCurrentDebate(item);
+  };
+
+  const deleteDebate = (item) => {
+    axios
+      .delete("/api/debates/" + item._id)
+      .then((res) => reloadDebateList())
+      .catch((err) => console.log(err));
+  };
+
   const renderDebateList = () => {
     return debateList.map((item, idx) => (
       <ListGroup.Item
@@ -65,23 +79,20 @@ const TopicContent = (props) => {
       >
         <Row style={componentStyle.listItemRow}>
           <Col sm={2}>{item.username}</Col>
-          <Col sm={9}>{item.content}</Col>
-          <Col sm={1} style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Dropdown as={ButtonGroup}>
-              <Dropdown.Toggle
-                variant="secondary"
-                id={"menu-" + item._id}
-                as="div"
-              />
-              <Dropdown.Menu>
-                <Dropdown.Item eventKey="1">Edit</Dropdown.Item>
-                <Dropdown.Item eventKey="2">Delete</Dropdown.Item>
-                <Dropdown.Divider />
-                <Dropdown.Item eventKey="3" disabled>
-                  Comment on {item.create_on}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+          <Col sm={8}>{item.content}</Col>
+          <Col sm={2}>
+            <Button
+              variant="outline-warning"
+              onClick={(e) => changeInputMode(item)}
+            >
+              Edit
+            </Button>{" "}
+            <Button
+              variant="outline-danger"
+              onClick={(e) => deleteDebate(item)}
+            >
+              Delete
+            </Button>
           </Col>
         </Row>
       </ListGroup.Item>
@@ -103,10 +114,14 @@ const TopicContent = (props) => {
         <ListGroup variant="flush">{renderDebateList()}</ListGroup>
       </Container>
       <Container style={{ fontSize: `15px`, padding: 0 }}>
-        <hr style={{ borderTop: `1px solid #e9ecef` }} />
+        <hr style={{ borderTop: `1px solid #e9ecef`, margin: `2px` }} />
         <InputForm
-          targetTopicIdx={targetTopic._id}
+          targetTopic={targetTopic}
           updateRow={reloadDebateList}
+          inputMode={inputMode}
+          setInputMode={setInputMode}
+          currentDebate={currentDebate}
+          setCurrentDebate={setCurrentDebate}
         />
       </Container>
     </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Col } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
@@ -6,32 +6,49 @@ import FormControl from "react-bootstrap/FormControl";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
+import { defaultDebateForm } from "../CommonComponents";
 
 export default function InputForm(props) {
-  const [form, setForm] = useState({
-    username: "",
-    email: "",
-    content: "",
-  });
-  const { updateRow } = props;
+  const {
+    currentDebate,
+    setCurrentDebate,
+    updateRow,
+    inputMode,
+    setInputMode,
+  } = props;
+
   const setField = (field, value) => {
-    setForm({
-      ...form,
+    setCurrentDebate({
+      ...currentDebate,
       [field]: value,
     });
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    form["topicNum"] = props.targetTopicIdx;
-    console.log(form);
-    axios
-      .post("/api/debates", form)
-      .then((res) => {
-        updateRow();
-        setForm("content", "");
-      })
-      .then((err) => console.log(err));
+    currentDebate["topicNum"] = props.targetTopic._id;
+    console.log("Form -> ", currentDebate);
+
+    if (inputMode === "C") {
+      axios
+        .post("/api/debates", currentDebate)
+        .then((res) => {
+          updateRow();
+          setField("content", "");
+        })
+        .then((err) => console.log(err));
+    } else {
+      axios
+        .put("/api/debates", currentDebate)
+        .then((res) => {
+          updateRow();
+          setInputMode("C");
+          setCurrentDebate(defaultDebateForm);
+        })
+        .then((err) => console.log(err));
+    }
   };
+
   return (
     <Form>
       <Form.Row className="align-items-center">
@@ -42,7 +59,7 @@ export default function InputForm(props) {
           <Form.Control
             id="inlineFormInputName"
             placeholder="Username 🎩"
-            value={form.username}
+            value={currentDebate.username}
             onChange={(e) => setField("username", e.target.value)}
           />
         </Col>
@@ -57,7 +74,7 @@ export default function InputForm(props) {
             <FormControl
               id="inlineFormInputGroupUsername"
               placeholder="Email 📮"
-              value={form.email}
+              value={currentDebate.email}
               onChange={(e) => setField("email", e.target.value)}
             />
           </InputGroup>
@@ -75,7 +92,7 @@ export default function InputForm(props) {
               as="textarea"
               rows={3}
               placeholder="Share your experiences. 👍"
-              value={form.content}
+              value={currentDebate.content}
               onChange={(e) => setField("content", e.target.value)}
             />
           </Form.Group>
