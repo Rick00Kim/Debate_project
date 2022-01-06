@@ -1,9 +1,14 @@
 import React, { useState, useEffect, forwardRef } from "react";
 import { useParams, Navigate } from "react-router-dom";
-import { Card, Image, Dropdown, Button } from "react-bootstrap";
-import Container from "react-bootstrap/Container";
-import Jumbotron from "react-bootstrap/Jumbotron";
-import ListGroup from "react-bootstrap/ListGroup";
+import {
+  Container,
+  Jumbotron,
+  ListGroup,
+  Card,
+  Image,
+  Dropdown,
+  Button,
+} from "react-bootstrap";
 import InputForm from "./InputForm";
 import axios from "axios";
 import {
@@ -94,6 +99,8 @@ const CustomToggle = forwardRef(({ children, onClick }, ref) => (
 
 const TopicContent = (props) => {
   const { topicId } = useParams();
+  const { freshList } = props;
+  const [topicDeleteFlg, setTopicDeleteFlg] = useState(false);
   const [inputMode, setInputMode] = useState("C");
   const [liked, setLiked] = useState(false);
   const [unliked, setUnLiked] = useState(false);
@@ -128,6 +135,16 @@ const TopicContent = (props) => {
     axios
       .delete(backendPointList.debates + "/" + item._id)
       .then((res) => reloadDebateList())
+      .catch((err) => console.log(err));
+  };
+
+  const deleteTopic = (item) => {
+    axios
+      .delete(backendPointList.topic + "/" + topicId)
+      .then((res) => {
+        freshList();
+        setTopicDeleteFlg(true);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -197,43 +214,48 @@ const TopicContent = (props) => {
   };
 
   return targetTopic ? (
-    <div style={componentStyle.root}>
-      <Jumbotron
-        fluid
-        style={{ paddingTop: `2rem`, marginBottom: 10, padding: `20px 0` }}
-      >
-        <Container style={componentStyle.header}>
-          <h1>{targetTopic.header}</h1>
-          <p>{targetTopic.content}</p>
+    topicDeleteFlg ? (
+      <Navigate to={routerEndPoint.root} />
+    ) : (
+      <div style={componentStyle.root}>
+        <Jumbotron
+          fluid
+          style={{ paddingTop: `2rem`, marginBottom: 10, padding: `20px 0` }}
+        >
+          <Container style={componentStyle.header}>
+            <h1>{targetTopic.header}</h1>
+            <p>{targetTopic.content}</p>
+          </Container>
+          <Button
+            variant="outline-danger"
+            style={{ position: "absolute", right: "3%", top: "3%" }}
+            onClick={() => deleteTopic()}
+          >
+            DELETE
+          </Button>
+          <Button
+            variant="outline-info"
+            style={{ position: "absolute", right: "3%", top: "9%" }}
+          >
+            MODIFY
+          </Button>
+        </Jumbotron>
+        <Container style={componentStyle.list}>
+          <ListGroup variant="flush">{renderDebateList()}</ListGroup>
         </Container>
-        <Button
-          variant="outline-danger"
-          style={{ position: "absolute", right: "3%", top: "3%" }}
-        >
-          DELETE
-        </Button>
-        <Button
-          variant="outline-info"
-          style={{ position: "absolute", right: "3%", top: "9%" }}
-        >
-          MODIFY
-        </Button>
-      </Jumbotron>
-      <Container style={componentStyle.list}>
-        <ListGroup variant="flush">{renderDebateList()}</ListGroup>
-      </Container>
-      <Container style={{ fontSize: `15px`, padding: 0 }}>
-        <hr style={{ borderTop: `1px solid #e9ecef`, margin: `2px` }} />
-        <InputForm
-          targetTopic={targetTopic}
-          updateRow={reloadDebateList}
-          inputMode={inputMode}
-          setInputMode={setInputMode}
-          currentDebate={currentDebate}
-          setCurrentDebate={setCurrentDebate}
-        />
-      </Container>
-    </div>
+        <Container style={{ fontSize: `15px`, padding: 0 }}>
+          <hr style={{ borderTop: `1px solid #e9ecef`, margin: `2px` }} />
+          <InputForm
+            targetTopic={targetTopic}
+            updateRow={reloadDebateList}
+            inputMode={inputMode}
+            setInputMode={setInputMode}
+            currentDebate={currentDebate}
+            setCurrentDebate={setCurrentDebate}
+          />
+        </Container>
+      </div>
+    )
   ) : (
     <Navigate to={routerEndPoint.errors.notFound} />
   );
