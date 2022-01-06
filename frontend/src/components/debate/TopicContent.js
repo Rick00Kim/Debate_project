@@ -1,6 +1,6 @@
 import React, { useState, useEffect, forwardRef } from "react";
 import { useParams, Navigate } from "react-router-dom";
-import { Card, Image, Dropdown } from "react-bootstrap";
+import { Card, Image, Dropdown, Button } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import ListGroup from "react-bootstrap/ListGroup";
@@ -206,6 +206,18 @@ const TopicContent = (props) => {
           <h1>{targetTopic.header}</h1>
           <p>{targetTopic.content}</p>
         </Container>
+        <Button
+          variant="outline-danger"
+          style={{ position: "absolute", right: "3%", top: "3%" }}
+        >
+          DELETE
+        </Button>
+        <Button
+          variant="outline-info"
+          style={{ position: "absolute", right: "3%", top: "9%" }}
+        >
+          MODIFY
+        </Button>
       </Jumbotron>
       <Container style={componentStyle.list}>
         <ListGroup variant="flush">{renderDebateList()}</ListGroup>
