@@ -1,10 +1,46 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { Row, ListGroup, Button } from "react-bootstrap";
+import Jumbotron from "react-bootstrap/Jumbotron";
+import Container from "react-bootstrap/Container";
+import { contentStyle } from "../CommonComponents";
 
 const componentStyle = {
+  root: contentStyle.root,
   listGroupItemStyle: {
     padding: `0.3rem 1rem`,
+  },
+  rowStyle: {
+    justifyContent: "center",
+  },
+  headerStyle: {
+    paddingBottom: 20,
+    margin: 0,
+  },
+  rootLinkStyle: {
+    color: "#fdfdfe",
+    textDecoration: "none",
+  },
+  newBtnStyle: {
+    position: "absolute",
+    right: "5%",
+  },
+  topicListStyle: {
+    height: `70vh`,
+    maxHeight: `70vh`,
+    fontSize: `20px`,
+    borderRadius: `5px`,
+    overflow: `scroll`,
+  },
+  topicElementStyle: {
+    textDecoration: "none",
+  },
+  userInfoStyle: {
+    marginTop: 10,
+    paddingTop: `2rem`,
+    marginBottom: 10,
+    padding: `20px 0`,
+    color: `#585858`,
   },
 };
 
@@ -12,20 +48,20 @@ const TopicListBar = (props) => {
   const { topicList, currentTopic, setCurrentTopic } = props;
 
   return (
-    <Fragment>
-      <Row style={{ justifyContent: "center" }}>
-        <Link to={`/`} style={{ color: "#fdfdfe", textDecoration: "none" }}>
-          <h3 style={{ paddingBottom: 20, margin: 0 }}>Choose Topic</h3>
+    <div style={componentStyle.root}>
+      <Row style={componentStyle.rowStyle}>
+        <Link to={`/`} style={componentStyle.rootLinkStyle}>
+          <h3 style={componentStyle.headerStyle}>Choose Topic</h3>
         </Link>
-        <Link to={`topic/add`} style={{ position: "absolute", right: "5%" }}>
+        <Link to={`topic/add`} style={componentStyle.newBtnStyle}>
           <Button variant="light">New</Button>
         </Link>
       </Row>
-      <ListGroup style={{ fontSize: `20px`, borderRadius: `40px` }}>
+      <ListGroup style={componentStyle.topicListStyle}>
         {topicList.map((e) => (
           <Link
             to={`debate/${e._id}`}
-            style={{ textDecoration: "none" }}
+            style={componentStyle.topicElementStyle}
             key={`topicKey-${e._id}`}
           >
             <ListGroup.Item
@@ -43,7 +79,12 @@ const TopicListBar = (props) => {
           </Link>
         ))}
       </ListGroup>
-    </Fragment>
+      <Jumbotron fluid style={componentStyle.userInfoStyle}>
+        <Container>
+          <h3>fe</h3>
+        </Container>
+      </Jumbotron>
+    </div>
   );
 };
 
