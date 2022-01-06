@@ -1,10 +1,19 @@
 import datetime
 import os
 import json
-from bson import encode
-
+import logging
+from logging.config import fileConfig
+from logging.handlers import RotatingFileHandler
 from flask import Flask, Response, request
 from flask_mongoengine import MongoEngine
+
+# Log settings
+fileConfig('./log_config.ini')
+logger = logging.getLogger('debate_backend_logger')
+
+handler = RotatingFileHandler(
+    'logs/debate_backend_logger.log', maxBytes=10000, backupCount=10)
+handler.setLevel(logging.INFO)
 
 app = Flask(__name__)
 app.config['MONGODB_SETTINGS'] = {
@@ -13,6 +22,7 @@ app.config['MONGODB_SETTINGS'] = {
     'password': os.environ['MONGODB_PASSWORD'],
     'db': 'debate_web'
 }
+app.logger.addHandler(handler)
 
 db = MongoEngine()
 db.init_app(app)
