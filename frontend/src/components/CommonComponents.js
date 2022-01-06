@@ -1,5 +1,19 @@
 import React from "react";
 
+export const routerEndPoint = {
+  root: "/",
+  debates: "debates/",
+  addTopic: "topic/add",
+  errors: {
+    notFound: "/NotFound",
+  },
+};
+
+export const backendPointList = {
+  topic: "/api/topic",
+  debates: "/api/debates",
+};
+
 export const defaultDebateForm = {
   topicNum: "",
   username: "",

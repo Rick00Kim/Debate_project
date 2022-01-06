@@ -6,7 +6,12 @@ import Jumbotron from "react-bootstrap/Jumbotron";
 import ListGroup from "react-bootstrap/ListGroup";
 import InputForm from "./InputForm";
 import axios from "axios";
-import { contentStyle, defaultDebateForm } from "../CommonComponents";
+import {
+  routerEndPoint,
+  backendPointList,
+  contentStyle,
+  defaultDebateForm,
+} from "../CommonComponents";
 import "bootstrap/dist/css/bootstrap.css";
 
 const componentStyle = {
@@ -42,18 +47,18 @@ const TopicContent = (props) => {
 
   useEffect(() => {
     axios
-      .get("/api/topic/" + topicId)
+      .get(backendPointList.topic + "/" + topicId)
       .then((res) => setTargetTopic(res.data[0]))
       .catch((err) => console.log(err));
     axios
-      .get("/api/debates/" + topicId)
+      .get(backendPointList.debates + "/" + topicId)
       .then((res) => setDebateList(res.data))
       .catch((err) => console.log(err));
   }, [topicId]);
 
   const reloadDebateList = () => {
     axios
-      .get("/api/debates/" + topicId)
+      .get(backendPointList.debates + "/" + topicId)
       .then((res) => setDebateList(res.data))
       .catch((err) => console.log(err));
   };
@@ -65,7 +70,7 @@ const TopicContent = (props) => {
 
   const deleteDebate = (item) => {
     axios
-      .delete("/api/debates/" + item._id)
+      .delete(backendPointList.debates + "/" + item._id)
       .then((res) => reloadDebateList())
       .catch((err) => console.log(err));
   };
@@ -126,7 +131,7 @@ const TopicContent = (props) => {
       </Container>
     </div>
   ) : (
-    <Navigate to="/NotFound" />
+    <Navigate to={routerEndPoint.errors.notFound} />
   );
 };
 

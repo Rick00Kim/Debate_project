@@ -52,7 +52,7 @@ const DebateIndex = (props) => {
           <Col sm={9} style={componentStyle.contentColStyle}>
             <Routes>
               <Route exact path="/" element={<DefaultPage />} />
-              <Route path="/debate/:topicId" element={<TopicContent />} />
+              <Route path="/debates/:topicId" element={<TopicContent />} />
               <Route
                 path="/topic/add"
                 element={

@@ -6,7 +6,7 @@ import FormControl from "react-bootstrap/FormControl";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
-import { defaultDebateForm } from "../CommonComponents";
+import { backendPointList, defaultDebateForm } from "../CommonComponents";
 
 export default function InputForm(props) {
   const {
@@ -31,7 +31,7 @@ export default function InputForm(props) {
 
     if (inputMode === "C") {
       axios
-        .post("/api/debates", currentDebate)
+        .post(backendPointList.debates, currentDebate)
         .then((res) => {
           updateRow();
           setField("content", "");
@@ -39,7 +39,7 @@ export default function InputForm(props) {
         .then((err) => console.log(err));
     } else {
       axios
-        .put("/api/debates", currentDebate)
+        .put(backendPointList.debates, currentDebate)
         .then((res) => {
           updateRow();
           setInputMode("C");

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Row, ListGroup, Button } from "react-bootstrap";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
-import { contentStyle } from "../CommonComponents";
+import { contentStyle, routerEndPoint } from "../CommonComponents";
 
 const componentStyle = {
   root: contentStyle.root,
@@ -51,17 +51,17 @@ const TopicListBar = (props) => {
   return (
     <div style={componentStyle.root}>
       <Row style={componentStyle.rowStyle}>
-        <Link to={`/`} style={componentStyle.rootLinkStyle}>
+        <Link to={routerEndPoint.root} style={componentStyle.rootLinkStyle}>
           <h3 style={componentStyle.headerStyle}>Choose Topic</h3>
         </Link>
-        <Link to={`topic/add`} style={componentStyle.newBtnStyle}>
+        <Link to={routerEndPoint.addTopic} style={componentStyle.newBtnStyle}>
           <Button variant="light">New</Button>
         </Link>
       </Row>
       <ListGroup style={componentStyle.topicListStyle}>
         {topicList.map((e) => (
           <Link
-            to={`debate/${e._id}`}
+            to={routerEndPoint.debates + e._id}
             style={componentStyle.topicElementStyle}
             key={`topicKey-${e._id}`}
           >
@@ -71,7 +71,6 @@ const TopicListBar = (props) => {
               active={currentTopic._id === e._id}
               variant="light"
               as="div"
-              href={"debate/" + e._id}
               key={"topicIdx" + e._id}
               onClick={(i) => setCurrentTopic(e)}
             >
