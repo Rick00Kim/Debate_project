@@ -73,6 +73,13 @@ def add_topic():
     return Response(created_topic.to_json(), mimetype="application/json", status=201)
 
 
+@app.route("/api/topic/<int:topic_id>", methods=['DELETE'])
+def delete_topic(topic_id):
+    Topics(id=topic_id).delete()
+    DebateDetails(topic_num=topic_id).delete()
+    return Response("SUCCESS", mimetype="application/json", status=200)
+
+
 @app.route("/api/debates/<int:refer_num>", methods=['GET'])
 def debate_list(refer_num):
     get_data = DebateDetails.objects(topic_num=refer_num)
