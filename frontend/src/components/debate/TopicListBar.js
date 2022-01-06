@@ -41,7 +41,9 @@ const componentStyle = {
     paddingTop: `2rem`,
     marginBottom: 10,
     padding: `20px 0`,
-    color: `#585858`,
+    color: `white`,
+    textAlign: `left`,
+    backgroundColor: "inherit",
   },
 };
 
@@ -81,7 +83,8 @@ const TopicListBar = (props) => {
       </ListGroup>
       <Jumbotron fluid style={componentStyle.userInfoStyle}>
         <Container>
-          <h3>fe</h3>
+          <h3>KURURU (Participant)</h3>
+          <h4>Like count: 0</h4>
         </Container>
       </Jumbotron>
     </div>
