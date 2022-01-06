@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, forwardRef } from "react";
 import { useParams, Navigate } from "react-router-dom";
-import { Col, Row, Button } from "react-bootstrap";
+import { Card, Image, Dropdown } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import ListGroup from "react-bootstrap/ListGroup";
@@ -12,6 +12,12 @@ import {
   contentStyle,
   defaultDebateForm,
 } from "../CommonComponents";
+import thumbUp from "../../assets/images/thumbs-up-regular.svg";
+import thumbUpSolid from "../../assets/images/thumbs-up-solid.svg";
+import thumbDown from "../../assets/images/thumbs-down-regular.svg";
+import thumbDownSolid from "../../assets/images/thumbs-down-solid.svg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.css";
 
 const componentStyle = {
@@ -27,20 +33,70 @@ const componentStyle = {
     overflow: `scroll`,
   },
   listItem: {
-    padding: `5px 20px`,
-    color: `#e9ecef`,
     textAlign: `left`,
-    borderBottomStyle: `dotted`,
-    borderBottomWidth: `thin`,
+    marginTop: 10,
   },
   listItemRow: {
     padding: `10px 0`,
   },
+  itemContentStyle: {
+    flexDirection: "row",
+    whiteSpace: "pre-wrap",
+  },
+  itemBodyStyle: {
+    padding: "10px",
+  },
+  itemFooterStyle: {
+    padding: "10px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    backgroundColor: "white",
+  },
+  likeButtonStyle: {
+    height: "40px",
+    cursor: "pointer",
+  },
+  thumbUpDownStyle: {
+    paddingLeft: 10,
+    paddingRight: 10,
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  thumbIconDivStyle: {
+    marginLeft: 15,
+    marginRight: 20,
+    display: "flex",
+    flexDirection: "column",
+  },
 };
+
+const CustomToggle = forwardRef(({ children, onClick }, ref) => (
+  <a
+    href="#!"
+    ref={ref}
+    onClick={(e) => {
+      e.preventDefault();
+      onClick(e);
+    }}
+    style={{
+      color: "#212529",
+      textDecoration: "none",
+      position: "absolute",
+      fontSize: 20,
+      marginRight: 15,
+    }}
+  >
+    <FontAwesomeIcon icon={faEllipsisV} />
+    {children}
+  </a>
+));
 
 const TopicContent = (props) => {
   const { topicId } = useParams();
   const [inputMode, setInputMode] = useState("C");
+  const [liked, setLiked] = useState(false);
+  const [unliked, setUnLiked] = useState(false);
   const [currentDebate, setCurrentDebate] = useState(defaultDebateForm);
   const [targetTopic, setTargetTopic] = useState({});
   const [debateList, setDebateList] = useState([]);
@@ -82,24 +138,60 @@ const TopicContent = (props) => {
         style={componentStyle.listItem}
         key={"topicnum-" + item._id}
       >
-        <Row style={componentStyle.listItemRow}>
-          <Col sm={2}>{item.username}</Col>
-          <Col sm={8}>{item.content}</Col>
-          <Col sm={2}>
-            <Button
-              variant="outline-warning"
-              onClick={(e) => changeInputMode(item)}
-            >
-              Edit
-            </Button>{" "}
-            <Button
-              variant="outline-danger"
-              onClick={(e) => deleteDebate(item)}
-            >
-              Delete
-            </Button>
-          </Col>
-        </Row>
+        <Card style={componentStyle.itemContentStyle}>
+          <Card.Body style={componentStyle.itemBodyStyle}>
+            <Card.Title>{item.username}</Card.Title>
+            <Card.Text>{item.content}</Card.Text>
+          </Card.Body>
+          <Card.Footer style={componentStyle.itemFooterStyle}>
+            <div style={componentStyle.thumbUpDownStyle}>
+              <div style={componentStyle.thumbIconDivStyle}>
+                <Image
+                  src={liked ? thumbUpSolid : thumbUp}
+                  rounded
+                  style={componentStyle.likeButtonStyle}
+                  onClick={() => setLiked(!liked)}
+                />
+                2321
+              </div>
+              <div style={componentStyle.thumbIconDivStyle}>
+                <Image
+                  src={unliked ? thumbDownSolid : thumbDown}
+                  rounded
+                  style={componentStyle.likeButtonStyle}
+                  onClick={() => setUnLiked(!unliked)}
+                />
+                2030
+              </div>
+              <Dropdown>
+                <Dropdown.Toggle
+                  as={CustomToggle}
+                  id="dropdown-custom-components"
+                />
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    as="button"
+                    onClick={(e) => changeInputMode(item)}
+                  >
+                    Edit
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    as="button"
+                    onClick={(e) => deleteDebate(item)}
+                  >
+                    Delete
+                  </Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item as="button" disabled>
+                    <small className="text-muted">
+                      Create on {item.create_on}
+                    </small>
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+          </Card.Footer>
+        </Card>
       </ListGroup.Item>
     ));
   };
