@@ -36,6 +36,7 @@ const componentStyle = {
     textDecoration: "none",
   },
   userInfoStyle: {
+    height: `17%`,
     marginTop: 10,
     paddingTop: `2rem`,
     marginBottom: 10,
