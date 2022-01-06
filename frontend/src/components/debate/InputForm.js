@@ -1,10 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import { Col } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
-import FormControl from "react-bootstrap/FormControl";
-import InputGroup from "react-bootstrap/InputGroup";
-import Button from "react-bootstrap/Button";
+import { Form, FormControl, InputGroup, Button, Col } from "react-bootstrap";
 import axios from "axios";
 import { backendPointList, defaultDebateForm } from "../CommonComponents";
 
