@@ -9,7 +9,6 @@ import {
   Dropdown,
   Button,
 } from "react-bootstrap";
-import InputForm from "./InputForm";
 import axios from "axios";
 import {
   routerEndPoint,
@@ -17,6 +16,7 @@ import {
   contentStyle,
   defaultDebateForm,
 } from "../CommonComponents";
+import InputForm from "./InputForm";
 import thumbUp from "../../assets/images/thumbs-up-regular.svg";
 import thumbUpSolid from "../../assets/images/thumbs-up-solid.svg";
 import thumbDown from "../../assets/images/thumbs-down-regular.svg";
