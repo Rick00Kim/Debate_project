@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import { backendPointList } from "../CommonComponents";
 import "bootstrap/dist/css/bootstrap.css";
 import axios from "axios";
 
@@ -16,12 +18,31 @@ const componentStyle = {
 };
 
 function AddTopic(props) {
+  const { topicId } = useParams();
+  const [manageMode, setManageMode] = useState("CREATE");
   const [form, setForm] = useState({
     title: "",
     header: "",
     content: "",
   });
   const { freshList } = props;
+
+  useEffect(() => {
+    if (topicId !== undefined) {
+      setManageMode("MODIFY");
+      axios
+        .get(backendPointList.topic + "/" + topicId)
+        .then((res) => setForm(res.data[0]))
+        .then((err) => console.log(err));
+    } else {
+      setManageMode("CREATE");
+      setForm({
+        title: "",
+        header: "",
+        content: "",
+      });
+    }
+  }, [topicId]);
 
   const setField = (e) => {
     const { name, value } = e.target;
@@ -33,22 +54,33 @@ function AddTopic(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post("/api/topic", form)
-      .then((res) => {
-        freshList();
-        setForm({
-          title: "",
-          header: "",
-          content: "",
-        });
-      })
-      .then((err) => console.log(err));
+    if (manageMode === "CREATE") {
+      axios
+        .post("/api/topic", form)
+        .then((res) => {
+          freshList();
+          setForm({
+            title: "",
+            header: "",
+            content: "",
+          });
+        })
+        .then((err) => console.log(err));
+    } else {
+      axios
+        .put("/api/topic", form)
+        .then((res) => {
+          freshList();
+        })
+        .then((err) => console.log(err));
+    }
   };
 
   return (
     <div style={componentStyle.root}>
-      <h1 style={{ marginBottom: `1em` }}>New topic</h1>
+      <h1 style={{ marginBottom: `1em` }}>
+        Topic Management ({manageMode === "CREATE" ? "Add" : "Modify"})
+      </h1>
       <Form>
         <Form.Group as={Row} controlId="formTitle">
           <Form.Label column sm={2}>
@@ -64,7 +96,6 @@ function AddTopic(props) {
             />
           </Col>
         </Form.Group>
-
         <Form.Group as={Row} controlId="formHeader">
           <Form.Label column sm={2}>
             Header
@@ -79,7 +110,6 @@ function AddTopic(props) {
             />
           </Col>
         </Form.Group>
-
         <Form.Group as={Row} controlId="formContent">
           <Form.Label column sm={2}>
             Content
@@ -94,7 +124,6 @@ function AddTopic(props) {
             />
           </Col>
         </Form.Group>
-
         <Form.Group as={Row}>
           <Col sm={{ span: 10, offset: 2 }}>
             <Button type="button" onClick={handleSubmit}>

@@ -62,6 +62,12 @@ const DebateIndex = (props) => {
                   <AddTopic topicList={topicList} freshList={freshList} />
                 }
               />
+              <Route
+                path="/topic/add/:topicId"
+                element={
+                  <AddTopic topicList={topicList} freshList={freshList} />
+                }
+              />
               <Route path="/NotFound" element={<NotFound />} />
             </Routes>
           </Col>

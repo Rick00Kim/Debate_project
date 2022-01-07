@@ -1,5 +1,5 @@
 import React, { useState, useEffect, forwardRef } from "react";
-import { useParams, Navigate } from "react-router-dom";
+import { useParams, Navigate, Link } from "react-router-dom";
 import {
   Container,
   Jumbotron,
@@ -233,12 +233,14 @@ const TopicContent = (props) => {
           >
             DELETE
           </Button>
-          <Button
-            variant="outline-info"
-            style={{ position: "absolute", right: "3%", top: "9%" }}
-          >
-            MODIFY
-          </Button>
+          <Link to={"/" + routerEndPoint.addTopic + "/" + targetTopic._id}>
+            <Button
+              variant="outline-info"
+              style={{ position: "absolute", right: "3%", top: "9%" }}
+            >
+              MODIFY
+            </Button>
+          </Link>
         </Jumbotron>
         <Container style={componentStyle.list}>
           <ListGroup variant="flush">{renderDebateList()}</ListGroup>

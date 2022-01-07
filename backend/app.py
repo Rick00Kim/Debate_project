@@ -73,6 +73,21 @@ def add_topic():
     return Response(created_topic.to_json(), mimetype="application/json", status=201)
 
 
+@app.route("/api/topic", methods=['PUT'])
+def modify_topic():
+    task = request.json
+    modified_topic = Topics(
+        id=task['_id'],
+        title=task['title'],
+        header=task['header'],
+        content=task['content']
+    ).save()
+
+    print(modified_topic)
+
+    return Response("SUCCESS", mimetype="application/json", status=200)
+
+
 @app.route("/api/topic/<int:topic_id>", methods=['DELETE'])
 def delete_topic(topic_id):
     Topics(id=topic_id).delete()
