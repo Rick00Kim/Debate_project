@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
 import TopicListBar from "./TopicListBar";
 import TopicContent from "./TopicContent";
-import { DefaultPage } from "../CommonComponents";
+import { DefaultPage, backendPointList } from "../CommonComponents";
 import AddTopic from "../management/AddTopic";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.css";
@@ -33,7 +33,7 @@ const DebateIndex = (props) => {
 
   const freshList = () => {
     axios
-      .get("/api/topic")
+      .get(backendPointList.topic)
       .then((res) => setTopicList(res.data))
       .catch((err) => console.log(err));
   };
