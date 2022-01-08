@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
-import TopicListBar from "./TopicListBar";
-import TopicContent from "./TopicContent";
-import { DefaultPage, backendPointList } from "../CommonComponents";
-import AddTopic from "../management/AddTopic";
+import TopicListBar from "./debate/TopicListBar";
+import TopicContent from "./debate/TopicContent";
+import { backendPointList } from "./common/CommonConstants";
+import SignIn from "./auth/SignIn";
+import SignUp from "./auth/SignUp";
+import IndexPage from "./IndexPage";
+import AddTopic from "./management/AddTopic";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.css";
-import { NotFound } from "../error/NotFound";
+import { NotFound } from "./error/NotFound";
 
 const componentStyle = {
   mainStyle: {
@@ -51,7 +54,9 @@ const DebateIndex = (props) => {
           </Col>
           <Col sm={9} style={componentStyle.contentColStyle}>
             <Routes>
-              <Route exact path="/" element={<DefaultPage />} />
+              <Route exact path="/" element={<IndexPage />} />
+              <Route path="/signIn" element={<SignIn />} />
+              <Route path="/signUp" element={<SignUp />} />
               <Route
                 path="/debates/:topicId"
                 element={<TopicContent freshList={freshList} />}
