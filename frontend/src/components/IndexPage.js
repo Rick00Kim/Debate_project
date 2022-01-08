@@ -13,7 +13,7 @@ const componentStyle = {
   buttonGroup: {},
 };
 
-function DefaultPage() {
+function IndexPage() {
   return (
     <div style={componentStyle.root}>
       <h1>🤔 What do you think?</h1>
@@ -36,4 +36,4 @@ function DefaultPage() {
   );
 }
 
-export default DefaultPage;
+export default IndexPage;
