@@ -4,8 +4,8 @@ import { Col, Row } from "react-bootstrap";
 import TopicListBar from "./debate/TopicListBar";
 import TopicContent from "./debate/TopicContent";
 import { backendPointList } from "./common/Constants";
-import SignIn from "./auth/SignIn";
-import SignUp from "./auth/SignUp";
+import SignInForm from "./auth/SignInForm";
+import SignUpForm from "./auth/SignUpForm";
 import IndexPage from "./IndexPage";
 import AddTopic from "./management/AddTopic";
 import axios from "axios";
@@ -55,8 +55,8 @@ const DebateIndex = (props) => {
           <Col sm={9} style={componentStyle.contentColStyle}>
             <Routes>
               <Route exact path="/" element={<IndexPage />} />
-              <Route path="/signIn" element={<SignIn />} />
-              <Route path="/signUp" element={<SignUp />} />
+              <Route path="/signIn" element={<SignInForm />} />
+              <Route path="/signUp" element={<SignUpForm />} />
               <Route
                 path="/debates/:topicId"
                 element={<TopicContent freshList={freshList} />}
