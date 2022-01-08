@@ -56,7 +56,7 @@ function AddTopic(props) {
     e.preventDefault();
     if (manageMode === "CREATE") {
       axios
-        .post(backendPointList, form)
+        .post(backendPointList.topic, form)
         .then((res) => {
           freshList();
           setForm({
@@ -68,7 +68,7 @@ function AddTopic(props) {
         .then((err) => console.log(err));
     } else {
       axios
-        .put(backendPointList, form)
+        .put(backendPointList.topic, form)
         .then((res) => {
           freshList();
         })
