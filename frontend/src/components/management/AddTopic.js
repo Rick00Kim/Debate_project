@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { backendPointList } from "../common/CommonConstants";
+import { backendPointList } from "../common/Constants";
 import "bootstrap/dist/css/bootstrap.css";
 import axios from "axios";
 

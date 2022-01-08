@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
 import TopicListBar from "./debate/TopicListBar";
 import TopicContent from "./debate/TopicContent";
-import { backendPointList } from "./common/CommonConstants";
+import { backendPointList } from "./common/Constants";
 import SignIn from "./auth/SignIn";
 import SignUp from "./auth/SignUp";
 import IndexPage from "./IndexPage";

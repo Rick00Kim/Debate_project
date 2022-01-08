@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Jumbotron, Container, Row, ListGroup, Button } from "react-bootstrap";
-import { contentStyle, routerEndPoint } from "../common/CommonConstants";
+import { contentStyle, routerEndPoint } from "../common/Constants";
 
 const componentStyle = {
   root: contentStyle.root,
