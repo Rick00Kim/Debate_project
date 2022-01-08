@@ -15,7 +15,7 @@ import {
   backendPointList,
   contentStyle,
   defaultDebateForm,
-} from "../CommonComponents";
+} from "../common/CommonConstants";
 import InputForm from "./InputForm";
 import thumbUp from "../../assets/images/thumbs-up-regular.svg";
 import thumbUpSolid from "../../assets/images/thumbs-up-solid.svg";

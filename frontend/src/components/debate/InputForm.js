@@ -2,7 +2,7 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Form, FormControl, InputGroup, Button, Col } from "react-bootstrap";
 import axios from "axios";
-import { backendPointList, defaultDebateForm } from "../CommonComponents";
+import { backendPointList, defaultDebateForm } from "../common/CommonConstants";
 
 export default function InputForm(props) {
   const {
