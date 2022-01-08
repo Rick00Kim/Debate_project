@@ -14,7 +14,7 @@ import {
   routerEndPoint,
   backendPointList,
   contentStyle,
-  defaultDebateForm,
+  emptyDebateForm,
 } from "../common/Constants";
 import InputForm from "./InputForm";
 import thumbUp from "../../assets/images/thumbs-up-regular.svg";
@@ -104,7 +104,7 @@ const TopicContent = (props) => {
   const [inputMode, setInputMode] = useState("C");
   const [liked, setLiked] = useState(false);
   const [unliked, setUnLiked] = useState(false);
-  const [currentDebate, setCurrentDebate] = useState(defaultDebateForm);
+  const [currentDebate, setCurrentDebate] = useState(emptyDebateForm);
   const [targetTopic, setTargetTopic] = useState({});
   const [debateList, setDebateList] = useState([]);
 

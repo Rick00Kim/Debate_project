@@ -2,7 +2,7 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Form, FormControl, InputGroup, Button, Col } from "react-bootstrap";
 import axios from "axios";
-import { backendPointList, defaultDebateForm } from "../common/Constants";
+import { backendPointList, emptyDebateForm } from "../common/Constants";
 
 export default function InputForm(props) {
   const {
@@ -39,7 +39,7 @@ export default function InputForm(props) {
         .then((res) => {
           updateRow();
           setInputMode("C");
-          setCurrentDebate(defaultDebateForm);
+          setCurrentDebate(emptyDebateForm);
         })
         .then((err) => console.log(err));
     }

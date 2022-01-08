@@ -12,7 +12,7 @@ export const backendPointList = {
   debates: "/api/debates",
 };
 
-export const defaultDebateForm = {
+export const emptyDebateForm = {
   topicNum: "",
   username: "",
   email: "",
