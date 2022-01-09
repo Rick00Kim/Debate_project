@@ -111,7 +111,7 @@ const TopicContent = (props) => {
   useEffect(() => {
     axios
       .get(backendPointList.topic + "/" + topicId)
-      .then((res) => setTargetTopic(res.data[0]))
+      .then((res) => setTargetTopic(res.data))
       .catch((err) => console.log(err));
     axios
       .get(backendPointList.debates + "/" + topicId)

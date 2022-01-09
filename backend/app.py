@@ -48,14 +48,12 @@ class DebateDetails(db.Document):
 @app.route("/api/topic", methods=['GET'])
 def topics_list():
     topics_list = Topics.objects().to_json()
-    print(topics_list)
     return Response(topics_list, mimetype="application/json", status=200)
 
 
 @app.route("/api/topic/<int:topic_num>", methods=['GET'])
 def topic_one(topic_num):
-    topic_one = Topics.objects(id=topic_num).to_json()
-    print(topic_one)
+    topic_one = Topics.objects(id=topic_num).first().to_json()
     return Response(topic_one, mimetype="application/json", status=200)
 
 
