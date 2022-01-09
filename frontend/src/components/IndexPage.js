@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Collapse, Card } from "react-bootstrap";
-import SignInForm from "./authenticated/SignInForm";
+import SignInForm from "./sign/SignInForm";
 import "bootstrap/dist/css/bootstrap.css";
 import { Link } from "react-router-dom";
 
