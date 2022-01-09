@@ -66,6 +66,59 @@ class DebateDetails(db.Document):
     update_on = db.DateTimeField(default=datetime.datetime.utcnow)
 
 
+def validate_for_auth(auth_data):
+    user_schema = {
+        "type": "object",
+        "properties": {
+            "name": {
+                "type": "string",
+            },
+            "email": {
+                "type": "string",
+                "format": "email"
+            },
+            "password": {
+                "type": "string",
+                "minLength": 5
+            }
+        },
+        "required": ["email", "password"],
+        "additionalProperties": False
+    }
+
+    try:
+        validate(auth_data, user_schema)
+    except ValidationError as e:
+        return {'result': False, 'message': e}
+    except SchemaError as e:
+        return {'result': False, 'message': e}
+    return {'result': True, 'data': auth_data}
+
+
+@app.route('/api/auth', methods=['POST'])
+def auth_login():
+    validated_data = validate_for_auth(request.json)
+    try:
+        if validated_data['result']:
+            request_data = validated_data['data']
+            request_data.pop('password')
+            manager = UserInfo.objects(email=request_data['email']).first()
+            if manager and flask_bcrypt.check_password_hash(
+                    manager['password'], request_data['password']):
+                response = {
+                    'status': 'SUCCESS',
+                    'access_token': create_access_token(identity=request_data),
+                    'refresh_token': create_refresh_token(identity=request_data)
+                }
+                return Response(json.dumps(response), mimetype="application/json", status=200)
+            else:
+                return Response(json.dumps({"result": False}), mimetype="application/json", status=200)
+        else:
+            return Response(json.dumps({"result": False}), mimetype="application/json", status=200)
+    except Exception as e:
+        return Response(json.dumps({"result": False}), mimetype="application/json", status=200)
+
+
 @app.route('/api/signup', methods=['POST'])
 def register_manager():
     request_data = request.json
