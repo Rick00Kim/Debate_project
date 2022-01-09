@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Jumbotron, Container, Row, ListGroup, Button } from "react-bootstrap";
 import { contentStyle, routerEndPoint } from "../common/Constants";
+import "bootstrap/dist/css/bootstrap.css";
 
 const componentStyle = {
   root: contentStyle.root,
@@ -21,7 +22,7 @@ const componentStyle = {
   },
   newBtnStyle: {
     position: "absolute",
-    right: "5%",
+    left: "5%",
   },
   topicListStyle: {
     height: `70vh`,

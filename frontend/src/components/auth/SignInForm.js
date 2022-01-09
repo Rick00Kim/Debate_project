@@ -1,5 +1,6 @@
 import React from "react";
 import { Form, Button } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.css";
 
 const componentStyle = {
   root: {

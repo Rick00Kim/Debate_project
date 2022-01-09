@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Collapse, Card } from "react-bootstrap";
 import SignInForm from "./auth/SignInForm";
 import SignUpForm from "./auth/SignUpForm";
+import "bootstrap/dist/css/bootstrap.css";
 
 const componentStyle = {
   root: {
