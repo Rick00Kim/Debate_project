@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Form, Button } from "react-bootstrap";
 import { backendPointList, routerEndPoint } from "../common/Constants";
@@ -18,7 +18,7 @@ const componentStyle = {
 };
 
 function SignUpForm() {
-  const [signUpFlg, setSignUpFlg] = useState(false);
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -35,14 +35,12 @@ function SignUpForm() {
     axios
       .post(backendPointList.signup, form)
       .then((res) => {
-        setSignUpFlg(true);
+        navigate(routerEndPoint.root);
       })
       .catch((err) => console.log(err));
   };
 
-  return signUpFlg ? (
-    <Navigate to={routerEndPoint.root} />
-  ) : (
+  return (
     <Form style={componentStyle.root}>
       <Form.Group controlId="formEmail" style={componentStyle.formGroupStyle}>
         <Form.Label>Email</Form.Label>
