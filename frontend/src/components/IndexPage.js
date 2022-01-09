@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Button, Collapse, Card } from "react-bootstrap";
-import SignInForm from "./auth/SignInForm";
-import SignUpForm from "./auth/SignUpForm";
+import SignInForm from "./authenticated/SignInForm";
 import "bootstrap/dist/css/bootstrap.css";
+import { Link } from "react-router-dom";
 
 const componentStyle = {
   root: {
@@ -14,7 +14,7 @@ const componentStyle = {
   },
   authDivStyle: {
     minWidth: "40%",
-    marginTop: "3%",
+    marginTop: "2%",
     marginBottom: "1%",
   },
   authCardStyle: {
@@ -30,17 +30,6 @@ const componentStyle = {
 
 function IndexPage() {
   const [signInFlg, setSignInFlg] = useState(false);
-  const [signUpFlg, setSignUpFlg] = useState(false);
-
-  const activeSignIn = () => {
-    setSignUpFlg(signUpFlg ? false : signUpFlg);
-    setSignInFlg(!signInFlg);
-  };
-
-  const activeSignUp = () => {
-    setSignInFlg(signInFlg ? false : signInFlg);
-    setSignUpFlg(!signUpFlg);
-  };
 
   return (
     <div style={componentStyle.root}>
@@ -52,31 +41,26 @@ function IndexPage() {
         <h4 style={{ marginTop: `10px` }}>
           👈 You can exchange opinions with many people on various topics
         </h4>
-        <div style={{ marginTop: "1em" }}>
-          <Button
-            variant="outline-light"
-            onClick={() => activeSignIn()}
-            active={signInFlg}
-            aria-controls="example-fade-text"
-          >
-            Sign in
-          </Button>{" "}
-          <Button
-            variant="outline-success"
-            onClick={() => activeSignUp()}
-            active={signUpFlg}
-            aria-controls="example-fade-text"
-          >
-            Sign up
-          </Button>
-        </div>
+      </div>
+      <div style={{ marginTop: "1%" }}>
+        <Button
+          variant="outline-warning"
+          onClick={() => setSignInFlg(!signInFlg)}
+          active={signInFlg}
+          aria-controls="example-fade-text"
+        >
+          Let's start with sign in
+        </Button>{" "}
+        <Link to={"/signUp"}>
+          <Button variant="outline-success">Sign up</Button>
+        </Link>
       </div>
       <div style={componentStyle.authDivStyle}>
-        <Collapse in={signInFlg || signUpFlg}>
+        <Collapse in={signInFlg}>
           <div id="example-fade-text">
             <Card style={componentStyle.authCardStyle}>
               <Card.Body style={componentStyle.authCardBodyStyle}>
-                {signInFlg ? <SignInForm /> : signUpFlg ? <SignUpForm /> : ""}
+                <SignInForm />
               </Card.Body>
             </Card>
           </div>

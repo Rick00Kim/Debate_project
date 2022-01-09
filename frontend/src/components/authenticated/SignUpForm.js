@@ -17,7 +17,6 @@ const componentStyle = {
 function SignUpForm() {
   return (
     <Form style={componentStyle.root}>
-      <h1 style={{ textAlign: "center" }}>SIGN UP</h1>
       <Form.Group controlId="formEmail" style={componentStyle.formGroupStyle}>
         <Form.Label>Email</Form.Label>
         <Form.Control type="email" placeholder="Enter email" />
