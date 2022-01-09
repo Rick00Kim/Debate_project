@@ -2,10 +2,17 @@ import datetime
 import os
 import json
 import logging
+from datetime import timedelta
 from logging.config import fileConfig
 from logging.handlers import RotatingFileHandler
 from flask import Flask, Response, request
 from flask_mongoengine import MongoEngine
+from flask_cors import CORS
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token, create_refresh_token, get_jwt_identity
+from flask_bcrypt import Bcrypt
+from jsonschema import validate
+from jsonschema.exceptions import ValidationError
+from jsonschema.exceptions import SchemaError
 
 # Log settings
 fileConfig('./log_config.ini')
@@ -16,16 +23,30 @@ handler = RotatingFileHandler(
 handler.setLevel(logging.INFO)
 
 app = Flask(__name__)
+CORS(app)
 app.config['MONGODB_SETTINGS'] = {
     'host': os.environ['MONGODB_HOST'],
     'username': os.environ['MONGODB_USERNAME'],
     'password': os.environ['MONGODB_PASSWORD'],
     'db': 'debate_web'
 }
+app.config['JWT_SECRET_KEY'] = 'sampleSecretKey'
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
+app.config['JWT_REFRESH_LIFESPAN'] = {'days': 30}
 app.logger.addHandler(handler)
 
 db = MongoEngine()
 db.init_app(app)
+
+flask_bcrypt = Bcrypt(app)
+
+
+class UserInfo(db.Document):
+    id = db.SequenceField(primary_key=True)
+    email = db.StringField()
+    password = db.StringField()
+    name = db.StringField()
+    del_flg = db.StringField(default="0")
 
 
 class Topics(db.Document):
@@ -43,6 +64,29 @@ class DebateDetails(db.Document):
     content = db.StringField()
     create_on = db.DateTimeField(default=datetime.datetime.utcnow)
     update_on = db.DateTimeField(default=datetime.datetime.utcnow)
+
+
+@app.route('/api/signup', methods=['POST'])
+def register_manager():
+    request_data = request.json
+    response = {
+        'status': 'SUCCESS'
+    }
+
+    if UserInfo.objects(email=request_data['email']):
+        response['status'] = False
+        response['message'] = "{} is already registered...".format(
+            request_data['email'])
+        return Response(json.dumps(response), mimetype="application/json", status=200)
+
+    UserInfo(
+        name=request_data['name'],
+        email=request_data['email'],
+        password=flask_bcrypt.generate_password_hash(
+            request_data['password']).decode('utf-8')
+    ).save()
+
+    return Response(json.dumps(response), mimetype="application/json", status=201)
 
 
 @app.route("/api/topic", methods=['GET'])

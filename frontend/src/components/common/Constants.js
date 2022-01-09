@@ -8,6 +8,7 @@ export const routerEndPoint = {
 };
 
 export const backendPointList = {
+  signup: "/api/signup",
   topic: "/api/topic",
   debates: "/api/debates",
 };
