@@ -11,9 +11,6 @@ export const nameValidation = (fieldValue) => {
   if (requireValidation(fieldValue)) {
     return `name is required`;
   }
-  if (/[^a-zA-Z -]/.test(fieldValue)) {
-    return "Invalid characters";
-  }
   if (fieldValue.trim().length < 3) {
     return `name needs to be at least three characters`;
   }
