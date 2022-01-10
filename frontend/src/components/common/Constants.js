@@ -3,7 +3,8 @@ export const routerEndPoint = {
   debates: "debates/",
   addTopic: "topic/add",
   errors: {
-    notFound: "/NotFound",
+    notFound: "/not-exists-topic",
+    nonPermission: "/non-permission",
   },
 };
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-const NotFound = () => {
+const NonPermission = () => {
   return (
     <div
       style={{
@@ -10,10 +10,10 @@ const NotFound = () => {
         justifyContent: "center",
       }}
     >
-      <h1>🎩 Not found page</h1>
-      <h2>Please choose other topic</h2>
+      <h1>🤲 Non permission page</h1>
+      <h2>You don't have permission of management.</h2>
     </div>
   );
 };
 
-export default NotFound;
+export default NonPermission;

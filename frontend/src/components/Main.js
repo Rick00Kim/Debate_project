@@ -10,7 +10,8 @@ import IndexPage from "./IndexPage";
 import AddTopic from "./management/AddTopic";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.css";
-import { NotFound } from "./error/NotFound";
+import NotFound from "./error/NotFound";
+import NonPermission from "./error/NonPermission";
 
 const componentStyle = {
   mainStyle: {
@@ -73,7 +74,8 @@ const DebateIndex = (props) => {
                   <AddTopic topicList={topicList} freshList={freshList} />
                 }
               />
-              <Route path="/NotFound" element={<NotFound />} />
+              <Route path="/not-exists-topic" element={<NotFound />} />
+              <Route path="/non-permission" element={<NonPermission />} />
             </Routes>
           </Col>
         </Row>
