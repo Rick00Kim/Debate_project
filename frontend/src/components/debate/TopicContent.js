@@ -74,6 +74,13 @@ const componentStyle = {
     display: "flex",
     flexDirection: "column",
   },
+  manageBtnStyle: {
+    display: "flex",
+    flexDirection: "column",
+    position: "absolute",
+    right: "3%",
+    top: "3%",
+  },
 };
 
 const CustomToggle = forwardRef(({ children, onClick }, ref) => (
@@ -226,21 +233,14 @@ const TopicContent = (props) => {
             <h1>{targetTopic.header}</h1>
             <p>{targetTopic.content}</p>
           </Container>
-          <Button
-            variant="outline-danger"
-            style={{ position: "absolute", right: "3%", top: "3%" }}
-            onClick={() => deleteTopic()}
-          >
-            DELETE
-          </Button>
-          <Link to={"/" + routerEndPoint.addTopic + "/" + targetTopic._id}>
-            <Button
-              variant="outline-info"
-              style={{ position: "absolute", right: "3%", top: "9%" }}
-            >
-              MODIFY
+          <div style={componentStyle.manageBtnStyle}>
+            <Button variant="outline-danger" onClick={() => deleteTopic()}>
+              DELETE
             </Button>
-          </Link>
+            <Link to={"/" + routerEndPoint.addTopic + "/" + targetTopic._id}>
+              <Button variant="outline-info">MODIFY</Button>
+            </Link>
+          </div>
         </Jumbotron>
         <Container style={componentStyle.list}>
           <ListGroup variant="flush">{renderDebateList()}</ListGroup>
