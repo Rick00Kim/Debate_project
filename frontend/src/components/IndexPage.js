@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button, Collapse, Card } from "react-bootstrap";
 import SignInForm from "./sign/SignInForm";
+import { useAuth } from "./authenticated/auth";
 import "bootstrap/dist/css/bootstrap.css";
-import { Link } from "react-router-dom";
 
 const componentStyle = {
   root: {
@@ -29,6 +30,7 @@ const componentStyle = {
 };
 
 function IndexPage() {
+  const [logged] = useAuth();
   const [signInFlg, setSignInFlg] = useState(false);
 
   return (
@@ -42,30 +44,36 @@ function IndexPage() {
           👈 You can exchange opinions with many people on various topics
         </h4>
       </div>
-      <div style={{ marginTop: "1%" }}>
-        <Button
-          variant="outline-warning"
-          onClick={() => setSignInFlg(!signInFlg)}
-          active={signInFlg}
-          aria-controls="example-fade-text"
-        >
-          Let's start with sign in
-        </Button>{" "}
-        <Link to={"/signUp"}>
-          <Button variant="outline-success">Sign up</Button>
-        </Link>
-      </div>
-      <div style={componentStyle.authDivStyle}>
-        <Collapse in={signInFlg}>
-          <div id="example-fade-text">
-            <Card style={componentStyle.authCardStyle}>
-              <Card.Body style={componentStyle.authCardBodyStyle}>
-                <SignInForm />
-              </Card.Body>
-            </Card>
+      {logged ? (
+        ""
+      ) : (
+        <>
+          <div style={{ marginTop: "1%" }}>
+            <Button
+              variant="outline-warning"
+              onClick={() => setSignInFlg(!signInFlg)}
+              active={signInFlg}
+              aria-controls="example-fade-text"
+            >
+              Let's start with sign in
+            </Button>{" "}
+            <Link to={"/signUp"}>
+              <Button variant="outline-success">Sign up</Button>
+            </Link>
           </div>
-        </Collapse>
-      </div>
+          <div style={componentStyle.authDivStyle}>
+            <Collapse in={signInFlg}>
+              <div id="example-fade-text">
+                <Card style={componentStyle.authCardStyle}>
+                  <Card.Body style={componentStyle.authCardBodyStyle}>
+                    <SignInForm />
+                  </Card.Body>
+                </Card>
+              </div>
+            </Collapse>
+          </div>
+        </>
+      )}
     </div>
   );
 }

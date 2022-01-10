@@ -2,7 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Jumbotron, Container, Row, ListGroup, Button } from "react-bootstrap";
 import { contentStyle, routerEndPoint } from "../common/Constants";
-import { useAuth } from "../authenticated/auth";
+import { useAuth, logout } from "../authenticated/auth";
+import { getCurrentUser } from "../authenticated/AuthService";
+import LogoutButton from "../sign/SignOut";
 import "bootstrap/dist/css/bootstrap.css";
 
 const componentStyle = {
@@ -55,9 +57,10 @@ const TopicListBar = (props) => {
     return logged ? (
       <Container>
         <h3>
-          {logged.name} ({logged.role})
+          {getCurrentUser().name} ({getCurrentUser().role})
         </h3>
         <h4>Like count: 0</h4>
+        <LogoutButton logout={logout} />
       </Container>
     ) : (
       ""
