@@ -32,7 +32,7 @@ function AddTopic(props) {
       setManageMode("MODIFY");
       axios
         .get(backendPointList.topic + "/" + topicId)
-        .then((res) => setForm(res.data[0]))
+        .then((res) => setForm(res.data))
         .then((err) => console.log(err));
     } else {
       setManageMode("CREATE");

@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Jumbotron, Container, Row, ListGroup, Button } from "react-bootstrap";
 import { contentStyle, routerEndPoint } from "../common/Constants";
+import { useAuth } from "../authenticated/auth";
 import "bootstrap/dist/css/bootstrap.css";
 
 const componentStyle = {
@@ -47,7 +48,21 @@ const componentStyle = {
 };
 
 const TopicListBar = (props) => {
+  const [logged] = useAuth();
   const { topicList, currentTopic, setCurrentTopic } = props;
+
+  const UserInfo = () => {
+    return logged ? (
+      <Container>
+        <h3>
+          {logged.name} ({logged.role})
+        </h3>
+        <h4>Like count: 0</h4>
+      </Container>
+    ) : (
+      ""
+    );
+  };
 
   return (
     <div style={componentStyle.root}>
@@ -81,10 +96,7 @@ const TopicListBar = (props) => {
         ))}
       </ListGroup>
       <Jumbotron fluid style={componentStyle.userInfoStyle}>
-        <Container>
-          <h3>KURURU (Participant)</h3>
-          <h4>Like count: 0</h4>
-        </Container>
+        <UserInfo />
       </Jumbotron>
     </div>
   );

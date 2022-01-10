@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
 import TopicListBar from "./debate/TopicListBar";
 import TopicContent from "./debate/TopicContent";
@@ -8,6 +13,7 @@ import SignIn from "./sign/SignIn";
 import SignUp from "./sign/SignUp";
 import IndexPage from "./IndexPage";
 import AddTopic from "./management/AddTopic";
+import { useAuth } from "./authenticated/auth";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.css";
 import NotFound from "./error/NotFound";
@@ -28,6 +34,7 @@ const componentStyle = {
 };
 
 const DebateIndex = (props) => {
+  const [logged] = useAuth();
   const [currentTopic, setCurrentTopic] = useState({});
   const [topicList, setTopicList] = useState([]);
 
@@ -40,6 +47,18 @@ const DebateIndex = (props) => {
       .get(backendPointList.topic)
       .then((res) => setTopicList(res.data))
       .catch((err) => console.log(err));
+  };
+
+  const RedirectToPath = (props) => {
+    const { path } = props;
+    return (
+      <Navigate
+        to={{
+          pathname: path,
+          state: { from: props.location },
+        }}
+      />
+    );
   };
 
   return (
@@ -65,13 +84,21 @@ const DebateIndex = (props) => {
               <Route
                 path="/topic/add"
                 element={
-                  <AddTopic topicList={topicList} freshList={freshList} />
+                  logged ? (
+                    <AddTopic topicList={topicList} freshList={freshList} />
+                  ) : (
+                    <RedirectToPath path="/signIn" />
+                  )
                 }
               />
               <Route
                 path="/topic/add/:topicId"
                 element={
-                  <AddTopic topicList={topicList} freshList={freshList} />
+                  logged ? (
+                    <AddTopic topicList={topicList} freshList={freshList} />
+                  ) : (
+                    <RedirectToPath path="/signIn" />
+                  )
                 }
               />
               <Route path="/not-exists-topic" element={<NotFound />} />
