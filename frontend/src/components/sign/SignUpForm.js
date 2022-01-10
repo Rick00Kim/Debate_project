@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Form, Button } from "react-bootstrap";
 import { backendPointList, routerEndPoint } from "../common/Constants";
-import "bootstrap/dist/css/bootstrap.css";
 import {
   emailValidation,
   nameValidation,
   passwordValidation,
 } from "../common/Validators";
+import "bootstrap/dist/css/bootstrap.css";
 
 const componentStyle = {
   root: {

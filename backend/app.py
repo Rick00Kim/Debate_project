@@ -39,11 +39,12 @@ db = MongoEngine()
 db.init_app(app)
 
 flask_bcrypt = Bcrypt(app)
+jwt = JWTManager(app)
 
 
 class UserInfo(db.Document):
     id = db.SequenceField(primary_key=True)
-    email = db.StringField()
+    email = db.StringField(unique=True)
     password = db.StringField()
     name = db.StringField()
     role = db.StringField(default="Participant")
@@ -102,14 +103,19 @@ def auth_login():
     try:
         if validated_data['result']:
             request_data = validated_data['data']
-            request_data.pop('password')
+            request_pwd = request_data['password']
             manager = UserInfo.objects(email=request_data['email']).first()
             if manager and flask_bcrypt.check_password_hash(
-                    manager['password'], request_data['password']):
+                    manager['password'], request_pwd):
+                identify = {
+                    'email': manager['email'],
+                    'name': manager['name'],
+                    'role': manager['role']
+                }
                 response = {
                     'status': 'SUCCESS',
-                    'access_token': create_access_token(identity=request_data),
-                    'refresh_token': create_refresh_token(identity=request_data)
+                    'access_token': create_access_token(identity=identify),
+                    'refresh_token': create_refresh_token(identity=identify)
                 }
                 return Response(json.dumps(response), mimetype="application/json", status=200)
             else:
