@@ -46,6 +46,7 @@ class UserInfo(db.Document):
     email = db.StringField()
     password = db.StringField()
     name = db.StringField()
+    role = db.StringField(default="Participant")
     del_flg = db.StringField(default="0")
 
 
@@ -79,7 +80,7 @@ def validate_for_auth(auth_data):
             },
             "password": {
                 "type": "string",
-                "minLength": 5
+                "minLength": 8
             }
         },
         "required": ["email", "password"],
