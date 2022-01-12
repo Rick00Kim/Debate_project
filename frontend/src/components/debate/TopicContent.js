@@ -207,9 +207,12 @@ function TopicContent(props) {
             />
           </Container>
         ) : (
-          <Link to={"/signIn?redirectUrl=" + location.pathname}>
+          <Link
+            to={"/signIn?redirectUrl=" + location.pathname}
+            style={{ textDecoration: "none" }}
+          >
             <Button variant="outline-warning" size="lg" block>
-              If you wanna join this topic, please sign in.
+              Do you wanna join this topic? Let's sign in 🎩
             </Button>
           </Link>
         )}
