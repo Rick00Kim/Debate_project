@@ -65,7 +65,7 @@ const DebateIndex = (props) => {
 
   const AuthComponent = (props) => {
     return logged ? (
-      loggedUser.role === "manager" ? (
+      loggedUser.role === "Manager" ? (
         props.component
       ) : (
         <Navigate to={"/non-permission"} />
