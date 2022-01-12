@@ -17,8 +17,6 @@ export const backendPointList = {
 
 export const emptyDebateForm = {
   topicNum: "",
-  username: "",
-  email: "",
   content: "",
 };
 
