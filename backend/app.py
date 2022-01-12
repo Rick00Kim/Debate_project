@@ -68,6 +68,18 @@ class DebateDetails(db.Document):
     update_on = db.DateTimeField(default=datetime.datetime.utcnow)
 
 
+class LikeOnDebate(db.Document):
+    id = db.SequenceField(primary_key=True)
+    debate_num = db.IntField()
+    user_id = db.IntField()
+
+
+class UnLikeOnDebate(db.Document):
+    id = db.SequenceField(primary_key=True)
+    debate_num = db.IntField()
+    user_id = db.IntField()
+
+
 def validate_for_auth(auth_data):
     user_schema = {
         "type": "object",
@@ -222,17 +234,23 @@ def debate_list(refer_num):
             debate.create_on, '%Y-%m-%d %H:%M:%S')
         debate_dict['update_on'] = datetime.datetime.strftime(
             debate.update_on, '%Y-%m-%d %H:%M:%S')
+        debate_dict['like_cnt'] = LikeOnDebate.objects(
+            debate_num=debate.id).count()
+        debate_dict['unlike_cnt'] = UnLikeOnDebate.objects(
+            debate_num=debate.id).count()
         debate_list.append(debate_dict)
 
+    print(debate_list)
     return Response(json.dumps(debate_list), mimetype="application/json", status=200)
 
 
 @app.route("/api/debates", methods=['POST'])
-@ jwt_required()
+@jwt_required()
 def register_debate():
     task = request.json
     current_user = get_jwt_identity()
-    print(current_user)
+
+    user = UserInfo.objects(email=current_user['email']).first()
 
     created_detail = DebateDetails(
         topic_num=task['topicNum'],
@@ -241,7 +259,7 @@ def register_debate():
         content=task['content']
     ).save()
 
-    return Response(created_detail.to_json(), mimetype="application/json", status=201)
+    return Response("SUCCESS", mimetype="application/json", status=201)
 
 
 @app.route("/api/debates/<int:debate_id>", methods=['DELETE'])
@@ -252,7 +270,7 @@ def delete_debate(debate_id):
 
 
 @app.route("/api/debates", methods=['PUT'])
-@ jwt_required()
+@jwt_required()
 def put_debate():
     task = request.json
     current_user = get_jwt_identity()
@@ -263,6 +281,45 @@ def put_debate():
         email=current_user['email'],
         content=task['content']
     ).save()
+
+    return Response("SUCCESS", mimetype="application/json", status=200)
+
+
+@app.route("/api/like", methods=['POST'])
+@jwt_required()
+def post_debate_like():
+    task = request.json
+    current_user = get_jwt_identity()
+
+    user = UserInfo.objects(email=current_user['email']).first()
+
+    if LikeOnDebate.objects(debate_num=task['debate_id'], user_id=user['id']).count() > 0:
+        LikeOnDebate(debate_num=task['debate_id'], user_id=user['id']).delete()
+    else:
+        created_like = LikeOnDebate(
+            debate_num=task['debate_id'],
+            user_id=user['id']
+        ).save()
+
+    return Response("SUCCESS", mimetype="application/json", status=200)
+
+
+@app.route("/api/unlike", methods=['POST'])
+@jwt_required()
+def post_debate_unlike():
+    task = request.json
+    current_user = get_jwt_identity()
+
+    user = UserInfo.objects(email=current_user['email']).first()
+
+    if UnLikeOnDebate.objects(debate_num=task['debate_id'], user_id=user['id']).count() > 0:
+        UnLikeOnDebate(debate_num=task['debate_id'],
+                       user_id=user['id']).delete()
+    else:
+        created_unlike = UnLikeOnDebate(
+            debate_num=task['debate_id'],
+            user_id=user['id']
+        ).save()
 
     return Response("SUCCESS", mimetype="application/json", status=200)
 
