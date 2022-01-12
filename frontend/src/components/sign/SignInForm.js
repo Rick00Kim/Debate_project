@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { emailValidation, passwordValidation } from "../common/Validators";
 import { backendPointList } from "../common/Constants";
@@ -18,20 +18,25 @@ const componentStyle = {
     alignItems: "center",
     fontSize: "20px",
   },
+  dangerMsgStyle: {
+    fontSize: "20px",
+  },
 };
 const validate = {
   email: (v) => emailValidation(v),
   password: (v) => passwordValidation(v),
 };
 
-function SignInForm() {
+function SignInForm(props) {
   const navigate = useNavigate();
+  const { redirectUrl } = props;
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
   const [touched, setTouched] = useState({});
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState(false);
 
   const handleInput = (props) => {
     const { name, value } = props.target;
@@ -92,14 +97,19 @@ function SignInForm() {
         .post(backendPointList.auth, form)
         .then((response) => response.data)
         .then((result) => {
-          console.log("LOGIN Result -> ", result);
           if (result.status === "SUCCESS") {
             localStorage.setItem(
               "REACT_REFRESH_TOKEN_AUTH_KEY",
               result.refresh_token
             );
             login(result.access_token);
-            navigate("/");
+            navigate(redirectUrl == null ? "/" : redirectUrl);
+          } else {
+            setServerError(true);
+            setForm({
+              email: "",
+              password: "",
+            });
           }
         })
         .catch((err) => console.log(err));
@@ -107,57 +117,68 @@ function SignInForm() {
   };
 
   return (
-    <Form style={componentStyle.root} autoComplete="off">
-      <Form.Group controlId="formEmail" style={componentStyle.formGroupStyle}>
-        <Form.Label>Email</Form.Label>
-        <Form.Control
-          type="email"
-          placeholder="Enter email"
-          name="email"
-          value={form.email}
-          onChange={(e) => handleInput(e)}
-          onBlur={(e) => handleBlur(e)}
-          required
-          isInvalid={errors.email}
-        />
-        <Form.Control.Feedback type="invalid">
-          {errors.email}
-        </Form.Control.Feedback>
-      </Form.Group>
-      <Form.Group
-        controlId="formPassword"
-        style={componentStyle.formGroupStyle}
+    <div>
+      <Alert
+        key={"danger-msg"}
+        variant={"danger"}
+        show={serverError}
+        style={componentStyle.dangerMsgStyle}
       >
-        <Form.Label>Password</Form.Label>
-        <Form.Control
-          type="password"
-          placeholder="Password"
-          name="password"
-          value={form.password}
-          onChange={(e) => handleInput(e)}
-          onBlur={(e) => handleBlur(e)}
-          autoComplete="off"
-          isInvalid={errors.password}
-        />
-        <Form.Control.Feedback type="invalid">
-          {errors.password}
-        </Form.Control.Feedback>
-      </Form.Group>
-      <Form.Label style={{ textAlign: "right" }}>
-        <small className="text-muted" style={{ fontSize: "65%" }}>
-          🔐 Forgot you email or password? <Link to={"fe"}>Click here</Link>
-        </small>
-      </Form.Label>
-      <Button
-        variant="primary"
-        size="lg"
-        block
-        style={{ marginTop: "0.5em" }}
-        onClick={(e) => handleSubmit(e)}
-      >
-        Sign in
-      </Button>
-    </Form>
+        Failed Login (Please check your email or password)
+      </Alert>
+      <Form style={componentStyle.root}>
+        <Form.Group controlId="formEmail" style={componentStyle.formGroupStyle}>
+          <Form.Label>Email</Form.Label>
+          <Form.Control
+            type="email"
+            placeholder="Enter email"
+            name="email"
+            value={form.email}
+            onChange={(e) => handleInput(e)}
+            onBlur={(e) => handleBlur(e)}
+            required
+            isInvalid={errors.email}
+          />
+          <Form.Control.Feedback type="invalid">
+            {errors.email}
+          </Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group
+          controlId="formPassword"
+          style={componentStyle.formGroupStyle}
+        >
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Password"
+            name="password"
+            value={form.password}
+            onChange={(e) => handleInput(e)}
+            onBlur={(e) => handleBlur(e)}
+            autoComplete="off"
+            isInvalid={errors.password}
+          />
+          <Form.Control.Feedback type="invalid">
+            {errors.password}
+          </Form.Control.Feedback>
+        </Form.Group>
+        <Form.Label style={{ textAlign: "right" }}>
+          <small className="text-muted" style={{ fontSize: "65%" }}>
+            🔐 Forgot you email or password? <Link to={"fe"}>Click here</Link>
+          </small>
+        </Form.Label>
+        <Button
+          variant="primary"
+          size="lg"
+          type="submit"
+          block
+          style={{ marginTop: "0.5em" }}
+          onClick={(e) => handleSubmit(e)}
+        >
+          Sign in
+        </Button>
+      </Form>
+    </div>
   );
 }
 

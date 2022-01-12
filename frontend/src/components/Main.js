@@ -14,6 +14,7 @@ import SignUp from "./sign/SignUp";
 import IndexPage from "./IndexPage";
 import AddTopic from "./management/AddTopic";
 import { useAuth } from "./authenticated/auth";
+import { getCurrentUser } from "./authenticated/AuthService";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.css";
 import NotFound from "./error/NotFound";
@@ -35,6 +36,7 @@ const componentStyle = {
 
 const DebateIndex = (props) => {
   const [logged] = useAuth();
+  const loggedUser = getCurrentUser();
   const [currentTopic, setCurrentTopic] = useState({});
   const [topicList, setTopicList] = useState([]);
 
@@ -61,6 +63,18 @@ const DebateIndex = (props) => {
     );
   };
 
+  const AuthComponent = (props) => {
+    return logged ? (
+      loggedUser.role === "manager" ? (
+        props.component
+      ) : (
+        <Navigate to={"/non-permission"} />
+      )
+    ) : (
+      <RedirectToPath path="/signIn" />
+    );
+  };
+
   return (
     <div style={componentStyle.mainStyle}>
       <Router>
@@ -84,21 +98,21 @@ const DebateIndex = (props) => {
               <Route
                 path="/topic/add"
                 element={
-                  logged ? (
-                    <AddTopic topicList={topicList} freshList={freshList} />
-                  ) : (
-                    <RedirectToPath path="/signIn" />
-                  )
+                  <AuthComponent
+                    component={
+                      <AddTopic topicList={topicList} freshList={freshList} />
+                    }
+                  />
                 }
               />
               <Route
                 path="/topic/add/:topicId"
                 element={
-                  logged ? (
-                    <AddTopic topicList={topicList} freshList={freshList} />
-                  ) : (
-                    <RedirectToPath path="/signIn" />
-                  )
+                  <AuthComponent
+                    component={
+                      <AddTopic topicList={topicList} freshList={freshList} />
+                    }
+                  />
                 }
               />
               <Route path="/not-exists-topic" element={<NotFound />} />

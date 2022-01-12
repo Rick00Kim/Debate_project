@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Card } from "react-bootstrap";
 import SignInForm from "./SignInForm";
 
@@ -25,12 +25,15 @@ const componentStyle = {
 };
 
 function SignIn() {
+  const search = useLocation().search;
+  const redirectUrl = new URLSearchParams(search).get("redirectUrl");
+
   return (
     <div style={componentStyle.root}>
       <h1 style={{ textAlign: "center" }}>SIGN IN</h1>
       <Card style={componentStyle.authCardStyle}>
         <Card.Body style={componentStyle.authCardBodyStyle}>
-          <SignInForm />
+          <SignInForm redirectUrl={redirectUrl} />
         </Card.Body>
       </Card>
       <Card style={componentStyle.authCardStyle}>

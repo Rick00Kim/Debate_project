@@ -1,5 +1,5 @@
 import React, { useState, useEffect, forwardRef } from "react";
-import { useParams, Navigate, Link } from "react-router-dom";
+import { useParams, Navigate, Link, useLocation } from "react-router-dom";
 import {
   Container,
   Jumbotron,
@@ -17,6 +17,8 @@ import {
   emptyDebateForm,
 } from "../common/Constants";
 import InputForm from "./InputForm";
+import { useAuth } from "../authenticated/auth";
+import DebateList from "./DebateList";
 import thumbUp from "../../assets/images/thumbs-up-regular.svg";
 import thumbUpSolid from "../../assets/images/thumbs-up-solid.svg";
 import thumbDown from "../../assets/images/thumbs-down-regular.svg";
@@ -104,7 +106,9 @@ const CustomToggle = forwardRef(({ children, onClick }, ref) => (
   </a>
 ));
 
-const TopicContent = (props) => {
+function TopicContent(props) {
+  const [logged] = useAuth();
+  const location = useLocation();
   const { topicId } = useParams();
   const { freshList } = props;
   const [topicDeleteFlg, setTopicDeleteFlg] = useState(false);
@@ -157,66 +161,11 @@ const TopicContent = (props) => {
 
   const renderDebateList = () => {
     return debateList.map((item, idx) => (
-      <ListGroup.Item
-        bsPrefix
-        style={componentStyle.listItem}
-        key={"topicnum-" + item._id}
-      >
-        <Card style={componentStyle.itemContentStyle}>
-          <Card.Body style={componentStyle.itemBodyStyle}>
-            <Card.Title>{item.username}</Card.Title>
-            <Card.Text>{item.content}</Card.Text>
-          </Card.Body>
-          <Card.Footer style={componentStyle.itemFooterStyle}>
-            <div style={componentStyle.thumbUpDownStyle}>
-              <div style={componentStyle.thumbIconDivStyle}>
-                <Image
-                  src={liked ? thumbUpSolid : thumbUp}
-                  rounded
-                  style={componentStyle.likeButtonStyle}
-                  onClick={() => setLiked(!liked)}
-                />
-                2321
-              </div>
-              <div style={componentStyle.thumbIconDivStyle}>
-                <Image
-                  src={unliked ? thumbDownSolid : thumbDown}
-                  rounded
-                  style={componentStyle.likeButtonStyle}
-                  onClick={() => setUnLiked(!unliked)}
-                />
-                2030
-              </div>
-              <Dropdown>
-                <Dropdown.Toggle
-                  as={CustomToggle}
-                  id="dropdown-custom-components"
-                />
-                <Dropdown.Menu>
-                  <Dropdown.Item
-                    as="button"
-                    onClick={(e) => changeInputMode(item)}
-                  >
-                    Edit
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    as="button"
-                    onClick={(e) => deleteDebate(item)}
-                  >
-                    Delete
-                  </Dropdown.Item>
-                  <Dropdown.Divider />
-                  <Dropdown.Item as="button" disabled>
-                    <small className="text-muted">
-                      Create on {item.create_on}
-                    </small>
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-          </Card.Footer>
-        </Card>
-      </ListGroup.Item>
+      <DebateList
+        item={item}
+        changeInputMode={changeInputMode}
+        deleteDebate={deleteDebate}
+      />
     ));
   };
 
@@ -245,22 +194,30 @@ const TopicContent = (props) => {
         <Container style={componentStyle.list}>
           <ListGroup variant="flush">{renderDebateList()}</ListGroup>
         </Container>
-        <Container style={{ fontSize: `15px`, padding: 0 }}>
-          <hr style={{ borderTop: `1px solid #e9ecef`, margin: `2px` }} />
-          <InputForm
-            targetTopic={targetTopic}
-            updateRow={reloadDebateList}
-            inputMode={inputMode}
-            setInputMode={setInputMode}
-            currentDebate={currentDebate}
-            setCurrentDebate={setCurrentDebate}
-          />
-        </Container>
+        {logged ? (
+          <Container style={{ fontSize: `15px`, padding: 0 }}>
+            <hr style={{ borderTop: `1px solid #e9ecef`, margin: `2px` }} />
+            <InputForm
+              targetTopic={targetTopic}
+              updateRow={reloadDebateList}
+              inputMode={inputMode}
+              setInputMode={setInputMode}
+              currentDebate={currentDebate}
+              setCurrentDebate={setCurrentDebate}
+            />
+          </Container>
+        ) : (
+          <Link to={"/signIn?redirectUrl=" + location.pathname}>
+            <Button variant="outline-warning" size="lg" block>
+              If you wanna join this topic, please sign in.
+            </Button>
+          </Link>
+        )}
       </div>
     )
   ) : (
     <Navigate to={routerEndPoint.errors.notFound} />
   );
-};
+}
 
 export default TopicContent;
