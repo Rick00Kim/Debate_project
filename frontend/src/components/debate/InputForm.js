@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import { Form, FormControl, InputGroup, Button, Col } from "react-bootstrap";
 import axios from "axios";
 import { backendPointList, emptyDebateForm } from "../common/Constants";
+import ShowToast from "../common/ShowToast";
 
 export default function InputForm(props) {
   const {
@@ -22,12 +23,20 @@ export default function InputForm(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!currentDebate.content) {
+      return;
+    }
+
     currentDebate["topicNum"] = props.targetTopic._id;
-    console.log("Form -> ", currentDebate);
+
+    let jwt_key = JSON.parse(localStorage.getItem("REACT_TOKEN_AUTH_KEY"));
 
     if (inputMode === "C") {
       axios
-        .post(backendPointList.debates, currentDebate)
+        .post(backendPointList.debates, currentDebate, {
+          headers: { Authorization: `Bearer ${jwt_key}` },
+        })
         .then((res) => {
           updateRow();
           setField("content", "");
@@ -35,7 +44,9 @@ export default function InputForm(props) {
         .then((err) => console.log(err));
     } else {
       axios
-        .put(backendPointList.debates, currentDebate)
+        .put(backendPointList.debates, currentDebate, {
+          headers: { Authorization: `Bearer ${jwt_key}` },
+        })
         .then((res) => {
           updateRow();
           setInputMode("C");
@@ -44,46 +55,15 @@ export default function InputForm(props) {
         .then((err) => console.log(err));
     }
   };
+  const handleReset = (e) => {
+    setField("content", "");
+  };
 
   return (
     <Form>
-      <Form.Row className="align-items-center">
-        <Col sm={3}>
-          <Form.Label htmlFor="inlineFormInputName" srOnly>
-            Name
-          </Form.Label>
-          <Form.Control
-            id="inlineFormInputName"
-            placeholder="Username 🎩"
-            value={currentDebate.username}
-            onChange={(e) => setField("username", e.target.value)}
-          />
-        </Col>
-        <Col sm={7}>
-          <Form.Label htmlFor="inlineFormInputGroupUsername" srOnly>
-            Username
-          </Form.Label>
-          <InputGroup>
-            <InputGroup.Prepend>
-              <InputGroup.Text>@</InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              id="inlineFormInputGroupUsername"
-              placeholder="Email 📮"
-              value={currentDebate.email}
-              onChange={(e) => setField("email", e.target.value)}
-            />
-          </InputGroup>
-        </Col>
-        <Col sm={2} className="my-1">
-          <Button block type="submit" onClick={handleSubmit}>
-            Submit
-          </Button>
-        </Col>
-      </Form.Row>
       <Form.Row>
-        <Col sm={12} className="my-1">
-          <Form.Group controlId="exampleForm.ControlTextarea1">
+        <Col sm={10} className="my-1">
+          <Form.Group controlId="contentArea">
             <Form.Control
               as="textarea"
               rows={3}
@@ -92,6 +72,19 @@ export default function InputForm(props) {
               onChange={(e) => setField("content", e.target.value)}
             />
           </Form.Group>
+        </Col>
+        <Col sm={2} className="my-1">
+          <Button block variant="success" type="submit" onClick={handleSubmit}>
+            {inputMode === "C" ? "Submit" : "Edit"}
+          </Button>
+          <Button
+            block
+            variant="outline-danger"
+            type="button"
+            onClick={handleReset}
+          >
+            Reset
+          </Button>
         </Col>
       </Form.Row>
     </Form>

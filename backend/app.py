@@ -126,6 +126,21 @@ def auth_login():
         return Response(json.dumps({"result": False}), mimetype="application/json", status=200)
 
 
+@app.route('/api/refresh', methods=['POST'])
+@jwt_required(refresh=True)
+def refresh():
+    try:
+        current_user = get_jwt_identity()
+        print('USER', current_user)
+        response = {
+            'status': 'SUCCESS',
+            'access_token': create_access_token(identity=current_user)
+        }
+    except Exception as e:
+        print(e)
+    return Response(json.dumps(response), mimetype="application/json", status=200)
+
+
 @app.route('/api/signup', methods=['POST'])
 def register_manager():
     request_data = request.json
@@ -213,13 +228,16 @@ def debate_list(refer_num):
 
 
 @app.route("/api/debates", methods=['POST'])
+@ jwt_required()
 def register_debate():
     task = request.json
+    current_user = get_jwt_identity()
+    print(current_user)
 
     created_detail = DebateDetails(
         topic_num=task['topicNum'],
-        username=task['username'],
-        email=task['email'],
+        username=current_user['name'],
+        email=current_user['email'],
         content=task['content']
     ).save()
 
@@ -234,13 +252,15 @@ def delete_debate(debate_id):
 
 
 @app.route("/api/debates", methods=['PUT'])
+@ jwt_required()
 def put_debate():
     task = request.json
+    current_user = get_jwt_identity()
     DebateDetails(
         id=task['_id'],
         topic_num=task['topicNum'],
-        username=task['username'],
-        email=task['email'],
+        username=current_user['name'],
+        email=current_user['email'],
         content=task['content']
     ).save()
 
