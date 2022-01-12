@@ -13,6 +13,8 @@ export const backendPointList = {
   signup: "/api/signup",
   topic: "/api/topic",
   debates: "/api/debates",
+  like: "/api/like",
+  unlike: "/api/unlike",
 };
 
 export const emptyDebateForm = {

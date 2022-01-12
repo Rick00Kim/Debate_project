@@ -72,6 +72,7 @@ const componentStyle = {
     marginRight: 20,
     display: "flex",
     flexDirection: "column",
+    textAlign: "center",
   },
   manageBtnStyle: {
     display: "flex",
@@ -104,9 +105,44 @@ const CustomToggle = forwardRef(({ children, onClick }, ref) => (
 ));
 
 function DebateList(props) {
+  const [logged] = useAuth();
   const { item, changeInputMode, deleteDebate } = props;
   const [liked, setLiked] = useState(false);
   const [unliked, setUnLiked] = useState(false);
+
+  const handlerLikeBtn = (e) => {
+    e.preventDefault();
+    let jwt_key = JSON.parse(localStorage.getItem("REACT_TOKEN_AUTH_KEY"));
+
+    axios
+      .post(
+        backendPointList.like,
+        { debate_id: item._id },
+        {
+          headers: { Authorization: `Bearer ${jwt_key}` },
+        }
+      )
+      .then((res) => {
+        setLiked(!liked);
+      })
+      .then((err) => console.log(err));
+  };
+  const handlerUnLikeBtn = (e) => {
+    e.preventDefault();
+    let jwt_key = JSON.parse(localStorage.getItem("REACT_TOKEN_AUTH_KEY"));
+    axios
+      .post(
+        backendPointList.unlike,
+        { debate_id: item._id },
+        {
+          headers: { Authorization: `Bearer ${jwt_key}` },
+        }
+      )
+      .then((res) => {
+        setUnLiked(!unliked);
+      })
+      .then((err) => console.log(err));
+  };
 
   return (
     <ListGroup.Item
@@ -115,60 +151,64 @@ function DebateList(props) {
       key={"debate-" + item._id}
     >
       <Card style={componentStyle.itemContentStyle} key={"debate-" + item._id}>
-        <Card.Body style={componentStyle.itemBodyStyle}>
+        <Card.Body key={"debate-" + item._id}>
           <Card.Title>{item.username}</Card.Title>
           <Card.Text>{item.content}</Card.Text>
         </Card.Body>
-        <Card.Footer style={componentStyle.itemFooterStyle}>
-          <div style={componentStyle.thumbUpDownStyle}>
-            <div style={componentStyle.thumbIconDivStyle}>
-              <Image
-                src={liked ? thumbUpSolid : thumbUp}
-                rounded
-                style={componentStyle.likeButtonStyle}
-                onClick={() => setLiked(!liked)}
-              />
-              2321
+        {logged ? (
+          <Card.Footer style={componentStyle.itemFooterStyle}>
+            <div style={componentStyle.thumbUpDownStyle}>
+              <div style={componentStyle.thumbIconDivStyle}>
+                <Image
+                  src={liked ? thumbUpSolid : thumbUp}
+                  rounded
+                  style={componentStyle.likeButtonStyle}
+                  onClick={(e) => handlerLikeBtn(e)}
+                />
+                {item.like_cnt}
+              </div>
+              <div style={componentStyle.thumbIconDivStyle}>
+                <Image
+                  src={unliked ? thumbDownSolid : thumbDown}
+                  rounded
+                  style={componentStyle.likeButtonStyle}
+                  onClick={(e) => handlerUnLikeBtn(e)}
+                />
+                {item.unlike_cnt}
+              </div>
+              <Dropdown>
+                <Dropdown.Toggle
+                  as={CustomToggle}
+                  id={"dropdown-custom-components-" + item._id}
+                />
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    as="button"
+                    onClick={(e) => changeInputMode(item)}
+                    eventKey="1"
+                  >
+                    Edit
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    as="button"
+                    onClick={(e) => deleteDebate(item)}
+                    eventKey="2"
+                  >
+                    Delete
+                  </Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item as="button" disabled>
+                    <small className="text-muted">
+                      Create on {item.create_on}
+                    </small>
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
-            <div style={componentStyle.thumbIconDivStyle}>
-              <Image
-                src={unliked ? thumbDownSolid : thumbDown}
-                rounded
-                style={componentStyle.likeButtonStyle}
-                onClick={() => setUnLiked(!unliked)}
-              />
-              2030
-            </div>
-            <Dropdown>
-              <Dropdown.Toggle
-                as={CustomToggle}
-                id={"dropdown-custom-components-" + item._id}
-              />
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  as="button"
-                  onClick={(e) => changeInputMode(item)}
-                  eventKey="1"
-                >
-                  Edit
-                </Dropdown.Item>
-                <Dropdown.Item
-                  as="button"
-                  onClick={(e) => deleteDebate(item)}
-                  eventKey="2"
-                >
-                  Delete
-                </Dropdown.Item>
-                <Dropdown.Divider />
-                <Dropdown.Item as="button" disabled>
-                  <small className="text-muted">
-                    Create on {item.create_on}
-                  </small>
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-        </Card.Footer>
+          </Card.Footer>
+        ) : (
+          ""
+        )}
       </Card>
     </ListGroup.Item>
   );
