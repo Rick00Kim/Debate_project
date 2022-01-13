@@ -1,9 +1,8 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import { Form, FormControl, InputGroup, Button, Col } from "react-bootstrap";
+import { Form, Button, Col } from "react-bootstrap";
 import axios from "axios";
 import { backendPointList, emptyDebateForm } from "../common/Constants";
-import ShowToast from "../common/ShowToast";
 
 export default function InputForm(props) {
   const {
