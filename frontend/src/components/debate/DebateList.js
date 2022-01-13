@@ -1,21 +1,7 @@
-import React, { useState, forwardRef } from "react";
-import {
-  Container,
-  Jumbotron,
-  ListGroup,
-  Card,
-  Image,
-  Dropdown,
-  Button,
-} from "react-bootstrap";
+import React, { useState, forwardRef, useEffect } from "react";
+import { ListGroup, Card, Image, Dropdown } from "react-bootstrap";
 import axios from "axios";
-import {
-  routerEndPoint,
-  backendPointList,
-  contentStyle,
-  emptyDebateForm,
-} from "../common/Constants";
-import InputForm from "./InputForm";
+import { backendPointList, contentStyle } from "../common/Constants";
 import { useAuth } from "../authenticated/auth";
 import thumbUp from "../../assets/images/thumbs-up-regular.svg";
 import thumbUpSolid from "../../assets/images/thumbs-up-solid.svg";
@@ -107,13 +93,27 @@ const CustomToggle = forwardRef(({ children, onClick }, ref) => (
 function DebateList(props) {
   const [logged] = useAuth();
   const { item, changeInputMode, deleteDebate } = props;
-  const [liked, setLiked] = useState(false);
-  const [unliked, setUnLiked] = useState(false);
+  const [likeList, setLikeList] = useState({});
+  const jwt_key = JSON.parse(localStorage.getItem("REACT_TOKEN_AUTH_KEY"));
 
-  const handlerLikeBtn = (e) => {
+  useEffect(() => {
+    if (logged) {
+      reloadLikeList();
+    }
+  }, []);
+
+  const reloadLikeList = () => {
+    axios
+      .get(backendPointList.like + "/" + item._id, {
+        headers: { Authorization: `Bearer ${jwt_key}` },
+      })
+      .then((res) => res.data)
+      .then((result) => setLikeList(result))
+      .catch((err) => console.log(err));
+  };
+
+  const handleLikeBtn = (e) => {
     e.preventDefault();
-    let jwt_key = JSON.parse(localStorage.getItem("REACT_TOKEN_AUTH_KEY"));
-
     axios
       .post(
         backendPointList.like,
@@ -123,13 +123,13 @@ function DebateList(props) {
         }
       )
       .then((res) => {
-        setLiked(!liked);
+        reloadLikeList();
       })
-      .then((err) => console.log(err));
+      .catch((err) => console.log(err));
   };
-  const handlerUnLikeBtn = (e) => {
+
+  const handleUnLikeBtn = (e) => {
     e.preventDefault();
-    let jwt_key = JSON.parse(localStorage.getItem("REACT_TOKEN_AUTH_KEY"));
     axios
       .post(
         backendPointList.unlike,
@@ -139,9 +139,9 @@ function DebateList(props) {
         }
       )
       .then((res) => {
-        setUnLiked(!unliked);
+        reloadLikeList();
       })
-      .then((err) => console.log(err));
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -160,21 +160,21 @@ function DebateList(props) {
             <div style={componentStyle.thumbUpDownStyle}>
               <div style={componentStyle.thumbIconDivStyle}>
                 <Image
-                  src={liked ? thumbUpSolid : thumbUp}
+                  src={likeList.liked ? thumbUpSolid : thumbUp}
                   rounded
                   style={componentStyle.likeButtonStyle}
-                  onClick={(e) => handlerLikeBtn(e)}
+                  onClick={(e) => handleLikeBtn(e)}
                 />
-                {item.like_cnt}
+                {likeList.like_cnt}
               </div>
               <div style={componentStyle.thumbIconDivStyle}>
                 <Image
-                  src={unliked ? thumbDownSolid : thumbDown}
+                  src={likeList.unliked ? thumbDownSolid : thumbDown}
                   rounded
                   style={componentStyle.likeButtonStyle}
-                  onClick={(e) => handlerUnLikeBtn(e)}
+                  onClick={(e) => handleUnLikeBtn(e)}
                 />
-                {item.unlike_cnt}
+                {likeList.unlike_cnt}
               </div>
               <Dropdown>
                 <Dropdown.Toggle

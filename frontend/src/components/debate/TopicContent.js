@@ -1,14 +1,12 @@
-import React, { useState, useEffect, forwardRef } from "react";
-import { useParams, Navigate, Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import {
-  Container,
-  Jumbotron,
-  ListGroup,
-  Card,
-  Image,
-  Dropdown,
-  Button,
-} from "react-bootstrap";
+  useParams,
+  useNavigate,
+  Navigate,
+  Link,
+  useLocation,
+} from "react-router-dom";
+import { Container, Jumbotron, ListGroup, Button } from "react-bootstrap";
 import axios from "axios";
 import {
   routerEndPoint,
@@ -19,12 +17,6 @@ import {
 import InputForm from "./InputForm";
 import { useAuth } from "../authenticated/auth";
 import DebateList from "./DebateList";
-import thumbUp from "../../assets/images/thumbs-up-regular.svg";
-import thumbUpSolid from "../../assets/images/thumbs-up-solid.svg";
-import thumbDown from "../../assets/images/thumbs-down-regular.svg";
-import thumbDownSolid from "../../assets/images/thumbs-down-solid.svg";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.css";
 
 const componentStyle = {
@@ -85,36 +77,13 @@ const componentStyle = {
   },
 };
 
-const CustomToggle = forwardRef(({ children, onClick }, ref) => (
-  <a
-    href="#!"
-    ref={ref}
-    onClick={(e) => {
-      e.preventDefault();
-      onClick(e);
-    }}
-    style={{
-      color: "#212529",
-      textDecoration: "none",
-      position: "absolute",
-      fontSize: 20,
-      marginRight: 15,
-    }}
-  >
-    <FontAwesomeIcon icon={faEllipsisV} />
-    {children}
-  </a>
-));
-
 function TopicContent(props) {
   const [logged] = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const { topicId } = useParams();
   const { freshList } = props;
-  const [topicDeleteFlg, setTopicDeleteFlg] = useState(false);
   const [inputMode, setInputMode] = useState("C");
-  const [liked, setLiked] = useState(false);
-  const [unliked, setUnLiked] = useState(false);
   const [currentDebate, setCurrentDebate] = useState(emptyDebateForm);
   const [targetTopic, setTargetTopic] = useState({});
   const [debateList, setDebateList] = useState([]);
@@ -143,18 +112,24 @@ function TopicContent(props) {
   };
 
   const deleteDebate = (item) => {
+    const jwt_key = JSON.parse(localStorage.getItem("REACT_TOKEN_AUTH_KEY"));
     axios
-      .delete(backendPointList.debates + "/" + item._id)
+      .delete(backendPointList.debates + "/" + item._id, {
+        headers: { Authorization: `Bearer ${jwt_key}` },
+      })
       .then((res) => reloadDebateList())
       .catch((err) => console.log(err));
   };
 
   const deleteTopic = (item) => {
+    const jwt_key = JSON.parse(localStorage.getItem("REACT_TOKEN_AUTH_KEY"));
     axios
-      .delete(backendPointList.topic + "/" + topicId)
+      .delete(backendPointList.topic + "/" + topicId, {
+        headers: { Authorization: `Bearer ${jwt_key}` },
+      })
       .then((res) => {
         freshList();
-        setTopicDeleteFlg(true);
+        navigate(routerEndPoint.root);
       })
       .catch((err) => console.log(err));
   };
@@ -170,54 +145,50 @@ function TopicContent(props) {
   };
 
   return targetTopic ? (
-    topicDeleteFlg ? (
-      <Navigate to={routerEndPoint.root} />
-    ) : (
-      <div style={componentStyle.root}>
-        <Jumbotron
-          fluid
-          style={{ paddingTop: `2rem`, marginBottom: 10, padding: `20px 0` }}
-        >
-          <Container style={componentStyle.header}>
-            <h1>{targetTopic.header}</h1>
-            <p>{targetTopic.content}</p>
-          </Container>
-          <div style={componentStyle.manageBtnStyle}>
-            <Button variant="outline-danger" onClick={() => deleteTopic()}>
-              DELETE
-            </Button>
-            <Link to={"/" + routerEndPoint.addTopic + "/" + targetTopic._id}>
-              <Button variant="outline-info">MODIFY</Button>
-            </Link>
-          </div>
-        </Jumbotron>
-        <Container style={componentStyle.list}>
-          <ListGroup variant="flush">{renderDebateList()}</ListGroup>
+    <div style={componentStyle.root}>
+      <Jumbotron
+        fluid
+        style={{ paddingTop: `2rem`, marginBottom: 10, padding: `20px 0` }}
+      >
+        <Container style={componentStyle.header}>
+          <h1>{targetTopic.header}</h1>
+          <p>{targetTopic.content}</p>
         </Container>
-        {logged ? (
-          <Container style={{ fontSize: `15px`, padding: 0 }}>
-            <hr style={{ borderTop: `1px solid #e9ecef`, margin: `2px` }} />
-            <InputForm
-              targetTopic={targetTopic}
-              updateRow={reloadDebateList}
-              inputMode={inputMode}
-              setInputMode={setInputMode}
-              currentDebate={currentDebate}
-              setCurrentDebate={setCurrentDebate}
-            />
-          </Container>
-        ) : (
-          <Link
-            to={"/signIn?redirectUrl=" + location.pathname}
-            style={{ textDecoration: "none" }}
-          >
-            <Button variant="outline-warning" size="lg" block>
-              Do you wanna join this topic? Let's sign in 🎩
-            </Button>
+        <div style={componentStyle.manageBtnStyle}>
+          <Button variant="outline-danger" onClick={() => deleteTopic()}>
+            DELETE
+          </Button>
+          <Link to={"/" + routerEndPoint.addTopic + "/" + targetTopic._id}>
+            <Button variant="outline-info">MODIFY</Button>
           </Link>
-        )}
-      </div>
-    )
+        </div>
+      </Jumbotron>
+      <Container style={componentStyle.list}>
+        <ListGroup variant="flush">{renderDebateList()}</ListGroup>
+      </Container>
+      {logged ? (
+        <Container style={{ fontSize: `15px`, padding: 0 }}>
+          <hr style={{ borderTop: `1px solid #e9ecef`, margin: `2px` }} />
+          <InputForm
+            targetTopic={targetTopic}
+            updateRow={reloadDebateList}
+            inputMode={inputMode}
+            setInputMode={setInputMode}
+            currentDebate={currentDebate}
+            setCurrentDebate={setCurrentDebate}
+          />
+        </Container>
+      ) : (
+        <Link
+          to={"/signIn?redirectUrl=" + location.pathname}
+          style={{ textDecoration: "none" }}
+        >
+          <Button variant="outline-warning" size="lg" block>
+            Do you wanna join this topic? Let's sign in 🎩
+          </Button>
+        </Link>
+      )}
+    </div>
   ) : (
     <Navigate to={routerEndPoint.errors.notFound} />
   );
