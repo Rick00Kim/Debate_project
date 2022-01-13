@@ -61,8 +61,7 @@ class Topics(db.Document):
 class DebateDetails(db.Document):
     id = db.SequenceField(primary_key=True)
     topic_num = db.IntField()
-    username = db.StringField()
-    email = db.StringField()
+    writer = db.IntField()
     content = db.StringField()
     create_on = db.DateTimeField(default=datetime.datetime.utcnow)
     update_on = db.DateTimeField(default=datetime.datetime.utcnow)
@@ -218,9 +217,19 @@ def modify_topic():
 
 
 @app.route("/api/topic/<int:topic_id>", methods=['DELETE'])
+@jwt_required()
 def delete_topic(topic_id):
-    Topics(id=topic_id).delete()
-    DebateDetails(topic_num=topic_id).delete()
+    current_user = get_jwt_identity()
+    if current_user['role'] != "Manager":
+        return Response("No permission", mimetype="application/json", status=200)
+
+    Topics.objects(id=topic_id).delete()
+    target_debate = DebateDetails.objects(topic_num=topic_id)
+    for element in target_debate:
+        LikeOnDebate.objects(debate_num=element['id']).delete()
+        UnLikeOnDebate.objects(debate_num=element['id']).delete()
+        element.delete()
+
     return Response("SUCCESS", mimetype="application/json", status=200)
 
 
@@ -230,17 +239,14 @@ def debate_list(refer_num):
     debate_list = []
     for debate in get_data:
         debate_dict = debate.to_mongo().to_dict()
+        user_info = UserInfo.objects(id=debate_dict['writer']).first()
+        debate_dict['username'] = user_info['name']
         debate_dict['create_on'] = datetime.datetime.strftime(
             debate.create_on, '%Y-%m-%d %H:%M:%S')
         debate_dict['update_on'] = datetime.datetime.strftime(
             debate.update_on, '%Y-%m-%d %H:%M:%S')
-        debate_dict['like_cnt'] = LikeOnDebate.objects(
-            debate_num=debate.id).count()
-        debate_dict['unlike_cnt'] = UnLikeOnDebate.objects(
-            debate_num=debate.id).count()
         debate_list.append(debate_dict)
 
-    print(debate_list)
     return Response(json.dumps(debate_list), mimetype="application/json", status=200)
 
 
@@ -254,8 +260,7 @@ def register_debate():
 
     created_detail = DebateDetails(
         topic_num=task['topicNum'],
-        username=current_user['name'],
-        email=current_user['email'],
+        writer=user['id'],
         content=task['content']
     ).save()
 
@@ -263,9 +268,12 @@ def register_debate():
 
 
 @app.route("/api/debates/<int:debate_id>", methods=['DELETE'])
+@jwt_required()
 def delete_debate(debate_id):
-    DebateDetails(id=debate_id).delete()
-
+    target_debate = DebateDetails.objects(id=debate_id).first()
+    LikeOnDebate.objects(debate_num=target_debate['id']).delete()
+    UnLikeOnDebate.objects(debate_num=target_debate['id']).delete()
+    target_debate.delete()
     return Response("SUCCESS", mimetype="application/json", status=200)
 
 
@@ -274,15 +282,32 @@ def delete_debate(debate_id):
 def put_debate():
     task = request.json
     current_user = get_jwt_identity()
+    user = UserInfo.objects(email=current_user['email']).first()
     DebateDetails(
         id=task['_id'],
         topic_num=task['topicNum'],
-        username=current_user['name'],
-        email=current_user['email'],
+        writer=user['id'],
         content=task['content']
     ).save()
 
     return Response("SUCCESS", mimetype="application/json", status=200)
+
+
+@app.route("/api/like/<int:debate_num>", methods=['GET'])
+@jwt_required()
+def get_debate_like(debate_num):
+    current_user = get_jwt_identity()
+
+    user = UserInfo.objects(email=current_user['email']).first()
+
+    response = {
+        'like_cnt': LikeOnDebate.objects(debate_num=debate_num).count(),
+        'unlike_cnt': UnLikeOnDebate.objects(debate_num=debate_num).count(),
+        'liked': False if LikeOnDebate.objects(debate_num=debate_num, user_id=user['id']).count() == 0 else True,
+        'unliked': False if UnLikeOnDebate.objects(debate_num=debate_num, user_id=user['id']).count() == 0 else True
+    }
+
+    return Response(json.dumps(response), mimetype="application/json", status=200)
 
 
 @app.route("/api/like", methods=['POST'])
@@ -293,13 +318,14 @@ def post_debate_like():
 
     user = UserInfo.objects(email=current_user['email']).first()
 
-    if LikeOnDebate.objects(debate_num=task['debate_id'], user_id=user['id']).count() > 0:
-        LikeOnDebate(debate_num=task['debate_id'], user_id=user['id']).delete()
+    if LikeOnDebate.objects(debate_num=task['debate_id'], user_id=user['id']).count() == 0:
+        LikeOnDebate(debate_num=task['debate_id'], user_id=user['id']).save()
+        if UnLikeOnDebate.objects(debate_num=task['debate_id'], user_id=user['id']).count() > 0:
+            UnLikeOnDebate.objects(
+                debate_num=task['debate_id'], user_id=user['id']).delete()
     else:
-        created_like = LikeOnDebate(
-            debate_num=task['debate_id'],
-            user_id=user['id']
-        ).save()
+        LikeOnDebate.objects(
+            debate_num=task['debate_id'], user_id=user['id']).delete()
 
     return Response("SUCCESS", mimetype="application/json", status=200)
 
@@ -312,14 +338,15 @@ def post_debate_unlike():
 
     user = UserInfo.objects(email=current_user['email']).first()
 
-    if UnLikeOnDebate.objects(debate_num=task['debate_id'], user_id=user['id']).count() > 0:
-        UnLikeOnDebate(debate_num=task['debate_id'],
-                       user_id=user['id']).delete()
+    if UnLikeOnDebate.objects(debate_num=task['debate_id'], user_id=user['id']).count() == 0:
+        UnLikeOnDebate(
+            debate_num=task['debate_id'], user_id=user['id']).save()
+        if LikeOnDebate.objects(debate_num=task['debate_id'], user_id=user['id']).count() > 0:
+            LikeOnDebate.objects(
+                debate_num=task['debate_id'], user_id=user['id']).delete()
     else:
-        created_unlike = UnLikeOnDebate(
-            debate_num=task['debate_id'],
-            user_id=user['id']
-        ).save()
+        UnLikeOnDebate.objects(debate_num=task['debate_id'],
+                               user_id=user['id']).delete()
 
     return Response("SUCCESS", mimetype="application/json", status=200)
 
