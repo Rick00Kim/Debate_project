@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  useParams,
-  useNavigate,
-  Navigate,
-  Link,
-  useLocation,
-} from "react-router-dom";
+import { useParams, Navigate, Link, useLocation } from "react-router-dom";
 import { Container, Jumbotron, ListGroup, Button } from "react-bootstrap";
 import axios from "axios";
 import {
@@ -18,6 +12,7 @@ import InputForm from "./InputForm";
 import { useAuth } from "../authenticated/auth";
 import DebateList from "./DebateList";
 import "bootstrap/dist/css/bootstrap.css";
+import DeleteTopicBtn from "../topic/DeleteTopicBtn";
 
 const componentStyle = {
   root: contentStyle.root,
@@ -80,7 +75,6 @@ const componentStyle = {
 function TopicContent(props) {
   const [logged] = useAuth();
   const location = useLocation();
-  const navigate = useNavigate();
   const { topicId } = useParams();
   const { freshList } = props;
   const [inputMode, setInputMode] = useState("C");
@@ -121,19 +115,6 @@ function TopicContent(props) {
       .catch((err) => console.log(err));
   };
 
-  const deleteTopic = (item) => {
-    const jwt_key = JSON.parse(localStorage.getItem("REACT_TOKEN_AUTH_KEY"));
-    axios
-      .delete(backendPointList.topic + "/" + topicId, {
-        headers: { Authorization: `Bearer ${jwt_key}` },
-      })
-      .then((res) => {
-        freshList();
-        navigate(routerEndPoint.root);
-      })
-      .catch((err) => console.log(err));
-  };
-
   const renderDebateList = () => {
     return debateList.map((item, idx) => (
       <DebateList
@@ -155,9 +136,7 @@ function TopicContent(props) {
           <p>{targetTopic.content}</p>
         </Container>
         <div style={componentStyle.manageBtnStyle}>
-          <Button variant="outline-danger" onClick={() => deleteTopic()}>
-            DELETE
-          </Button>
+          <DeleteTopicBtn freshList={freshList} topicId={topicId} />
           <Link to={"/" + routerEndPoint.addTopic + "/" + targetTopic._id}>
             <Button variant="outline-info">MODIFY</Button>
           </Link>
