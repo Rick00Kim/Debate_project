@@ -18,7 +18,10 @@ function DeleteTopicBtn(props) {
         freshList();
         navigate(routerEndPoint.root);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        navigate(routerEndPoint.errors.nonPermission);
+      });
   };
 
   return (
