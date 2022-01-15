@@ -93,13 +93,19 @@ const CustomToggle = forwardRef(({ children, onClick }, ref) => (
 function DebateList(props) {
   const [logged] = useAuth();
   const { item, changeInputMode, deleteDebate } = props;
-  const [likeList, setLikeList] = useState({});
+  const [likeList, setLikeList] = useState({
+    like_cnt: 0,
+    unlike_cnt: 0,
+    liked: false,
+    unliked: false,
+  });
   const jwt_key = JSON.parse(localStorage.getItem("REACT_TOKEN_AUTH_KEY"));
 
   useEffect(() => {
     if (logged) {
       reloadLikeList();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const reloadLikeList = () => {
@@ -182,21 +188,27 @@ function DebateList(props) {
                   id={"dropdown-custom-components-" + item._id}
                 />
                 <Dropdown.Menu>
-                  <Dropdown.Item
-                    as="button"
-                    onClick={(e) => changeInputMode(item)}
-                    eventKey="1"
-                  >
-                    Edit
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    as="button"
-                    onClick={(e) => deleteDebate(item)}
-                    eventKey="2"
-                  >
-                    Delete
-                  </Dropdown.Item>
-                  <Dropdown.Divider />
+                  {item.edit_grant ? (
+                    <div>
+                      <Dropdown.Item
+                        as="button"
+                        onClick={(e) => changeInputMode(item)}
+                        eventKey="1"
+                      >
+                        Edit
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        as="button"
+                        onClick={(e) => deleteDebate(item)}
+                        eventKey="2"
+                      >
+                        Delete
+                      </Dropdown.Item>
+                      <Dropdown.Divider />
+                    </div>
+                  ) : (
+                    ""
+                  )}
                   <Dropdown.Item as="button" disabled>
                     <small className="text-muted">
                       Create on {item.create_on}
