@@ -73,9 +73,13 @@ const TopicListBar = (props) => {
         <Link to={routerEndPoint.root} style={componentStyle.rootLinkStyle}>
           <h3 style={componentStyle.headerStyle}>Choose Topic</h3>
         </Link>
-        <Link to={routerEndPoint.addTopic} style={componentStyle.newBtnStyle}>
-          <Button variant="light">New</Button>
-        </Link>
+        {logged && getCurrentUser().role === "Manager" ? (
+          <Link to={routerEndPoint.addTopic} style={componentStyle.newBtnStyle}>
+            <Button variant="light">New</Button>
+          </Link>
+        ) : (
+          ""
+        )}
       </Row>
       <ListGroup style={componentStyle.topicListStyle}>
         {topicList.map((e) => (
@@ -90,7 +94,7 @@ const TopicListBar = (props) => {
               active={currentTopic._id === e._id}
               variant="light"
               as="div"
-              key={"topicIdx" + e._id}
+              key={"topic" + e._id}
               onClick={(i) => setCurrentTopic(e)}
             >
               {e.title}

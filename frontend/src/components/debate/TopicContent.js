@@ -13,6 +13,7 @@ import { useAuth } from "../authenticated/auth";
 import DebateList from "./DebateList";
 import "bootstrap/dist/css/bootstrap.css";
 import DeleteTopicBtn from "../topic/DeleteTopicBtn";
+import { getCurrentUser } from "../authenticated/AuthService";
 
 const componentStyle = {
   root: contentStyle.root,
@@ -81,21 +82,23 @@ function TopicContent(props) {
   const [currentDebate, setCurrentDebate] = useState(emptyDebateForm);
   const [targetTopic, setTargetTopic] = useState({});
   const [debateList, setDebateList] = useState([]);
+  const jwt_key = JSON.parse(localStorage.getItem("REACT_TOKEN_AUTH_KEY"));
 
   useEffect(() => {
     axios
       .get(backendPointList.topic + "/" + topicId)
       .then((res) => setTargetTopic(res.data))
       .catch((err) => console.log(err));
-    axios
-      .get(backendPointList.debates + "/" + topicId)
-      .then((res) => setDebateList(res.data))
-      .catch((err) => console.log(err));
+    reloadDebateList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topicId]);
 
   const reloadDebateList = () => {
+    const headerContents = logged ? { Authorization: `Bearer ${jwt_key}` } : "";
     axios
-      .get(backendPointList.debates + "/" + topicId)
+      .get(backendPointList.debates + "/" + topicId, {
+        headers: headerContents,
+      })
       .then((res) => setDebateList(res.data))
       .catch((err) => console.log(err));
   };
@@ -106,7 +109,6 @@ function TopicContent(props) {
   };
 
   const deleteDebate = (item) => {
-    const jwt_key = JSON.parse(localStorage.getItem("REACT_TOKEN_AUTH_KEY"));
     axios
       .delete(backendPointList.debates + "/" + item._id, {
         headers: { Authorization: `Bearer ${jwt_key}` },
@@ -118,6 +120,7 @@ function TopicContent(props) {
   const renderDebateList = () => {
     return debateList.map((item, idx) => (
       <DebateList
+        key={"topic-" + idx}
         item={item}
         changeInputMode={changeInputMode}
         deleteDebate={deleteDebate}
@@ -135,15 +138,25 @@ function TopicContent(props) {
           <h1>{targetTopic.header}</h1>
           <p>{targetTopic.content}</p>
         </Container>
-        <div style={componentStyle.manageBtnStyle}>
-          <DeleteTopicBtn freshList={freshList} topicId={topicId} />
-          <Link to={"/" + routerEndPoint.addTopic + "/" + targetTopic._id}>
-            <Button variant="outline-info">MODIFY</Button>
-          </Link>
-        </div>
+        {logged && getCurrentUser().role === "Manager" ? (
+          <div style={componentStyle.manageBtnStyle}>
+            <DeleteTopicBtn freshList={freshList} topicId={topicId} />
+            <Link to={"/" + routerEndPoint.addTopic + "/" + targetTopic._id}>
+              <Button variant="outline-info">MODIFY</Button>
+            </Link>
+          </div>
+        ) : (
+          ""
+        )}
       </Jumbotron>
       <Container style={componentStyle.list}>
-        <ListGroup variant="flush">{renderDebateList()}</ListGroup>
+        {debateList.length === 0 ? (
+          <div style={{ color: "white", margin: "3%" }}>
+            <h1>No Contents yet</h1>
+          </div>
+        ) : (
+          <ListGroup variant="flush">{renderDebateList()}</ListGroup>
+        )}
       </Container>
       {logged ? (
         <Container style={{ fontSize: `15px`, padding: 0 }}>
