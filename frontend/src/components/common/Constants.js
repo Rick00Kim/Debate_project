@@ -12,7 +12,6 @@ export const backendPointList = {
   auth: "/api/auth",
   signup: "/api/signup",
   topic: "/api/topic",
-  topics: "/api/topics",
   debates: "/api/debates",
   like: "/api/like",
   unlike: "/api/unlike",

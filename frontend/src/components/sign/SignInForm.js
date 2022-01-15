@@ -98,10 +98,6 @@ function SignInForm(props) {
         .then((response) => response.data)
         .then((result) => {
           if (result.status === "SUCCESS") {
-            localStorage.setItem(
-              "REACT_REFRESH_TOKEN_AUTH_KEY",
-              result.refresh_token
-            );
             login(result.access_token);
             navigate(redirectUrl == null ? "/" : redirectUrl);
           } else {
