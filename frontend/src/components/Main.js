@@ -46,11 +46,8 @@ const DebateIndex = (props) => {
 
   const freshList = () => {
     axios
-      .get(backendPointList.topics)
-      .then((res) => {
-        console.log(res);
-        setTopicList(res.data);
-      })
+      .get(backendPointList.topic)
+      .then((res) => setTopicList(res.data))
       .catch((err) => console.log(err));
   };
 
