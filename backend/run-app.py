@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import datetime
 import os
 import json
@@ -46,7 +47,7 @@ class UserInfo(db.Document):
     id = db.SequenceField(primary_key=True)
     email = db.StringField(unique=True)
     password = db.StringField()
-    name = db.StringField()
+    name = db.StringField(unique=True)
     role = db.StringField(default="Participant")
     del_flg = db.StringField(default="0")
 
@@ -125,8 +126,7 @@ def auth_login():
                 }
                 response = {
                     'status': 'SUCCESS',
-                    'access_token': create_access_token(identity=identify),
-                    'refresh_token': create_refresh_token(identity=identify)
+                    'access_token': create_access_token(identity=identify)
                 }
                 return Response(json.dumps(response), mimetype="application/json", status=200)
             else:
@@ -135,21 +135,6 @@ def auth_login():
             return Response(json.dumps({"result": False}), mimetype="application/json", status=200)
     except Exception as e:
         return Response(json.dumps({"result": False}), mimetype="application/json", status=200)
-
-
-@app.route('/api/refresh', methods=['POST'])
-@jwt_required(refresh=True)
-def refresh():
-    try:
-        current_user = get_jwt_identity()
-        print('USER', current_user)
-        response = {
-            'status': 'SUCCESS',
-            'access_token': create_access_token(identity=current_user)
-        }
-    except Exception as e:
-        print(e)
-    return Response(json.dumps(response), mimetype="application/json", status=200)
 
 
 @app.route('/api/signup', methods=['POST'])
@@ -196,22 +181,18 @@ def add_topic():
         content=task['content']
     ).save()
 
-    print(created_topic)
-
     return Response(created_topic.to_json(), mimetype="application/json", status=201)
 
 
 @app.route("/api/topic", methods=['PUT'])
 def modify_topic():
     task = request.json
-    modified_topic = Topics(
+    Topics(
         id=task['_id'],
         title=task['title'],
         header=task['header'],
         content=task['content']
     ).save()
-
-    print(modified_topic)
 
     return Response("SUCCESS", mimetype="application/json", status=200)
 
@@ -219,9 +200,14 @@ def modify_topic():
 @app.route("/api/topic/<int:topic_id>", methods=['DELETE'])
 @jwt_required()
 def delete_topic(topic_id):
+    response = {"result": "SUCCESS"}
     current_user = get_jwt_identity()
-    if current_user['role'] != "Manager":
-        return Response("No permission", mimetype="application/json", status=200)
+    user = UserInfo.objects(email=current_user['email']).first()
+
+    if user['role'] != "Manager":
+        response['result'] = "FAIL"
+        response['mesesage'] = "No permission"
+        return Response(json.dumps(response), mimetype="application/json", status=403)
 
     Topics.objects(id=topic_id).delete()
     target_debate = DebateDetails.objects(topic_num=topic_id)
@@ -234,9 +220,11 @@ def delete_topic(topic_id):
 
 
 @app.route("/api/debates/<int:refer_num>", methods=['GET'])
+@jwt_required(optional=True)
 def debate_list(refer_num):
-    get_data = DebateDetails.objects(topic_num=refer_num)
+    current_user = get_jwt_identity()
     debate_list = []
+    get_data = DebateDetails.objects(topic_num=refer_num)
     for debate in get_data:
         debate_dict = debate.to_mongo().to_dict()
         user_info = UserInfo.objects(id=debate_dict['writer']).first()
@@ -245,6 +233,11 @@ def debate_list(refer_num):
             debate.create_on, '%Y-%m-%d %H:%M:%S')
         debate_dict['update_on'] = datetime.datetime.strftime(
             debate.update_on, '%Y-%m-%d %H:%M:%S')
+        if current_user is None:
+            debate_dict['edit_grant'] = False
+        else:
+            user = UserInfo.objects(email=current_user['email']).first()
+            debate_dict['edit_grant'] = debate_dict['writer'] == user['id']
         debate_list.append(debate_dict)
 
     return Response(json.dumps(debate_list), mimetype="application/json", status=200)
@@ -258,7 +251,7 @@ def register_debate():
 
     user = UserInfo.objects(email=current_user['email']).first()
 
-    created_detail = DebateDetails(
+    DebateDetails(
         topic_num=task['topicNum'],
         writer=user['id'],
         content=task['content']
@@ -270,11 +263,21 @@ def register_debate():
 @app.route("/api/debates/<int:debate_id>", methods=['DELETE'])
 @jwt_required()
 def delete_debate(debate_id):
+    response = {"result": "SUCCESS"}
+    current_user = get_jwt_identity()
+    user = UserInfo.objects(email=current_user['email']).first()
+
     target_debate = DebateDetails.objects(id=debate_id).first()
+
+    if user['role'] != "Manager" and target_debate.writer != user['id']:
+        response['result'] = "FAIL"
+        response['mesesage'] = "Current user no have grant for deleting debate"
+        return Response(json.dumps(response), mimetype="application/json", status=200)
+
     LikeOnDebate.objects(debate_num=target_debate['id']).delete()
     UnLikeOnDebate.objects(debate_num=target_debate['id']).delete()
     target_debate.delete()
-    return Response("SUCCESS", mimetype="application/json", status=200)
+    return Response(json.dumps(response), mimetype="application/json", status=200)
 
 
 @app.route("/api/debates", methods=['PUT'])
@@ -303,7 +306,7 @@ def get_debate_like(debate_num):
     response = {
         'like_cnt': LikeOnDebate.objects(debate_num=debate_num).count(),
         'unlike_cnt': UnLikeOnDebate.objects(debate_num=debate_num).count(),
-        'liked': False if LikeOnDebate.objects(debate_num=debate_num, user_id=user['id']).count() == 0 else True,
+        'liked': not LikeOnDebate.objects(debate_num=debate_num, user_id=user['id']).count() == 0,
         'unliked': False if UnLikeOnDebate.objects(debate_num=debate_num, user_id=user['id']).count() == 0 else True
     }
 
