@@ -36,7 +36,7 @@ function SignUp() {
       <Card style={componentStyle.authCardStyle}>
         <Card.Body>
           <small>
-            Do you already have a account? <Link to={"/signIn"}>Sign in</Link>
+            Do you already have an account? <Link to={"/signIn"}>Sign in</Link>
           </small>
         </Card.Body>
       </Card>
