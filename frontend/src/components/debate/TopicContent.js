@@ -176,7 +176,7 @@ function TopicContent(props) {
           style={{ textDecoration: "none" }}
         >
           <Button variant="outline-warning" size="lg" block>
-            Do you wanna join this topic? Let's sign in 🎩
+            Do you wanna participate in this topic? Let's sign in 🎩
           </Button>
         </Link>
       )}
