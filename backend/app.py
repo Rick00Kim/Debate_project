@@ -352,7 +352,3 @@ def post_debate_unlike():
                                user_id=user['id']).delete()
 
     return Response("SUCCESS", mimetype="application/json", status=200)
-
-
-if __name__ == "__main__":
-    app.run(debug=True, port=5500)
