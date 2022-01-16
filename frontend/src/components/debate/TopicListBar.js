@@ -56,10 +56,8 @@ const TopicListBar = (props) => {
   const UserInfo = () => {
     return logged ? (
       <Container>
-        <h3>
-          {getCurrentUser().name} ({getCurrentUser().role})
-        </h3>
-        <h4>Like count: 0</h4>
+        <h3>{getCurrentUser().name}</h3>
+        <h4>Role: {getCurrentUser().role}</h4>
         <LogoutButton logout={logout} />
       </Container>
     ) : (
