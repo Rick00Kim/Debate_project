@@ -21,7 +21,7 @@ services:
       dockerfile: Dockerfile
     tty: true
     ports:
-      - "13102:3300"
+      - "13102:3000"
     volumes:
       - appdata:/app
     networks:
@@ -38,7 +38,7 @@ services:
     ports:
       - 5500:5500
     environment:
-      MONGODB_HOST: debate_web
+      MONGODB_HOST: mongodb
       MONGODB_USERNAME: "debate_manager"
       MONGODB_PASSWORD: "manPrd4892#"
     volumes:
@@ -52,17 +52,17 @@ services:
 
   mongodb:
     container_name: debate_db
-    build:
-      context: ./db
-      dockerfile: Dockerfile
     image: mongo
     restart: unless-stopped
-    command: mongod --auth
     environment:
+      MONGO_INITDB_ROOT_USERNAME: "prd_debate_admin"
+      MONGO_INITDB_ROOT_PASSWORD: "debate2140"
+      TARGET_DATABASE: "debate_web"
+      TARGET_USERNAME: "debate_manager"
+      TARGET_PASSWORD: "manPrd4892#"
       MONGODB_DATA_DIR: mongodbdata
     volumes:
-      - mongodbdata:/data/db
-      - mongodbdata:/data/configdb
+      - ./db/init.sh:/docker-entrypoint-initdb.d/init.sh:ro
     ports:
       - 27017:27017
     networks:
