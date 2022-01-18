@@ -17,4 +17,4 @@ ADD . /app
 
 RUN chown -R node:node /app
 
-CMD ["npm", "start"]
+CMD ["npm", "start:prod"]
