@@ -13,6 +13,7 @@ export const routerEndPoint = {
 export const backendPointList = {
   auth: config.BACKEND_DOMAIN + "/api/auth",
   refresh: config.BACKEND_DOMAIN + "/api/refresh",
+  users: config.BACKEND_DOMAIN + "/api/users",
   signup: config.BACKEND_DOMAIN + "/api/signup",
   topic: config.BACKEND_DOMAIN + "/api/topic",
   debates: config.BACKEND_DOMAIN + "/api/debates",
