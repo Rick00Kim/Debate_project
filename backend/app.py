@@ -160,6 +160,22 @@ def register_manager():
     return Response(json.dumps(response), mimetype="application/json", status=201)
 
 
+@app.route("/api/users", methods=['GET'])
+@jwt_required()
+def user_list():
+    response = {"result": "SUCCESS"}
+    current_user = get_jwt_identity()
+    user = UserInfo.objects(email=current_user['email']).first()
+
+    if user['role'] != "Manager":
+        response['result'] = "FAIL"
+        response['mesesage'] = "No permission"
+        return Response(json.dumps(response), mimetype="application/json", status=403)
+
+    user_list = UserInfo.objects().to_json()
+    return Response(user_list, mimetype="application/json", status=200)
+
+
 @app.route("/api/topic", methods=['GET'])
 def topics_list():
     topics_list = Topics.objects().to_json()
@@ -352,3 +368,7 @@ def post_debate_unlike():
                                user_id=user['id']).delete()
 
     return Response("SUCCESS", mimetype="application/json", status=200)
+
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5500)
