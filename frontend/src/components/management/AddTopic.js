@@ -33,7 +33,7 @@ function AddTopic(props) {
       axios
         .get(backendPointList.topic + "/" + topicId)
         .then((res) => setForm(res.data))
-        .then((err) => console.log(err));
+        .catch((err) => console.log(err));
     } else {
       setManageMode("CREATE");
       setForm({
@@ -65,14 +65,14 @@ function AddTopic(props) {
             content: "",
           });
         })
-        .then((err) => console.log(err));
+        .catch((err) => console.log(err));
     } else {
       axios
         .put(backendPointList.topic, form)
         .then((res) => {
           freshList();
         })
-        .then((err) => console.log(err));
+        .catch((err) => console.log(err));
     }
   };
 

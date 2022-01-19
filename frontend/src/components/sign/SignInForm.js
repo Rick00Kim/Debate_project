@@ -22,6 +22,7 @@ const componentStyle = {
     fontSize: "20px",
   },
 };
+
 const validate = {
   email: (v) => emailValidation(v),
   password: (v) => passwordValidation(v),

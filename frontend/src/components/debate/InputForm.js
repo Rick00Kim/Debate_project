@@ -40,7 +40,7 @@ export default function InputForm(props) {
           updateRow();
           setField("content", "");
         })
-        .then((err) => console.log(err));
+        .catch((err) => console.log(err));
     } else {
       axios
         .put(backendPointList.debates, currentDebate, {
@@ -51,7 +51,7 @@ export default function InputForm(props) {
           setInputMode("C");
           setCurrentDebate(emptyDebateForm);
         })
-        .then((err) => console.log(err));
+        .catch((err) => console.log(err));
     }
   };
   const handleReset = (e) => {
