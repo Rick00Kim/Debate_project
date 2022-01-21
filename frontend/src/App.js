@@ -65,10 +65,10 @@ function App() {
     );
   };
 
-  const AuthComponent = (props) => {
+  const AuthComponent = ({ component }) => {
     return logged ? (
       loggedUser.role === "Manager" ? (
-        props.component
+        component
       ) : (
         <Navigate to={"/non-permission"} />
       )
@@ -76,6 +76,7 @@ function App() {
       <RedirectToPath path="/signIn" />
     );
   };
+
   return (
     <div className="App-header">
       <div style={componentStyle.mainStyle}>
