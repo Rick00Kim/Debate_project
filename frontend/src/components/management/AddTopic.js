@@ -47,7 +47,6 @@ function AddTopic(props) {
             header: res.data.header,
             content: res.data.content,
           });
-          console.log(res.data);
         })
         .catch((err) => console.log(err));
     } else {
@@ -129,6 +128,7 @@ function AddTopic(props) {
           .catch((err) => console.log(err));
       } else {
         form["_id"] = topicId;
+        console.log(form);
         axios
           .put(backendPointList.topic, form)
           .then((res) => {

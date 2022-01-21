@@ -204,7 +204,7 @@ def add_topic():
 def modify_topic():
     task = request.json
     Topics(
-        id=task['_id'],
+        id=int(task['_id']),
         title=task['title'],
         header=task['header'],
         content=task['content']
