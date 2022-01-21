@@ -64,8 +64,8 @@ class DebateDetails(db.Document):
     topic_num = db.IntField()
     writer = db.IntField()
     content = db.StringField()
-    create_on = db.DateTimeField(default=datetime.datetime.utcnow)
-    update_on = db.DateTimeField(default=datetime.datetime.utcnow)
+    create_on = db.DateTimeField(default=datetime.datetime.now)
+    update_on = db.DateTimeField(default=datetime.datetime.now)
 
 
 class LikeOnDebate(db.Document):
@@ -306,7 +306,8 @@ def put_debate():
         id=task['_id'],
         topic_num=task['topicNum'],
         writer=user['id'],
-        content=task['content']
+        content=task['content'],
+        update_on=datetime.datetime.now
     ).save()
 
     return Response("SUCCESS", mimetype="application/json", status=200)
