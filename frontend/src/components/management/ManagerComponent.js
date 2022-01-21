@@ -2,7 +2,7 @@ import React from "react";
 import { useAuth } from "../authenticated/auth";
 import { getCurrentUser } from "../authenticated/AuthService";
 
-function ManagerComponet({ component: Component, render, props }) {
+function ManagerComponent({ component: Component, render, props }) {
   const [logged] = useAuth();
   const loggedUser = getCurrentUser();
 
@@ -21,4 +21,4 @@ function ManagerComponet({ component: Component, render, props }) {
   );
 }
 
-export default ManagerComponet;
+export default ManagerComponent;
