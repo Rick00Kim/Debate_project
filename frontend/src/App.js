@@ -118,7 +118,7 @@ function App() {
                   }
                 />
                 <Route
-                  path="/users"
+                  path="/manage/users"
                   element={<AuthComponent component={<Users />} />}
                 />
                 <Route path="/not-exists-topic" element={<NotFound />} />

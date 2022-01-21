@@ -4,6 +4,9 @@ export const routerEndPoint = {
   root: "/",
   debates: "debates/",
   addTopic: "topic/add",
+  manager: {
+    users: "manage/users",
+  },
   errors: {
     notFound: "/not-exists-topic",
     nonPermission: "/non-permission",
