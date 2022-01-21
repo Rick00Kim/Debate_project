@@ -10,6 +10,10 @@ const componentStyle = {
     flexDirection: "column",
     color: "white",
   },
+  scroll: {
+    overflowY: "auto",
+    position: "relative",
+  },
 };
 
 function Users() {
@@ -29,23 +33,21 @@ function Users() {
   return (
     <div style={componentStyle.root}>
       <h1>User Manager</h1>
-      <Table bordered hover variant="dark" size="md">
+      <Table bordered hover variant="dark" size="sm">
         <thead>
           <tr>
             <th>#</th>
             <th>User name</th>
-            <th>Roles</th>
-            <th>Menu</th>
+            <th>Role</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody style={componentStyle.scroll}>
           {userList.map((e, idx) => {
             return (
               <tr key={"user" + idx}>
-                <td>{idx + 1}</td>
+                <td onClick={(e) => console.log(e)}>{idx + 1}</td>
                 <td>{e.name}</td>
                 <td>{e.role}</td>
-                <td>@mdo</td>
               </tr>
             );
           })}
