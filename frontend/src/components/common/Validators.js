@@ -60,3 +60,13 @@ export const ageValidation = (age) => {
   }
   return null;
 };
+
+export const topicValidation = (fieldValue, fieldName) => {
+  if (requireValidation(fieldValue)) {
+    return `${fieldName} is required`;
+  }
+  if (fieldValue.trim().length < 5) {
+    return `file needs to be at least 5 characters`;
+  }
+  return null;
+};

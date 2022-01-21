@@ -4,6 +4,7 @@ import { Col, Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { backendPointList } from "../common/Constants";
+import { topicValidation } from "../common/Validators";
 import "bootstrap/dist/css/bootstrap.css";
 import axios from "axios";
 
@@ -17,6 +18,12 @@ const componentStyle = {
   },
 };
 
+const validate = {
+  title: (v) => topicValidation(v, "title"),
+  header: (v) => topicValidation(v, "header"),
+  content: (v) => topicValidation(v, "content"),
+};
+
 function AddTopic(props) {
   const { topicId } = useParams();
   const [manageMode, setManageMode] = useState("CREATE");
@@ -26,13 +33,22 @@ function AddTopic(props) {
     content: "",
   });
   const { freshList } = props;
+  const [touched, setTouched] = useState({});
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (topicId !== undefined) {
       setManageMode("MODIFY");
       axios
         .get(backendPointList.topic + "/" + topicId)
-        .then((res) => setForm(res.data))
+        .then((res) => {
+          setForm({
+            title: res.data.title,
+            header: res.data.header,
+            content: res.data.content,
+          });
+          console.log(res.data);
+        })
         .catch((err) => console.log(err));
     } else {
       setManageMode("CREATE");
@@ -44,35 +60,82 @@ function AddTopic(props) {
     }
   }, [topicId]);
 
-  const setField = (e) => {
-    const { name, value } = e.target;
+  const handleInput = (props) => {
+    const { name, value } = props.target;
     setForm({
       ...form,
       [name]: value,
+    });
+    setTouched({
+      ...touched,
+      [name]: true,
+    });
+  };
+
+  const handleBlur = (props) => {
+    const { name, value } = props.target;
+    const { [name]: removedError, ...rest } = errors;
+    const error = validate[name](value);
+    setErrors({
+      ...rest,
+      ...(error && { [name]: touched[name] && error }),
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (manageMode === "CREATE") {
-      axios
-        .post(backendPointList.topic, form)
-        .then((res) => {
-          freshList();
-          setForm({
-            title: "",
-            header: "",
-            content: "",
-          });
-        })
-        .catch((err) => console.log(err));
-    } else {
-      axios
-        .put(backendPointList.topic, form)
-        .then((res) => {
-          freshList();
-        })
-        .catch((err) => console.log(err));
+
+    const formValidation = Object.keys(form).reduce(
+      (acc, key) => {
+        const newError = validate[key](form[key]);
+        const newTouched = { [key]: true };
+        return {
+          errors: {
+            ...acc.errors,
+            ...(newError && { [key]: newError }),
+          },
+          touched: {
+            ...acc.touched,
+            ...newTouched,
+          },
+        };
+      },
+      {
+        errors: { ...errors },
+        touched: { ...touched },
+      }
+    );
+
+    setErrors(formValidation.errors);
+    setTouched(formValidation.touched);
+
+    if (
+      !Object.values(formValidation.errors).length &&
+      Object.values(formValidation.touched).length ===
+        Object.values(form).length &&
+      Object.values(formValidation.touched).every((t) => t === true)
+    ) {
+      if (manageMode === "CREATE") {
+        axios
+          .post(backendPointList.topic, form)
+          .then((res) => {
+            freshList();
+            setForm({
+              title: "",
+              header: "",
+              content: "",
+            });
+          })
+          .catch((err) => console.log(err));
+      } else {
+        form["_id"] = topicId;
+        axios
+          .put(backendPointList.topic, form)
+          .then((res) => {
+            freshList();
+          })
+          .catch((err) => console.log(err));
+      }
     }
   };
 
@@ -92,8 +155,14 @@ function AddTopic(props) {
               placeholder="Topic title"
               name="title"
               value={form.title}
-              onChange={(e) => setField(e)}
+              onChange={(e) => handleInput(e)}
+              onBlur={(e) => handleBlur(e)}
+              required
+              isInvalid={errors.title}
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.title}
+            </Form.Control.Feedback>
           </Col>
         </Form.Group>
         <Form.Group as={Row} controlId="formHeader">
@@ -106,8 +175,14 @@ function AddTopic(props) {
               placeholder="Topic header"
               name="header"
               value={form.header}
-              onChange={(e) => setField(e)}
+              onChange={(e) => handleInput(e)}
+              onBlur={(e) => handleBlur(e)}
+              required
+              isInvalid={errors.header}
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.header}
+            </Form.Control.Feedback>
           </Col>
         </Form.Group>
         <Form.Group as={Row} controlId="formContent">
@@ -120,8 +195,14 @@ function AddTopic(props) {
               placeholder="Topic content"
               name="content"
               value={form.content}
-              onChange={(e) => setField(e)}
+              onChange={(e) => handleInput(e)}
+              onBlur={(e) => handleBlur(e)}
+              required
+              isInvalid={errors.content}
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.content}
+            </Form.Control.Feedback>
           </Col>
         </Form.Group>
         <Form.Group as={Row}>
