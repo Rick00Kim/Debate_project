@@ -13,7 +13,7 @@ import { useAuth } from "../authenticated/auth";
 import DebateList from "./DebateList";
 import "bootstrap/dist/css/bootstrap.css";
 import DeleteTopicBtn from "../topic/DeleteTopicBtn";
-import { getCurrentUser } from "../authenticated/AuthService";
+import ManagerComponet from "../management/ManagerComponent";
 
 const componentStyle = {
   root: contentStyle.root,
@@ -138,16 +138,16 @@ function TopicContent(props) {
           <h1>{targetTopic.header}</h1>
           <p>{targetTopic.content}</p>
         </Container>
-        {logged && getCurrentUser().role === "Manager" ? (
-          <div style={componentStyle.manageBtnStyle}>
-            <DeleteTopicBtn freshList={freshList} topicId={topicId} />
-            <Link to={"/" + routerEndPoint.addTopic + "/" + targetTopic._id}>
-              <Button variant="outline-info">MODIFY</Button>
-            </Link>
-          </div>
-        ) : (
-          ""
-        )}
+        <ManagerComponet
+          render={(props) => (
+            <div style={componentStyle.manageBtnStyle} {...props}>
+              <DeleteTopicBtn freshList={freshList} topicId={topicId} />
+              <Link to={"/" + routerEndPoint.addTopic + "/" + targetTopic._id}>
+                <Button variant="outline-info">MODIFY</Button>
+              </Link>
+            </div>
+          )}
+        />
       </Jumbotron>
       <Container style={componentStyle.list}>
         {debateList.length === 0 ? (

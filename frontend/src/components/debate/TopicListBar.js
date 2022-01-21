@@ -5,6 +5,7 @@ import { contentStyle, routerEndPoint } from "../common/Constants";
 import { useAuth, logout } from "../authenticated/auth";
 import { getCurrentUser } from "../authenticated/AuthService";
 import LogoutButton from "../sign/SignOut";
+import ManagerComponet from "../management/ManagerComponent";
 import "bootstrap/dist/css/bootstrap.css";
 
 const componentStyle = {
@@ -26,6 +27,11 @@ const componentStyle = {
   newBtnStyle: {
     position: "absolute",
     left: "5%",
+  },
+  usersStyle: {
+    position: "absolute",
+    right: "10%",
+    bottom: "11%",
   },
   topicListStyle: {
     height: `70vh`,
@@ -56,6 +62,17 @@ const TopicListBar = (props) => {
   const UserInfo = () => {
     return logged ? (
       <Container>
+        <ManagerComponet
+          render={(props) => (
+            <Link
+              to={routerEndPoint.manager.users}
+              style={componentStyle.usersStyle}
+              {...props}
+            >
+              <Button variant="outline-warning">Users</Button>
+            </Link>
+          )}
+        />
         <h3>{getCurrentUser().name}</h3>
         <h4>Role: {getCurrentUser().role}</h4>
         <LogoutButton logout={logout} />
@@ -71,13 +88,16 @@ const TopicListBar = (props) => {
         <Link to={routerEndPoint.root} style={componentStyle.rootLinkStyle}>
           <h3 style={componentStyle.headerStyle}>Choose Topic</h3>
         </Link>
-        {logged && getCurrentUser().role === "Manager" ? (
-          <Link to={routerEndPoint.addTopic} style={componentStyle.newBtnStyle}>
-            <Button variant="light">New</Button>
-          </Link>
-        ) : (
-          ""
-        )}
+        <ManagerComponet
+          render={(props) => (
+            <Link
+              to={routerEndPoint.addTopic}
+              style={componentStyle.newBtnStyle}
+            >
+              <Button variant="light">New</Button>
+            </Link>
+          )}
+        />
       </Row>
       <ListGroup style={componentStyle.topicListStyle}>
         {topicList.map((e) => (
