@@ -9,7 +9,7 @@ from logging.handlers import RotatingFileHandler
 from flask import Flask, Response, request
 from flask_mongoengine import MongoEngine
 from flask_cors import CORS
-from flask_jwt_extended import JWTManager, jwt_required, create_access_token, create_refresh_token, get_jwt_identity
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
 from flask_bcrypt import Bcrypt
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
