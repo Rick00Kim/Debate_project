@@ -4,7 +4,7 @@ const NotFound = () => {
   return (
     <div
       style={{
-        height: `96vh`,
+        height: `95vh`,
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
