@@ -14,6 +14,7 @@ import DebateList from "./DebateList";
 import "bootstrap/dist/css/bootstrap.css";
 import DeleteTopicBtn from "../topic/DeleteTopicBtn";
 import ManagerComponet from "../management/ManagerComponent";
+import { getAuthHeader } from "../authenticated/AuthService";
 
 const componentStyle = {
   root: contentStyle.root,
@@ -82,7 +83,6 @@ function TopicContent(props) {
   const [currentDebate, setCurrentDebate] = useState(emptyDebateForm);
   const [targetTopic, setTargetTopic] = useState({});
   const [debateList, setDebateList] = useState([]);
-  const jwt_key = JSON.parse(localStorage.getItem("REACT_TOKEN_AUTH_KEY"));
 
   useEffect(() => {
     axios
@@ -94,7 +94,7 @@ function TopicContent(props) {
   }, [topicId]);
 
   const reloadDebateList = () => {
-    const headerContents = logged ? { Authorization: `Bearer ${jwt_key}` } : "";
+    const headerContents = logged ? getAuthHeader() : "";
     axios
       .get(backendPointList.debates + "/" + topicId, {
         headers: headerContents,
@@ -111,7 +111,7 @@ function TopicContent(props) {
   const deleteDebate = (item) => {
     axios
       .delete(backendPointList.debates + "/" + item._id, {
-        headers: { Authorization: `Bearer ${jwt_key}` },
+        headers: getAuthHeader(),
       })
       .then((res) => reloadDebateList())
       .catch((err) => console.log(err));

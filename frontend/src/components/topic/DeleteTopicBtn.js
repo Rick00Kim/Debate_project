@@ -3,16 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { routerEndPoint, backendPointList } from "../common/Constants";
 import { Button } from "react-bootstrap";
 import axios from "axios";
+import { getAuthHeader } from "../authenticated/AuthService";
 
 function DeleteTopicBtn(props) {
   const navigate = useNavigate();
   const { freshList, topicId } = props;
 
   const deleteTopic = (item) => {
-    const jwt_key = JSON.parse(localStorage.getItem("REACT_TOKEN_AUTH_KEY"));
     axios
       .delete(backendPointList.topic + "/" + topicId, {
-        headers: { Authorization: `Bearer ${jwt_key}` },
+        headers: getAuthHeader(),
       })
       .then((res) => {
         freshList();

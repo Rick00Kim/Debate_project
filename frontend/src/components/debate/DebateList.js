@@ -9,6 +9,7 @@ import thumbDown from "../../assets/images/thumbs-down-regular.svg";
 import thumbDownSolid from "../../assets/images/thumbs-down-solid.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
+import { getAuthHeader } from "../authenticated/AuthService";
 
 const componentStyle = {
   root: contentStyle.root,
@@ -99,7 +100,6 @@ function DebateList(props) {
     liked: false,
     unliked: false,
   });
-  const jwt_key = JSON.parse(localStorage.getItem("REACT_TOKEN_AUTH_KEY"));
 
   useEffect(() => {
     if (logged) {
@@ -111,7 +111,7 @@ function DebateList(props) {
   const reloadLikeList = () => {
     axios
       .get(backendPointList.like + "/" + item._id, {
-        headers: { Authorization: `Bearer ${jwt_key}` },
+        headers: getAuthHeader(),
       })
       .then((res) => res.data)
       .then((result) => setLikeList(result))
@@ -125,7 +125,7 @@ function DebateList(props) {
         backendPointList.like,
         { debate_id: item._id },
         {
-          headers: { Authorization: `Bearer ${jwt_key}` },
+          headers: getAuthHeader(),
         }
       )
       .then((res) => {
@@ -141,7 +141,7 @@ function DebateList(props) {
         backendPointList.unlike,
         { debate_id: item._id },
         {
-          headers: { Authorization: `Bearer ${jwt_key}` },
+          headers: getAuthHeader(),
         }
       )
       .then((res) => {

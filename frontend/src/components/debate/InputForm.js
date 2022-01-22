@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import { Form, Button, Col } from "react-bootstrap";
 import axios from "axios";
 import { backendPointList, emptyDebateForm } from "../common/Constants";
+import { getAuthHeader } from "../authenticated/AuthService";
 
 export default function InputForm(props) {
   const {
@@ -29,12 +30,10 @@ export default function InputForm(props) {
 
     currentDebate["topicNum"] = props.targetTopic._id;
 
-    let jwt_key = JSON.parse(localStorage.getItem("REACT_TOKEN_AUTH_KEY"));
-
     if (inputMode === "C") {
       axios
         .post(backendPointList.debates, currentDebate, {
-          headers: { Authorization: `Bearer ${jwt_key}` },
+          headers: getAuthHeader(),
         })
         .then((res) => {
           updateRow();
@@ -44,7 +43,7 @@ export default function InputForm(props) {
     } else {
       axios
         .put(backendPointList.debates, currentDebate, {
-          headers: { Authorization: `Bearer ${jwt_key}` },
+          headers: getAuthHeader(),
         })
         .then((res) => {
           updateRow();
