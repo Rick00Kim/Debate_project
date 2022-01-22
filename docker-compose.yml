@@ -38,6 +38,7 @@ services:
     ports:
       - 5500:5500
     environment:
+      SECRET_KEY: prdDebateSecret
       MONGODB_HOST: mongodb
       MONGODB_USERNAME: "debate_manager"
       MONGODB_PASSWORD: "manPrd4892#"
