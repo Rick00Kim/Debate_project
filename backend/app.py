@@ -14,6 +14,7 @@ from flask_bcrypt import Bcrypt
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 from jsonschema.exceptions import SchemaError
+from constants import signin_schema, signup_schema
 
 # Log settings
 fileConfig('./log_config.ini')
@@ -31,8 +32,8 @@ app.config['MONGODB_SETTINGS'] = {
     'password': os.environ['MONGODB_PASSWORD'],
     'db': 'debate_web'
 }
-app.config['JWT_SECRET_KEY'] = 'sampleSecretKey'
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
+app.config['JWT_SECRET_KEY'] = os.environ['SECRET_KEY']
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
 app.config['JWT_REFRESH_LIFESPAN'] = {'days': 30}
 app.logger.addHandler(handler)
 
@@ -80,57 +81,25 @@ class UnLikeOnDebate(db.Document):
     user_id = db.IntField()
 
 
-def validate_for_auth(auth_data):
-    user_schema = {
-        "type": "object",
-        "properties": {
-            "name": {
-                "type": "string",
-            },
-            "email": {
-                "type": "string",
-                "format": "email"
-            },
-            "password": {
-                "type": "string",
-                "minLength": 8
-            }
-        },
-        "required": ["email", "password"],
-        "additionalProperties": False
-    }
-
-    try:
-        validate(auth_data, user_schema)
-    except ValidationError as e:
-        return {'result': False, 'message': e}
-    except SchemaError as e:
-        return {'result': False, 'message': e}
-    return {'result': True, 'data': auth_data}
-
-
 @app.route('/api/auth', methods=['POST'])
 def auth_login():
-    validated_data = validate_for_auth(request.json)
     try:
-        if validated_data['result']:
-            request_data = validated_data['data']
-            request_pwd = request_data['password']
-            manager = UserInfo.objects(email=request_data['email']).first()
-            if manager and flask_bcrypt.check_password_hash(
-                    manager['password'], request_pwd):
-                identify = {
-                    'email': manager['email'],
-                    'name': manager['name'],
-                    'role': manager['role']
-                }
-                response = {
-                    'status': 'SUCCESS',
-                    'access_token': create_access_token(identity=identify)
-                }
-                return Response(json.dumps(response), mimetype="application/json", status=200)
-            else:
-                return Response(json.dumps({"result": False}), mimetype="application/json", status=200)
+        validate(request.json, signin_schema)
+        request_email = request.json['email']
+        request_pwd = request.json['password']
+        manager = UserInfo.objects(email=request_email).first()
+        if manager and flask_bcrypt.check_password_hash(
+                manager['password'], request_pwd):
+            identify = {
+                'email': manager['email'],
+                'name': manager['name'],
+                'role': manager['role']
+            }
+            response = {
+                'status': 'SUCCESS',
+                'access_token': create_access_token(identity=identify)
+            }
+            return Response(json.dumps(response), mimetype="application/json", status=200)
         else:
             return Response(json.dumps({"result": False}), mimetype="application/json", status=200)
     except Exception as e:
@@ -139,25 +108,32 @@ def auth_login():
 
 @app.route('/api/signup', methods=['POST'])
 def register_manager():
-    request_data = request.json
     response = {
-        'status': 'SUCCESS'
+        'status': True
     }
 
-    if UserInfo.objects(email=request_data['email']):
-        response['status'] = False
-        response['message'] = "{} is already registered...".format(
-            request_data['email'])
-        return Response(json.dumps(response), mimetype="application/json", status=200)
+    try:
+        print('validated => ', validate(request.json, signup_schema))
+        validate(request.json, signup_schema)
+        request_data = request.json
 
-    UserInfo(
-        name=request_data['name'],
-        email=request_data['email'],
-        password=flask_bcrypt.generate_password_hash(
-            request_data['password']).decode('utf-8')
-    ).save()
+        if UserInfo.objects(email=request_data['email']):
+            response['status'] = False
+            response['message'] = "{} is already registered...".format(
+                request_data['email'])
+            return Response(json.dumps(response), mimetype="application/json", status=200)
 
-    return Response(json.dumps(response), mimetype="application/json", status=201)
+        UserInfo(
+            name=request_data['name'],
+            email=request_data['email'],
+            password=flask_bcrypt.generate_password_hash(
+                request_data['password']).decode('utf-8')
+        ).save()
+
+        return Response(json.dumps(response), mimetype="application/json", status=201)
+    except Exception as e:
+        print(e)
+        return Response(json.dumps({"result": False}), mimetype="application/json", status=200)
 
 
 @app.route("/api/users", methods=['GET'])
