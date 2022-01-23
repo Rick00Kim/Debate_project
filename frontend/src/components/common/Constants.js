@@ -1,5 +1,3 @@
-import config from "../../components/config";
-
 export const routerEndPoint = {
   root: "/",
   debates: "debates/",
@@ -14,14 +12,14 @@ export const routerEndPoint = {
 };
 
 export const backendPointList = {
-  auth: config.BACKEND_DOMAIN + "/api/auth",
-  refresh: config.BACKEND_DOMAIN + "/api/refresh",
-  users: config.BACKEND_DOMAIN + "/api/users",
-  signup: config.BACKEND_DOMAIN + "/api/signup",
-  topic: config.BACKEND_DOMAIN + "/api/topic",
-  debates: config.BACKEND_DOMAIN + "/api/debates",
-  like: config.BACKEND_DOMAIN + "/api/like",
-  unlike: config.BACKEND_DOMAIN + "/api/unlike",
+  auth: "/api/auth",
+  refresh: "/api/refresh",
+  users: "/api/users",
+  signup: "/api/signup",
+  topic: "/api/topic",
+  debates: "/api/debates",
+  like: "/api/like",
+  unlike: "/api/unlike",
 };
 
 export const emptyDebateForm = {
