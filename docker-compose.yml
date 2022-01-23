@@ -19,7 +19,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    command: "npm run start:prod"
+    command: "npm run start"
     tty: true
     volumes:
       - appdata:/app
