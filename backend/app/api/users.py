@@ -2,7 +2,7 @@ import json
 from flask import Response, request
 from jsonschema import validate
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from constants import signup_schema
+from ..constants import signup_schema
 from ..dto import UserInfo
 from .. import app, flask_bcrypt
 
