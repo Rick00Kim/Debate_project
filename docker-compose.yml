@@ -61,8 +61,6 @@ services:
       MONGODB_DATA_DIR: mongodbdata
     volumes:
       - ./db/init.sh:/docker-entrypoint-initdb.d/init.sh:ro
-    ports:
-      - 27017:27017
     networks:
       debate-network:
         aliases:
