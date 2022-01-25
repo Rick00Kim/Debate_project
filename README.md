@@ -25,3 +25,10 @@ Web application for debate with various people.
 2. Views
 
 3. APIs
+   1. Authorize
+      [EP: /api/auth]
+   2. Sign In
+      [EP: /api/signIn]
+   3. Sign up
+      [EP: /api/sginUp]
+   4. Get topic
