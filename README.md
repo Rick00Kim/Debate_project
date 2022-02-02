@@ -25,33 +25,20 @@ Web application for debate with various people.
 2. Views
 
 3. APIs
-   1. Authorize
-      [EP: /api/auth, POST]
-   2. Sign up
-      [EP: /api/signup, POST]
-   3. Get all users
-      [EP: /api/users, GET]
-   4. Get topic
-      [EP: /api/topic, GET]
-   5. Get specific topic
-      [EP: /api/topic/{topic_num}, GET]
-   6. Resister topic
-      [EP: /api/topic, POST]
-   7. Modify topic
-      [EP: /api/topic, PUT]
-   8. Delete topic
-      [EP: /api/topic/{topic_num}, DELETE]
-   9. Get Debate List
-      [EP: /api/debates/{topic_num}, GET]
-   10. Resister Debate
-       [EP: /api/debates, POST]
-   11. Delete Debate
-       [EP: /api/debates/{debate_id}, DELETE]
-   12. Modify Debate
-       [EP: /api/debates, PUT]
-   13. Get Like and Unlike
-       [EP: /api/like/{debate_num}, GET]
-   14. Resister like
-       [EP: /api/like, POST]
-   15. Resister unlike
-       [EP: /api/unlike, POST]
+   | No | End point | Function name | Method | description |
+   |----|-----------|---------------|--------|-------------|
+   | 1| /api/auth| Authorize | POST|- |
+   | 2| /api/signup| Sign up| POST| -|
+   | 3| /api/users| Get all users|GET | -|
+   | 4| /api/topic| Get topic|GET | -|
+   | 5| /api/topic/{topic_num}| Get specific topic| GET| -|
+   | 6| /api/topic| Resister topic| POST| -|
+   | 7| /api/topic|Modify topic |PUT | -|
+   | 8| /api/topic/{topic_num}|Delete topic | DELETE| -|
+   | 9| /api/debates/{topic_num}| Get Debate List | GET| -|
+   | 10| /api/debates| Resister Debate | POST| -|
+   | 11| /api/debates/{debate_id} | Delete Debate | DELETE| -|
+   | 12| /api/debates| Modify Debate | PUT| -|
+   | 13| /api/like/{debate_num}| Get Like and Unlike | GET| -|
+   | 14| /api/like| Resister like |POST | -|
+   | 15| /api/unlike| Resister unlike |POST | -|
