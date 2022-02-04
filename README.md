@@ -15,12 +15,12 @@ Web application for debate with various people.
    - Web server: NGINX 1.15
    - Frontend: Node 14.18-alpine
    - Backend: Python 3.8
-2. Tools
+2. Tools \
    [TODO] Write Tools
 
 ## DESIGN
 
-1. System
+1. System \
    [TODO] Input Picture
 2. Views
 
