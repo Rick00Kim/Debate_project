@@ -5,8 +5,10 @@ import {
   Route,
   Routes,
   Navigate,
+  NavLink,
 } from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
+import { Nav, Navbar } from "react-bootstrap";
 import TopicListBar from "./components/debate/TopicListBar";
 import TopicContent from "./components/debate/TopicContent";
 import { backendPointList } from "./components/common/Constants";
@@ -26,6 +28,8 @@ const componentStyle = {
   mainStyle: {
     color: `#e9ecef`,
     width: `100vw`,
+  },
+  contentRowStyle: {
     height: `100vh`,
     padding: 20,
   },
@@ -41,10 +45,27 @@ function App() {
   const loggedUser = getCurrentUser();
   const [currentTopic, setCurrentTopic] = useState({});
   const [topicList, setTopicList] = useState([]);
+  const [width, setWindowWidth] = useState(0);
 
   useEffect(() => {
     freshList();
   }, []);
+
+  useEffect(() => {
+    updateDimensions();
+
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
+
+  const updateDimensions = () => {
+    const width = window.innerWidth;
+    setWindowWidth(width);
+  };
+
+  const responsiveMobile = {
+    showTopNavMenu: width < 764,
+  };
 
   const freshList = () => {
     axios
@@ -77,19 +98,51 @@ function App() {
     );
   };
 
+  const NavBar = () => {
+    return (
+      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar.Brand href="/">Dice Roller</Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link as={NavLink} to="features">
+              features
+            </Nav.Link>
+            <Nav.Link href="#pricing">Pricing</Nav.Link>
+          </Nav>
+          <Nav>
+            <Nav.Link href="#deets">More deets</Nav.Link>
+            <Nav.Link eventKey={2} href="#memes">
+              Dank memes
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+    );
+  };
+
   return (
     <div className="App-header">
       <div style={componentStyle.mainStyle}>
         <Router>
-          <Row>
-            <Col sm={3}>
-              <TopicListBar
-                topicList={topicList}
-                currentTopic={currentTopic}
-                setCurrentTopic={setCurrentTopic}
-              />
-            </Col>
-            <Col sm={9} style={componentStyle.contentColStyle}>
+          {responsiveMobile.showTopNavMenu ? NavBar() : ""}
+          <Row style={componentStyle.contentRowStyle}>
+            {responsiveMobile.showTopNavMenu ? (
+              ""
+            ) : (
+              <Col sm={3}>
+                <TopicListBar
+                  topicList={topicList}
+                  currentTopic={currentTopic}
+                  setCurrentTopic={setCurrentTopic}
+                />
+              </Col>
+            )}
+
+            <Col
+              sm={responsiveMobile.showTopNavMenu ? 12 : 9}
+              style={componentStyle.contentColStyle}
+            >
               <Routes>
                 <Route exact path="/" element={<IndexPage />} />
                 <Route path="/signIn" element={<SignIn />} />
