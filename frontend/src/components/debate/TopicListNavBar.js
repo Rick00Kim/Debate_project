@@ -28,9 +28,7 @@ const TopicListNavBar = (props) => {
         sticky="top"
         expanded={expanded}
       >
-        <Navbar.Brand as={NavLink} to={routerEndPoint.root}>
-          KURURU DEBATE
-        </Navbar.Brand>
+        <Navbar.Brand href={routerEndPoint.root}>KURURU DEBATE</Navbar.Brand>
         <Navbar.Toggle
           aria-controls="responsive-navbar-nav"
           onClick={(e) => setExpanded(!expanded)}

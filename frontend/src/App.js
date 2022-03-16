@@ -28,14 +28,13 @@ const componentStyle = {
     color: `#e9ecef`,
     width: `100vw`,
   },
+  contentMenuStyle: {
+    borderRightStyle: `solid`,
+    borderRightWidth: `thin`,
+  },
   contentRowStyle: {
     height: `100vh`,
     padding: 20,
-  },
-  contentColStyle: {
-    color: `#e8dbdb`,
-    borderLeftStyle: `solid`,
-    borderLeftWidth: `thin`,
   },
 };
 
@@ -63,7 +62,7 @@ function App() {
   };
 
   const responsiveMobile = {
-    showTopNavMenu: width < 764,
+    showTopNavMenu: width < 900,
   };
 
   const freshList = () => {
@@ -113,7 +112,7 @@ function App() {
             {responsiveMobile.showTopNavMenu ? (
               ""
             ) : (
-              <Col sm={3}>
+              <Col sm={3} style={componentStyle.contentMenuStyle}>
                 <TopicListBar
                   topicList={topicList}
                   currentTopic={currentTopic}
@@ -122,10 +121,7 @@ function App() {
               </Col>
             )}
 
-            <Col
-              sm={responsiveMobile.showTopNavMenu ? 12 : 9}
-              style={componentStyle.contentColStyle}
-            >
+            <Col sm={responsiveMobile.showTopNavMenu ? 12 : 9}>
               <Routes>
                 <Route exact path="/" element={<IndexPage />} />
                 <Route path="/signIn" element={<SignIn />} />
