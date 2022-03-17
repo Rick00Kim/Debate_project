@@ -5,7 +5,7 @@ import { contentStyle, routerEndPoint } from "../common/Constants";
 import { useAuth, logout } from "../authenticated/auth";
 import { getCurrentUser } from "../authenticated/AuthService";
 import LogoutButton from "../sign/SignOut";
-import ManagerComponet from "../management/ManagerComponent";
+import ManagerComponent from "../management/ManagerComponent";
 import "bootstrap/dist/css/bootstrap.css";
 
 const componentStyle = {
@@ -62,7 +62,7 @@ const TopicListBar = (props) => {
   const UserInfo = () => {
     return logged ? (
       <Container>
-        <ManagerComponet
+        <ManagerComponent
           render={(props) => (
             <Link
               to={routerEndPoint.manager.users}
@@ -88,7 +88,7 @@ const TopicListBar = (props) => {
         <Link to={routerEndPoint.root} style={componentStyle.rootLinkStyle}>
           <h3 style={componentStyle.headerStyle}>Choose Topic</h3>
         </Link>
-        <ManagerComponet
+        <ManagerComponent
           render={(props) => (
             <Link
               to={routerEndPoint.addTopic}

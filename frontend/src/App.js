@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
 import TopicListBar from "./components/debate/TopicListBar";
+import TopicListNavBar from "./components/debate/TopicListNavBar";
 import TopicContent from "./components/debate/TopicContent";
 import { backendPointList } from "./components/common/Constants";
 import SignIn from "./components/sign/SignIn";
@@ -26,13 +27,14 @@ const componentStyle = {
   mainStyle: {
     color: `#e9ecef`,
     width: `100vw`,
+  },
+  contentMenuStyle: {
+    borderRightStyle: `solid`,
+    borderRightWidth: `thin`,
+  },
+  contentRowStyle: {
     height: `100vh`,
     padding: 20,
-  },
-  contentColStyle: {
-    color: `#e8dbdb`,
-    borderLeftStyle: `solid`,
-    borderLeftWidth: `thin`,
   },
 };
 
@@ -41,10 +43,27 @@ function App() {
   const loggedUser = getCurrentUser();
   const [currentTopic, setCurrentTopic] = useState({});
   const [topicList, setTopicList] = useState([]);
+  const [width, setWindowWidth] = useState(0);
 
   useEffect(() => {
     freshList();
   }, []);
+
+  useEffect(() => {
+    updateDimensions();
+
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
+
+  const updateDimensions = () => {
+    const width = window.innerWidth;
+    setWindowWidth(width);
+  };
+
+  const responsiveMobile = {
+    showTopNavMenu: width < 900,
+  };
 
   const freshList = () => {
     axios
@@ -81,15 +100,28 @@ function App() {
     <div className="App-header">
       <div style={componentStyle.mainStyle}>
         <Router>
-          <Row>
-            <Col sm={3}>
-              <TopicListBar
-                topicList={topicList}
-                currentTopic={currentTopic}
-                setCurrentTopic={setCurrentTopic}
-              />
-            </Col>
-            <Col sm={9} style={componentStyle.contentColStyle}>
+          {responsiveMobile.showTopNavMenu ? (
+            <TopicListNavBar
+              topicList={topicList}
+              setCurrentTopic={setCurrentTopic}
+            />
+          ) : (
+            ""
+          )}
+          <Row style={componentStyle.contentRowStyle}>
+            {responsiveMobile.showTopNavMenu ? (
+              ""
+            ) : (
+              <Col sm={3} style={componentStyle.contentMenuStyle}>
+                <TopicListBar
+                  topicList={topicList}
+                  currentTopic={currentTopic}
+                  setCurrentTopic={setCurrentTopic}
+                />
+              </Col>
+            )}
+
+            <Col sm={responsiveMobile.showTopNavMenu ? 12 : 9}>
               <Routes>
                 <Route exact path="/" element={<IndexPage />} />
                 <Route path="/signIn" element={<SignIn />} />
