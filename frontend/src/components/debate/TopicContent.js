@@ -78,7 +78,7 @@ function TopicContent(props) {
   const [logged] = useAuth();
   const location = useLocation();
   const { topicId } = useParams();
-  const { freshList } = props;
+  const { freshList, mobileFlg } = props;
   const [inputMode, setInputMode] = useState("C");
   const [currentDebate, setCurrentDebate] = useState(emptyDebateForm);
   const [targetTopic, setTargetTopic] = useState({});
@@ -128,8 +128,12 @@ function TopicContent(props) {
     ));
   };
 
+  const responsiveHeight = {
+    height: mobileFlg ? `87vh` : `95vh`,
+  };
+
   return targetTopic ? (
-    <div style={componentStyle.root}>
+    <div style={{ ...componentStyle.root, ...responsiveHeight }}>
       <Jumbotron
         fluid
         style={{ paddingTop: `2rem`, marginBottom: 10, padding: `20px 0` }}

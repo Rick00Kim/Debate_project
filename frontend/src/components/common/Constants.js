@@ -32,6 +32,5 @@ export const contentStyle = {
     display: `flex`,
     flexDirection: `column`,
     justifyContent: `space-between`,
-    height: `95vh`,
   },
 };

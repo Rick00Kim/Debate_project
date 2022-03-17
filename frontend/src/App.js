@@ -33,7 +33,6 @@ const componentStyle = {
     borderRightWidth: `thin`,
   },
   contentRowStyle: {
-    height: `100vh`,
     padding: 20,
   },
 };
@@ -124,7 +123,12 @@ function App() {
                 <Route path="/signUp" element={<SignUp />} />
                 <Route
                   path="/debates/:topicId"
-                  element={<TopicContent freshList={freshList} />}
+                  element={
+                    <TopicContent
+                      freshList={freshList}
+                      mobileFlg={responsiveMobile.showTopNavMenu}
+                    />
+                  }
                 />
                 <Route
                   path="/topic/add"
