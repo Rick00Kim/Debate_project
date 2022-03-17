@@ -62,7 +62,7 @@ function App() {
   };
 
   const responsiveMobile = {
-    showTopNavMenu: width < 900,
+    showTopNavMenu: width < 640,
   };
 
   const freshList = () => {
@@ -100,18 +100,14 @@ function App() {
     <div className="App-header">
       <div style={componentStyle.mainStyle}>
         <Router>
-          {responsiveMobile.showTopNavMenu ? (
+          {responsiveMobile.showTopNavMenu && (
             <TopicListNavBar
               topicList={topicList}
               setCurrentTopic={setCurrentTopic}
             />
-          ) : (
-            ""
           )}
           <Row style={componentStyle.contentRowStyle}>
-            {responsiveMobile.showTopNavMenu ? (
-              ""
-            ) : (
+            {!responsiveMobile.showTopNavMenu && (
               <Col sm={3} style={componentStyle.contentMenuStyle}>
                 <TopicListBar
                   topicList={topicList}

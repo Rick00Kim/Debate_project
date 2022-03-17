@@ -44,9 +44,7 @@ function IndexPage() {
           👈 You can exchange opinions with many people on various topics
         </h4>
       </div>
-      {logged ? (
-        ""
-      ) : (
+      {!logged && (
         <>
           <div style={{ marginTop: "1%" }}>
             <Button

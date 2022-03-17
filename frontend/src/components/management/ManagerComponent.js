@@ -8,15 +8,8 @@ function ManagerComponent({ component: Component, render, props }) {
 
   return (
     <div>
-      {logged & (loggedUser.role === "Manager") ? (
-        render ? (
-          render(props)
-        ) : (
-          <Component {...props} />
-        )
-      ) : (
-        ""
-      )}
+      {logged & (loggedUser.role === "Manager") &&
+        (render ? render(props) : <Component {...props} />)}
     </div>
   );
 }

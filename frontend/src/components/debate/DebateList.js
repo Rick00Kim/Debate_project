@@ -161,7 +161,7 @@ function DebateList(props) {
           <Card.Title>{item.username}</Card.Title>
           <Card.Text>{item.content}</Card.Text>
         </Card.Body>
-        {logged ? (
+        {logged && (
           <Card.Footer style={componentStyle.itemFooterStyle}>
             <div style={componentStyle.thumbUpDownStyle}>
               <div style={componentStyle.thumbIconDivStyle}>
@@ -188,7 +188,7 @@ function DebateList(props) {
                   id={"dropdown-custom-components-" + item._id}
                 />
                 <Dropdown.Menu>
-                  {item.edit_grant ? (
+                  {item.edit_grant && (
                     <div>
                       <Dropdown.Item
                         as="button"
@@ -206,8 +206,6 @@ function DebateList(props) {
                       </Dropdown.Item>
                       <Dropdown.Divider />
                     </div>
-                  ) : (
-                    ""
                   )}
                   <Dropdown.Item as="button" disabled>
                     <small className="text-muted">
@@ -218,8 +216,6 @@ function DebateList(props) {
               </Dropdown>
             </div>
           </Card.Footer>
-        ) : (
-          ""
         )}
       </Card>
     </ListGroup.Item>

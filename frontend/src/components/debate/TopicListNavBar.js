@@ -34,12 +34,10 @@ const TopicListNavBar = (props) => {
           onClick={(e) => setExpanded(!expanded)}
         />
         <Navbar.Collapse id="responsive-navbar-nav">
-          {logged ? (
+          {logged && (
             <h4>
               {getCurrentUser().name} ({getCurrentUser().role})
             </h4>
-          ) : (
-            ""
           )}
           <Nav className="mr-auto">
             <NavDropdown title="Choose Topic" id="collasible-nav-dropdown">
@@ -54,7 +52,7 @@ const TopicListNavBar = (props) => {
               ))}
             </NavDropdown>
           </Nav>
-          {logged ? (
+          {logged && (
             <Nav>
               <ManagerComponent
                 render={(props) => (
@@ -80,8 +78,6 @@ const TopicListNavBar = (props) => {
               />
               <LogoutButton logout={logout} />
             </Nav>
-          ) : (
-            ""
           )}
         </Navbar.Collapse>
       </Navbar>

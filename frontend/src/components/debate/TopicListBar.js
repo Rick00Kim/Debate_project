@@ -60,25 +60,25 @@ const TopicListBar = (props) => {
   const { topicList, currentTopic, setCurrentTopic } = props;
 
   const UserInfo = () => {
-    return logged ? (
-      <Container>
-        <ManagerComponent
-          render={(props) => (
-            <Link
-              to={routerEndPoint.manager.users}
-              style={componentStyle.usersStyle}
-              {...props}
-            >
-              <Button variant="outline-warning">Users</Button>
-            </Link>
-          )}
-        />
-        <h3>{getCurrentUser().name}</h3>
-        <h4>Role: {getCurrentUser().role}</h4>
-        <LogoutButton logout={logout} />
-      </Container>
-    ) : (
-      ""
+    return (
+      logged && (
+        <Container>
+          <ManagerComponent
+            render={(props) => (
+              <Link
+                to={routerEndPoint.manager.users}
+                style={componentStyle.usersStyle}
+                {...props}
+              >
+                <Button variant="outline-warning">Users</Button>
+              </Link>
+            )}
+          />
+          <h3>{getCurrentUser().name}</h3>
+          <h4>Role: {getCurrentUser().role}</h4>
+          <LogoutButton logout={logout} />
+        </Container>
+      )
     );
   };
 
