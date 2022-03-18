@@ -33,7 +33,6 @@ const componentStyle = {
     borderRightWidth: `thin`,
   },
   contentRowStyle: {
-    height: `100vh`,
     padding: 20,
   },
 };
@@ -62,7 +61,7 @@ function App() {
   };
 
   const responsiveMobile = {
-    showTopNavMenu: width < 900,
+    showTopNavMenu: width < 768,
   };
 
   const freshList = () => {
@@ -100,18 +99,14 @@ function App() {
     <div className="App-header">
       <div style={componentStyle.mainStyle}>
         <Router>
-          {responsiveMobile.showTopNavMenu ? (
+          {responsiveMobile.showTopNavMenu && (
             <TopicListNavBar
               topicList={topicList}
               setCurrentTopic={setCurrentTopic}
             />
-          ) : (
-            ""
           )}
           <Row style={componentStyle.contentRowStyle}>
-            {responsiveMobile.showTopNavMenu ? (
-              ""
-            ) : (
+            {!responsiveMobile.showTopNavMenu && (
               <Col sm={3} style={componentStyle.contentMenuStyle}>
                 <TopicListBar
                   topicList={topicList}
@@ -123,19 +118,44 @@ function App() {
 
             <Col sm={responsiveMobile.showTopNavMenu ? 12 : 9}>
               <Routes>
-                <Route exact path="/" element={<IndexPage />} />
-                <Route path="/signIn" element={<SignIn />} />
-                <Route path="/signUp" element={<SignUp />} />
+                <Route
+                  exact
+                  path="/"
+                  element={
+                    <IndexPage mobileFlg={responsiveMobile.showTopNavMenu} />
+                  }
+                />
+                <Route
+                  path="/signIn"
+                  element={
+                    <SignIn mobileFlg={responsiveMobile.showTopNavMenu} />
+                  }
+                />
+                <Route
+                  path="/signUp"
+                  element={
+                    <SignUp mobileFlg={responsiveMobile.showTopNavMenu} />
+                  }
+                />
                 <Route
                   path="/debates/:topicId"
-                  element={<TopicContent freshList={freshList} />}
+                  element={
+                    <TopicContent
+                      freshList={freshList}
+                      mobileFlg={responsiveMobile.showTopNavMenu}
+                    />
+                  }
                 />
                 <Route
                   path="/topic/add"
                   element={
                     <AuthComponent
                       component={
-                        <AddTopic topicList={topicList} freshList={freshList} />
+                        <AddTopic
+                          topicList={topicList}
+                          freshList={freshList}
+                          mobileFlg={responsiveMobile.showTopNavMenu}
+                        />
                       }
                     />
                   }
@@ -145,14 +165,24 @@ function App() {
                   element={
                     <AuthComponent
                       component={
-                        <AddTopic topicList={topicList} freshList={freshList} />
+                        <AddTopic
+                          topicList={topicList}
+                          freshList={freshList}
+                          mobileFlg={responsiveMobile.showTopNavMenu}
+                        />
                       }
                     />
                   }
                 />
                 <Route
                   path="/manage/users"
-                  element={<AuthComponent component={<Users />} />}
+                  element={
+                    <AuthComponent
+                      component={
+                        <Users mobileFlg={responsiveMobile.showTopNavMenu} />
+                      }
+                    />
+                  }
                 />
                 <Route path="/not-exists-topic" element={<NotFound />} />
                 <Route path="/non-permission" element={<NonPermission />} />

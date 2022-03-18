@@ -10,6 +10,7 @@ const componentStyle = {
     display: "flex",
     flexDirection: "column",
     color: "white",
+    height: `95vh`,
   },
   scroll: {
     overflowY: "auto",
@@ -17,8 +18,13 @@ const componentStyle = {
   },
 };
 
-function Users() {
+function Users(props) {
   const [userList, setUserList] = useState([]);
+  const { mobileFlg } = props;
+
+  const responsiveHeight = {
+    height: mobileFlg ? `87vh` : `95vh`,
+  };
 
   useEffect(() => {
     axios
@@ -30,7 +36,7 @@ function Users() {
   }, []);
 
   return (
-    <div style={componentStyle.root}>
+    <div style={{ ...componentStyle.root, ...responsiveHeight }}>
       <h1>User Manager</h1>
       <Table bordered hover variant="dark" size="sm">
         <thead>

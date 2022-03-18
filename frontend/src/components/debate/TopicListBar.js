@@ -29,13 +29,12 @@ const componentStyle = {
     left: "5%",
   },
   usersStyle: {
-    position: "absolute",
     right: "10%",
     bottom: "11%",
   },
   topicListStyle: {
-    height: `70vh`,
-    maxHeight: `70vh`,
+    height: `65vh`,
+    maxHeight: `65vh`,
     fontSize: `20px`,
     borderRadius: `5px`,
     overflow: `scroll`,
@@ -60,25 +59,27 @@ const TopicListBar = (props) => {
   const { topicList, currentTopic, setCurrentTopic } = props;
 
   const UserInfo = () => {
-    return logged ? (
-      <Container>
-        <ManagerComponent
-          render={(props) => (
-            <Link
-              to={routerEndPoint.manager.users}
-              style={componentStyle.usersStyle}
-              {...props}
-            >
-              <Button variant="outline-warning">Users</Button>
-            </Link>
-          )}
-        />
-        <h3>{getCurrentUser().name}</h3>
-        <h4>Role: {getCurrentUser().role}</h4>
-        <LogoutButton logout={logout} />
-      </Container>
-    ) : (
-      ""
+    return (
+      logged && (
+        <Container>
+          <ManagerComponent
+            render={(props) => (
+              <Link
+                to={routerEndPoint.manager.users}
+                style={componentStyle.usersStyle}
+                {...props}
+              >
+                <Button block variant="outline-warning">
+                  Users
+                </Button>
+              </Link>
+            )}
+          />
+          <h3>{getCurrentUser().name}</h3>
+          <h4>Role: {getCurrentUser().role}</h4>
+          <LogoutButton logout={logout} />
+        </Container>
+      )
     );
   };
 

@@ -26,6 +26,7 @@ const validate = {
 
 function AddTopic(props) {
   const { topicId } = useParams();
+  const { mobileFlg } = props;
   const [manageMode, setManageMode] = useState("CREATE");
   const [form, setForm] = useState({
     title: "",
@@ -35,6 +36,10 @@ function AddTopic(props) {
   const { freshList } = props;
   const [touched, setTouched] = useState({});
   const [errors, setErrors] = useState({});
+
+  const responsiveHeight = {
+    height: mobileFlg ? `87vh` : `95vh`,
+  };
 
   useEffect(() => {
     if (topicId !== undefined) {
@@ -140,7 +145,7 @@ function AddTopic(props) {
   };
 
   return (
-    <div style={componentStyle.root}>
+    <div style={{ ...componentStyle.root, ...responsiveHeight }}>
       <h1 style={{ marginBottom: `1em` }}>
         Topic Management ({manageMode === "CREATE" ? "Add" : "Modify"})
       </h1>

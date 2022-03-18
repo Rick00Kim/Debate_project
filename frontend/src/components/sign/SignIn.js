@@ -24,12 +24,17 @@ const componentStyle = {
   },
 };
 
-function SignIn() {
+function SignIn(props) {
   const search = useLocation().search;
+  const { mobileFlg } = props;
   const redirectUrl = new URLSearchParams(search).get("redirectUrl");
 
+  const responsiveHeight = {
+    height: mobileFlg ? `87vh` : `95vh`,
+  };
+
   return (
-    <div style={componentStyle.root}>
+    <div style={{ ...componentStyle.root, ...responsiveHeight }}>
       <h1 style={{ textAlign: "center" }}>SIGN IN</h1>
       <Card style={componentStyle.authCardStyle}>
         <Card.Body style={componentStyle.authCardBodyStyle}>
