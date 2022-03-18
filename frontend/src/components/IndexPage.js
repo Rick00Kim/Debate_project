@@ -29,12 +29,16 @@ const componentStyle = {
   },
 };
 
-function IndexPage() {
+function IndexPage(props) {
   const [logged] = useAuth();
   const [signInFlg, setSignInFlg] = useState(false);
+  const { mobileFlg } = props;
 
+  const responsiveHeight = {
+    height: mobileFlg ? `87vh` : `95vh`,
+  };
   return (
-    <div style={componentStyle.root}>
+    <div style={{ ...componentStyle.root, ...responsiveHeight }}>
       <div>
         <h1>🤔 What do you think?</h1>
         <h2>

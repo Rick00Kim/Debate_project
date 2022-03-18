@@ -118,9 +118,25 @@ function App() {
 
             <Col sm={responsiveMobile.showTopNavMenu ? 12 : 9}>
               <Routes>
-                <Route exact path="/" element={<IndexPage />} />
-                <Route path="/signIn" element={<SignIn />} />
-                <Route path="/signUp" element={<SignUp />} />
+                <Route
+                  exact
+                  path="/"
+                  element={
+                    <IndexPage mobileFlg={responsiveMobile.showTopNavMenu} />
+                  }
+                />
+                <Route
+                  path="/signIn"
+                  element={
+                    <SignIn mobileFlg={responsiveMobile.showTopNavMenu} />
+                  }
+                />
+                <Route
+                  path="/signUp"
+                  element={
+                    <SignUp mobileFlg={responsiveMobile.showTopNavMenu} />
+                  }
+                />
                 <Route
                   path="/debates/:topicId"
                   element={
@@ -135,7 +151,11 @@ function App() {
                   element={
                     <AuthComponent
                       component={
-                        <AddTopic topicList={topicList} freshList={freshList} />
+                        <AddTopic
+                          topicList={topicList}
+                          freshList={freshList}
+                          mobileFlg={responsiveMobile.showTopNavMenu}
+                        />
                       }
                     />
                   }
@@ -145,14 +165,24 @@ function App() {
                   element={
                     <AuthComponent
                       component={
-                        <AddTopic topicList={topicList} freshList={freshList} />
+                        <AddTopic
+                          topicList={topicList}
+                          freshList={freshList}
+                          mobileFlg={responsiveMobile.showTopNavMenu}
+                        />
                       }
                     />
                   }
                 />
                 <Route
                   path="/manage/users"
-                  element={<AuthComponent component={<Users />} />}
+                  element={
+                    <AuthComponent
+                      component={
+                        <Users mobileFlg={responsiveMobile.showTopNavMenu} />
+                      }
+                    />
+                  }
                 />
                 <Route path="/not-exists-topic" element={<NotFound />} />
                 <Route path="/non-permission" element={<NonPermission />} />

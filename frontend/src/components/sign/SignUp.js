@@ -24,9 +24,14 @@ const componentStyle = {
   },
 };
 
-function SignUp() {
+function SignUp(props) {
+  const { mobileFlg } = props;
+
+  const responsiveHeight = {
+    height: mobileFlg ? `87vh` : `95vh`,
+  };
   return (
-    <div style={componentStyle.root}>
+    <div style={{ ...componentStyle.root, ...responsiveHeight }}>
       <h1 style={{ textAlign: "center" }}>SIGN UP</h1>
       <Card style={componentStyle.authCardStyle}>
         <Card.Body style={componentStyle.authCardBodyStyle}>
