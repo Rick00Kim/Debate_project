@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Navigate, Link, useLocation } from "react-router-dom";
-import { Container, Jumbotron, ListGroup, Button } from "react-bootstrap";
+import {
+  Container,
+  Jumbotron,
+  ListGroup,
+  Button,
+  Row,
+  Col,
+} from "react-bootstrap";
 import axios from "axios";
 import {
   routerEndPoint,
@@ -13,7 +20,7 @@ import { useAuth } from "../authenticated/auth";
 import DebateList from "./DebateList";
 import "bootstrap/dist/css/bootstrap.css";
 import DeleteTopicBtn from "../topic/DeleteTopicBtn";
-import ManagerComponet from "../management/ManagerComponent";
+import ManagerComponent from "../management/ManagerComponent";
 import { getAuthHeader } from "../authenticated/AuthService";
 
 const componentStyle = {
@@ -66,11 +73,9 @@ const componentStyle = {
     flexDirection: "column",
   },
   manageBtnStyle: {
-    display: "flex",
-    flexDirection: "column",
-    position: "absolute",
-    right: "3%",
-    top: "3%",
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom: 10,
   },
 };
 
@@ -134,6 +139,22 @@ function TopicContent(props) {
 
   return targetTopic ? (
     <div style={{ ...componentStyle.root, ...responsiveHeight }}>
+      <ManagerComponent
+        render={(props) => (
+          <Row style={componentStyle.manageBtnStyle} {...props}>
+            <Col xs={6}>
+              <Link to={"/" + routerEndPoint.addTopic + "/" + targetTopic._id}>
+                <Button block variant="info">
+                  MODIFY
+                </Button>
+              </Link>
+            </Col>
+            <Col xs={6}>
+              <DeleteTopicBtn freshList={freshList} topicId={topicId} />
+            </Col>
+          </Row>
+        )}
+      />
       <Jumbotron
         fluid
         style={{ paddingTop: `2rem`, marginBottom: 10, padding: `20px 0` }}
@@ -142,16 +163,6 @@ function TopicContent(props) {
           <h1>{targetTopic.header}</h1>
           <p>{targetTopic.content}</p>
         </Container>
-        <ManagerComponet
-          render={(props) => (
-            <div style={componentStyle.manageBtnStyle} {...props}>
-              <DeleteTopicBtn freshList={freshList} topicId={topicId} />
-              <Link to={"/" + routerEndPoint.addTopic + "/" + targetTopic._id}>
-                <Button variant="outline-info">MODIFY</Button>
-              </Link>
-            </div>
-          )}
-        />
       </Jumbotron>
       <Container style={componentStyle.list}>
         {debateList.length === 0 ? (
@@ -163,7 +174,7 @@ function TopicContent(props) {
         )}
       </Container>
       {logged ? (
-        <Container style={{ fontSize: `15px`, padding: 0 }}>
+        <Container style={{ fontSize: `15px`, padding: 0 }} fluid="md">
           <hr style={{ borderTop: `1px solid #e9ecef`, margin: `2px` }} />
           <InputForm
             targetTopic={targetTopic}
@@ -172,6 +183,7 @@ function TopicContent(props) {
             setInputMode={setInputMode}
             currentDebate={currentDebate}
             setCurrentDebate={setCurrentDebate}
+            mobileFlg={mobileFlg}
           />
         </Container>
       ) : (

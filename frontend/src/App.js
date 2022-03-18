@@ -61,7 +61,7 @@ function App() {
   };
 
   const responsiveMobile = {
-    showTopNavMenu: width < 640,
+    showTopNavMenu: width < 768,
   };
 
   const freshList = () => {

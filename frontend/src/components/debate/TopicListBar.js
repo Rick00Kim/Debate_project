@@ -29,13 +29,12 @@ const componentStyle = {
     left: "5%",
   },
   usersStyle: {
-    position: "absolute",
     right: "10%",
     bottom: "11%",
   },
   topicListStyle: {
-    height: `70vh`,
-    maxHeight: `70vh`,
+    height: `65vh`,
+    maxHeight: `65vh`,
     fontSize: `20px`,
     borderRadius: `5px`,
     overflow: `scroll`,
@@ -70,7 +69,9 @@ const TopicListBar = (props) => {
                 style={componentStyle.usersStyle}
                 {...props}
               >
-                <Button variant="outline-warning">Users</Button>
+                <Button block variant="outline-warning">
+                  Users
+                </Button>
               </Link>
             )}
           />

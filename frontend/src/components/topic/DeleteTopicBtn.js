@@ -25,7 +25,7 @@ function DeleteTopicBtn(props) {
   };
 
   return (
-    <Button variant="outline-danger" onClick={() => deleteTopic()}>
+    <Button block variant="danger" onClick={() => deleteTopic()}>
       DELETE
     </Button>
   );

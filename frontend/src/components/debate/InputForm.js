@@ -12,6 +12,7 @@ export default function InputForm(props) {
     updateRow,
     inputMode,
     setInputMode,
+    mobileFlg,
   } = props;
 
   const setField = (field, value) => {
@@ -60,7 +61,7 @@ export default function InputForm(props) {
   return (
     <Form>
       <Form.Row>
-        <Col sm={10} className="my-1">
+        <Col sm={mobileFlg ? 12 : 10} lg={mobileFlg ? 12 : 10} className="my-1">
           <Form.Group controlId="contentArea">
             <Form.Control
               as="textarea"
@@ -71,18 +72,20 @@ export default function InputForm(props) {
             />
           </Form.Group>
         </Col>
-        <Col sm={2} className="my-1">
+        <Col sm={mobileFlg ? 12 : 2} lg={mobileFlg ? 12 : 2} className="my-1">
           <Button block variant="success" type="submit" onClick={handleSubmit}>
             {inputMode === "C" ? "Submit" : "Edit"}
           </Button>
-          <Button
-            block
-            variant="outline-danger"
-            type="button"
-            onClick={handleReset}
-          >
-            Reset
-          </Button>
+          {!mobileFlg && (
+            <Button
+              block
+              variant="outline-danger"
+              type="button"
+              onClick={handleReset}
+            >
+              Reset
+            </Button>
+          )}
         </Col>
       </Form.Row>
     </Form>
