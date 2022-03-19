@@ -76,7 +76,7 @@ const TopicListNavBar = (props) => {
                   </Nav.Link>
                 )}
               />
-              <LogoutButton logout={logout} />
+              <LogoutButton variant="danger" logout={logout} />
             </Nav>
           )}
         </Navbar.Collapse>

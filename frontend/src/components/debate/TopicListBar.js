@@ -1,6 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Jumbotron, Container, Row, ListGroup, Button } from "react-bootstrap";
+import {
+  Jumbotron,
+  Container,
+  Row,
+  ListGroup,
+  Button,
+  ButtonGroup,
+} from "react-bootstrap";
 import { contentStyle, routerEndPoint } from "../common/Constants";
 import { useAuth, logout } from "../authenticated/auth";
 import { getCurrentUser } from "../authenticated/AuthService";
@@ -62,22 +69,24 @@ const TopicListBar = (props) => {
     return (
       logged && (
         <Container>
-          <ManagerComponent
-            render={(props) => (
-              <Link
-                to={routerEndPoint.manager.users}
-                style={componentStyle.usersStyle}
-                {...props}
-              >
-                <Button block variant="outline-warning">
-                  Users
-                </Button>
-              </Link>
-            )}
-          />
           <h3>{getCurrentUser().name}</h3>
           <h4>Role: {getCurrentUser().role}</h4>
-          <LogoutButton logout={logout} />
+          <ButtonGroup aria-label="userinfo-label">
+            <LogoutButton
+              variant="outline-danger"
+              className="mr-2"
+              logout={logout}
+            />
+            <ManagerComponent
+              render={(props) => (
+                <Link to={routerEndPoint.manager.users} {...props}>
+                  <Button block variant="outline-warning">
+                    Users
+                  </Button>
+                </Link>
+              )}
+            />
+          </ButtonGroup>
         </Container>
       )
     );

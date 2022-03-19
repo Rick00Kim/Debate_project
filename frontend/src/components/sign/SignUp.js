@@ -12,8 +12,6 @@ const componentStyle = {
   },
   authCardStyle: {
     marginTop: "20px",
-    marginLeft: "25%",
-    marginRight: "25%",
     backgroundColor: "#161b22",
     borderColor: "white",
     borderWidth: "1px",
@@ -28,17 +26,23 @@ function SignUp(props) {
   const { mobileFlg } = props;
 
   const responsiveHeight = {
-    height: mobileFlg ? `87vh` : `95vh`,
+    height: mobileFlg ? `70vh` : `95vh`,
   };
+
+  const responsiveAuthCard = {
+    marginLeft: mobileFlg ? "0%" : "10%",
+    marginRight: mobileFlg ? "0%" : "10%",
+  };
+
   return (
     <div style={{ ...componentStyle.root, ...responsiveHeight }}>
       <h1 style={{ textAlign: "center" }}>SIGN UP</h1>
-      <Card style={componentStyle.authCardStyle}>
+      <Card style={{ ...componentStyle.authCardStyle, ...responsiveAuthCard }}>
         <Card.Body style={componentStyle.authCardBodyStyle}>
           <SignUpForm />
         </Card.Body>
       </Card>
-      <Card style={componentStyle.authCardStyle}>
+      <Card style={{ ...componentStyle.authCardStyle, ...responsiveAuthCard }}>
         <Card.Body>
           <small>
             Do you already have an account? <Link to={"/signIn"}>Sign in</Link>
