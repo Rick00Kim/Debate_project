@@ -21,10 +21,15 @@ def auth_login():
                 'name': manager['name'],
                 'role': manager['role']
             }
+
             response = {
                 'status': 'SUCCESS',
                 'access_token': create_access_token(identity=identify)
             }
+
+            if manager['temporary_password'] == True:
+                response['requreInitPassword'] = True
+
             return Response(json.dumps(response), mimetype="application/json", status=200)
         else:
             return Response(json.dumps({"result": False}), mimetype="application/json", status=200)

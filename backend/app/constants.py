@@ -38,3 +38,19 @@ signup_schema = {
     "required": ["email", "password", "name"],
     "additionalProperties": False
 }
+
+initialize_password_schema = {
+    "type": "object",
+    "properties": {
+        "password": {
+            "type": "string",
+            "minLength": 8
+        },
+        "confirmPassword": {
+            "type": "string",
+            "minLength": 8
+        },
+    },
+    "required": ["password", "confirmPassword"],
+    "additionalProperties": False
+}

@@ -10,6 +10,7 @@ class UserInfo(db.Document):
     password = db.StringField()
     name = db.StringField(unique=True)
     role = db.StringField(default="Participant")
+    temporary_password = db.BooleanField(default=False)
     del_flg = db.StringField(default="0")
 
 
