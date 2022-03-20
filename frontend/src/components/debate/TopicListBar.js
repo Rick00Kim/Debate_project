@@ -72,22 +72,18 @@ const TopicListBar = (props) => {
         <Container>
           <h3>{getCurrentUser().name}</h3>
           <h4>Role: {getCurrentUser().role}</h4>
-          <ButtonGroup aria-label="userinfo-label">
-            <LogoutButton
-              variant="outline-danger"
-              className="mr-2"
-              logout={logout}
-            />
-            <ManagerComponent
-              render={(props) => (
-                <Link to={routerEndPoint.manager.users} {...props}>
-                  <Button block variant="outline-warning">
-                    Users
-                  </Button>
-                </Link>
-              )}
-            />
-          </ButtonGroup>
+          <LogoutButton
+            variant="outline-danger"
+            className="mr-2"
+            logout={logout}
+          />{" "}
+          <ManagerComponent
+            render={(props) => (
+              <Link to={routerEndPoint.manager.users} {...props}>
+                <Button variant="outline-warning">Users</Button>
+              </Link>
+            )}
+          />
         </Container>
       )
     );

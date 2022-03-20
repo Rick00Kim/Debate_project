@@ -10,7 +10,7 @@ function LogoutButton(props) {
     navigate("/");
   };
   return (
-    <Button variant={variant} onClick={handleClick} block>
+    <Button variant={variant} onClick={handleClick}>
       Sign out
     </Button>
   );
