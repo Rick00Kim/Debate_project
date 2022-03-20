@@ -16,3 +16,8 @@ export const getAuthHeader = () => {
   const headerContents = { Authorization: `Bearer ${jwt_key}` };
   return headerContents;
 };
+
+export const isManager = () => {
+  const currentUser = getCurrentUser();
+  return currentUser.role === "Manager";
+};

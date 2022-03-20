@@ -100,9 +100,7 @@ function SignInForm(props) {
         .then((result) => {
           if (result.status === "SUCCESS") {
             login(result.access_token);
-            console.log(result);
             if (result.requreInitPassword === true) {
-              console.log("OOOO");
               navigate(routerEndPoint.initPassword);
             } else {
               navigate(redirectUrl == null ? "/" : redirectUrl);

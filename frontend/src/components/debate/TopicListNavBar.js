@@ -45,6 +45,7 @@ const TopicListNavBar = (props) => {
                 <NavDropdown.Item
                   as={NavLink}
                   to={routerEndPoint.debates + e._id}
+                  key={"topicElement-" + e._id}
                   onClick={(i) => dropdownClickHandler(e)}
                 >
                   {e.title}

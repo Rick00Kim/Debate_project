@@ -29,7 +29,6 @@ const validate = {
 
 function SignInForm(props) {
   const navigate = useNavigate();
-  const { redirectUrl } = props;
   const [form, setForm] = useState({
     password: "",
     confirmPassword: "",
@@ -99,7 +98,7 @@ function SignInForm(props) {
         })
         .then((response) => response.data)
         .then((result) => {
-          if (result.status === "SUCCESS") {
+          if (result.result === "SUCCESS") {
             navigate("/");
           } else {
             setServerError(true);

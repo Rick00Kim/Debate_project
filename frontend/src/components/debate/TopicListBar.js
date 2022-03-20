@@ -4,13 +4,14 @@ import {
   Jumbotron,
   Container,
   Row,
+  Col,
   ListGroup,
   Button,
   ButtonGroup,
 } from "react-bootstrap";
 import { contentStyle, routerEndPoint } from "../common/Constants";
 import { useAuth, logout } from "../authenticated/auth";
-import { getCurrentUser } from "../authenticated/AuthService";
+import { getCurrentUser, isManager } from "../authenticated/AuthService";
 import LogoutButton from "../sign/SignOut";
 import ManagerComponent from "../management/ManagerComponent";
 import "bootstrap/dist/css/bootstrap.css";
@@ -95,17 +96,18 @@ const TopicListBar = (props) => {
   return (
     <div style={componentStyle.root}>
       <Row style={componentStyle.rowStyle}>
-        <Link to={routerEndPoint.root} style={componentStyle.rootLinkStyle}>
-          <h3 style={componentStyle.headerStyle}>Choose Topic</h3>
-        </Link>
+        <Col sm={isManager() ? 8 : 12} className="my-1">
+          <Link to={routerEndPoint.root} style={componentStyle.rootLinkStyle}>
+            <h3 style={componentStyle.headerStyle}>Choose Topic</h3>
+          </Link>
+        </Col>
         <ManagerComponent
           render={(props) => (
-            <Link
-              to={routerEndPoint.addTopic}
-              style={componentStyle.newBtnStyle}
-            >
-              <Button variant="light">New</Button>
-            </Link>
+            <Col sm={isManager() ? 4 : 2} className="my-2">
+              <Link to={routerEndPoint.addTopic}>
+                <Button variant="light">New</Button>
+              </Link>
+            </Col>
           )}
         />
       </Row>
