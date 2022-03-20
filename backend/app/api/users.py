@@ -74,6 +74,7 @@ def init_password():
             id=user['id'],
             name=user['name'],
             email=user['email'],
+            role=user['role'],
             password=flask_bcrypt.generate_password_hash(
                 request_data['password']).decode('utf-8'),
             temporary_password=False
