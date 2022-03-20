@@ -2,7 +2,7 @@ import json
 from flask import Response, request
 from jsonschema import validate
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from ..constants import signup_schema
+from ..constants import signup_schema, initialize_password_schema
 from ..dto import UserInfo
 from .. import app, flask_bcrypt
 
@@ -51,3 +51,36 @@ def user_list():
 
     user_list = UserInfo.objects().to_json()
     return Response(user_list, mimetype="application/json", status=200)
+
+
+@app.route("/api/init-password", methods=['POST'])
+@jwt_required()
+def init_password():
+    response = {"result": "SUCCESS"}
+    current_user = get_jwt_identity()
+
+    try:
+        validate(request.json, initialize_password_schema)
+        request_data = request.json
+
+        user = UserInfo.objects(email=current_user['email']).first()
+
+        if(request_data['password'] != request_data['confirmPassword']):
+            response['result'] = "FAIL"
+            response['mesesage'] = "Not equal password and confirmPassword"
+            return Response(json.dumps(response), mimetype="application/json", status=200)
+
+        UserInfo(
+            id=user['id'],
+            name=user['name'],
+            email=user['email'],
+            role=user['role'],
+            password=flask_bcrypt.generate_password_hash(
+                request_data['password']).decode('utf-8'),
+            temporary_password=False
+        ).save()
+
+        return Response(json.dumps(response), mimetype="application/json", status=200)
+    except Exception as e:
+        print(e)
+        return Response(json.dumps({"result": False}), mimetype="application/json", status=200)

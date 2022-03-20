@@ -30,7 +30,8 @@ const componentStyle = {
   },
   list: {
     color: `#585858`,
-    padding: 0,
+    paddingLeft: 15,
+    paddingRight: 15,
     fontSize: 15,
     height: `100%`,
     overflow: `scroll`,
@@ -122,17 +123,6 @@ function TopicContent(props) {
       .catch((err) => console.log(err));
   };
 
-  const renderDebateList = () => {
-    return debateList.map((item, idx) => (
-      <DebateList
-        key={"topic-" + idx}
-        item={item}
-        changeInputMode={changeInputMode}
-        deleteDebate={deleteDebate}
-      />
-    ));
-  };
-
   const responsiveHeight = {
     height: mobileFlg ? `87vh` : `95vh`,
   };
@@ -164,13 +154,22 @@ function TopicContent(props) {
           <p>{targetTopic.content}</p>
         </Container>
       </Jumbotron>
-      <Container style={componentStyle.list}>
+      <Container style={componentStyle.list} fluid="md">
         {debateList.length === 0 ? (
           <div style={{ color: "white", margin: "3%" }}>
             <h1>No Contents yet</h1>
           </div>
         ) : (
-          <ListGroup variant="flush">{renderDebateList()}</ListGroup>
+          <ListGroup variant="flush">
+            {debateList.map((item, idx) => (
+              <DebateList
+                key={"topic-" + idx}
+                item={item}
+                changeInputMode={changeInputMode}
+                deleteDebate={deleteDebate}
+              />
+            ))}
+          </ListGroup>
         )}
       </Container>
       {logged ? (

@@ -2,6 +2,7 @@ export const routerEndPoint = {
   root: "/",
   debates: "debates/",
   addTopic: "topic/add",
+  initPassword: "init-password",
   manager: {
     users: "manage/users",
   },
@@ -16,6 +17,7 @@ export const backendPointList = {
   refresh: "/api/refresh",
   users: "/api/users",
   signup: "/api/signup",
+  initPassword: "/api/init-password",
   topic: "/api/topic",
   debates: "/api/debates",
   like: "/api/like",
@@ -32,5 +34,6 @@ export const contentStyle = {
     display: `flex`,
     flexDirection: `column`,
     justifyContent: `space-between`,
+    height: `93vh`,
   },
 };

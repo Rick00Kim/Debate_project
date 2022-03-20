@@ -4,13 +4,13 @@ import { Button } from "react-bootstrap";
 
 function LogoutButton(props) {
   const navigate = useNavigate();
-  const { logout } = props;
+  const { logout, variant } = props;
   const handleClick = () => {
     logout();
     navigate("/");
   };
   return (
-    <Button variant="danger" onClick={handleClick} block>
+    <Button variant={variant} onClick={handleClick}>
       Sign out
     </Button>
   );

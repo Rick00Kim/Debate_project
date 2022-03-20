@@ -72,7 +72,7 @@ export default function InputForm(props) {
             />
           </Form.Group>
         </Col>
-        <Col sm={mobileFlg ? 12 : 2} lg={mobileFlg ? 12 : 2} className="my-1">
+        <Col sm={mobileFlg ? 12 : 2} lg={mobileFlg ? 12 : 2} className="my-2">
           <Button block variant="success" type="submit" onClick={handleSubmit}>
             {inputMode === "C" ? "Submit" : "Edit"}
           </Button>

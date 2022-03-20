@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Alert } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { emailValidation, passwordValidation } from "../common/Validators";
-import { routerEndPoint, backendPointList } from "../common/Constants";
-import { login } from "../authenticated/auth";
+import { passwordValidation } from "../common/Validators";
+import { backendPointList } from "../common/Constants";
+import { getAuthHeader } from "../authenticated/AuthService";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.css";
 
@@ -24,16 +23,15 @@ const componentStyle = {
 };
 
 const validate = {
-  email: (v) => emailValidation(v),
   password: (v) => passwordValidation(v),
+  confirmPassword: (v) => passwordValidation(v),
 };
 
 function SignInForm(props) {
   const navigate = useNavigate();
-  const { redirectUrl } = props;
   const [form, setForm] = useState({
-    email: "",
     password: "",
+    confirmPassword: "",
   });
   const [touched, setTouched] = useState({});
   const [errors, setErrors] = useState({});
@@ -95,21 +93,18 @@ function SignInForm(props) {
       Object.values(formValidation.touched).every((t) => t === true)
     ) {
       axios
-        .post(backendPointList.auth, form)
+        .post(backendPointList.initPassword, form, {
+          headers: getAuthHeader(),
+        })
         .then((response) => response.data)
         .then((result) => {
-          if (result.status === "SUCCESS") {
-            login(result.access_token);
-            if (result.requreInitPassword === true) {
-              navigate(routerEndPoint.initPassword);
-            } else {
-              navigate(redirectUrl == null ? "/" : redirectUrl);
-            }
+          if (result.result === "SUCCESS") {
+            navigate("/");
           } else {
             setServerError(true);
             setForm({
-              email: "",
               password: "",
+              confirmPassword: "",
             });
           }
         })
@@ -125,25 +120,9 @@ function SignInForm(props) {
         show={serverError}
         style={componentStyle.dangerMsgStyle}
       >
-        Failed Login (Please check your email or password)
+        Error occured
       </Alert>
       <Form style={componentStyle.root}>
-        <Form.Group controlId="formEmail" style={componentStyle.formGroupStyle}>
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter email"
-            name="email"
-            value={form.email}
-            onChange={(e) => handleInput(e)}
-            onBlur={(e) => handleBlur(e)}
-            required
-            isInvalid={errors.email}
-          />
-          <Form.Control.Feedback type="invalid">
-            {errors.email}
-          </Form.Control.Feedback>
-        </Form.Group>
         <Form.Group
           controlId="formPassword"
           style={componentStyle.formGroupStyle}
@@ -163,11 +142,25 @@ function SignInForm(props) {
             {errors.password}
           </Form.Control.Feedback>
         </Form.Group>
-        <Form.Label style={{ textAlign: "right" }}>
-          <small className="text-muted" style={{ fontSize: "65%" }}>
-            🔐 Forgot you email or password? <Link to={"fe"}>Click here</Link>
-          </small>
-        </Form.Label>
+        <Form.Group
+          controlId="formConfirmPassword"
+          style={componentStyle.formGroupStyle}
+        >
+          <Form.Label>Confirm Password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Confirm password"
+            name="confirmPassword"
+            value={form.confirmPassword}
+            onChange={(e) => handleInput(e)}
+            onBlur={(e) => handleBlur(e)}
+            autoComplete="off"
+            isInvalid={errors.confirmPassword}
+          />
+          <Form.Control.Feedback type="invalid">
+            {errors.confirmPassword}
+          </Form.Control.Feedback>
+        </Form.Group>
         <Button
           variant="primary"
           size="lg"
@@ -176,7 +169,7 @@ function SignInForm(props) {
           style={{ marginTop: "0.5em" }}
           onClick={(e) => handleSubmit(e)}
         >
-          Sign in
+          Submit
         </Button>
       </Form>
     </div>

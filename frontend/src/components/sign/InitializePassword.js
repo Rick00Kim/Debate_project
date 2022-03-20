@@ -1,7 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { Card } from "react-bootstrap";
-import SignUpForm from "./SignUpForm";
+import InitializePasswordForm from "./InitializePasswordForm";
 
 const componentStyle = {
   root: {
@@ -22,7 +21,7 @@ const componentStyle = {
   },
 };
 
-function SignUp(props) {
+function InitializePassword(props) {
   const { mobileFlg } = props;
 
   const responsiveHeight = {
@@ -36,21 +35,14 @@ function SignUp(props) {
 
   return (
     <div style={{ ...componentStyle.root, ...responsiveHeight }}>
-      <h1 style={{ textAlign: "center" }}>SIGN UP</h1>
+      <h1 style={{ textAlign: "center" }}>Initialize password</h1>
       <Card style={{ ...componentStyle.authCardStyle, ...responsiveAuthCard }}>
         <Card.Body style={componentStyle.authCardBodyStyle}>
-          <SignUpForm />
-        </Card.Body>
-      </Card>
-      <Card style={{ ...componentStyle.authCardStyle, ...responsiveAuthCard }}>
-        <Card.Body>
-          <small>
-            Do you already have an account? <Link to={"/signIn"}>Sign in</Link>
-          </small>
+          <InitializePasswordForm />
         </Card.Body>
       </Card>
     </div>
   );
 }
 
-export default SignUp;
+export default InitializePassword;

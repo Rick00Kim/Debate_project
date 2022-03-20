@@ -13,6 +13,7 @@ import TopicContent from "./components/debate/TopicContent";
 import { backendPointList } from "./components/common/Constants";
 import SignIn from "./components/sign/SignIn";
 import SignUp from "./components/sign/SignUp";
+import InitializePassword from "./components/sign/InitializePassword";
 import IndexPage from "./components/IndexPage";
 import AddTopic from "./components/management/AddTopic";
 import { useAuth } from "./components/authenticated/auth";
@@ -135,6 +136,14 @@ function App() {
                   path="/signUp"
                   element={
                     <SignUp mobileFlg={responsiveMobile.showTopNavMenu} />
+                  }
+                />
+                <Route
+                  path="/init-password"
+                  element={
+                    <InitializePassword
+                      mobileFlg={responsiveMobile.showTopNavMenu}
+                    />
                   }
                 />
                 <Route
