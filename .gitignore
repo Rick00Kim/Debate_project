@@ -119,3 +119,6 @@ dist
 
 # Support for Project snippet scope
 !.vscode/*.code-snippets
+
+# Memo for local
+memo.txt
