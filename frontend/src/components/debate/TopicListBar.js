@@ -11,7 +11,7 @@ import {
 import { contentStyle, routerEndPoint } from "../common/Constants";
 import { useAuth, logout } from "../authenticated/auth";
 import { getCurrentUser, isManager } from "../authenticated/AuthService";
-import LogoutButton from "../sign/SignOut";
+import LogoutButton from "../sign/LogoutButton";
 import ManagerComponent from "../management/ManagerComponent";
 import "bootstrap/dist/css/bootstrap.css";
 
