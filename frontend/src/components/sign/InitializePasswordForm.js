@@ -27,7 +27,7 @@ const validate = {
   confirmPassword: (v) => passwordValidation(v),
 };
 
-function SignInForm(props) {
+function InitializePasswordForm(props) {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     password: "",
@@ -176,4 +176,4 @@ function SignInForm(props) {
   );
 }
 
-export default SignInForm;
+export default InitializePasswordForm;
