@@ -40,8 +40,7 @@ const componentStyle = {
     bottom: "11%",
   },
   topicListStyle: {
-    height: `calc(70vh - 80px)`,
-    maxHeight: `calc(70vh - 80px)`,
+    height: `100%`,
     fontSize: `20px`,
     borderRadius: `5px`,
     overflow: `scroll`,
