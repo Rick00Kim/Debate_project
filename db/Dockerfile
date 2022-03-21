@@ -11,6 +11,6 @@ ENV TARGET_USERNAME 'debate_manager'
 ENV TARGET_PASSWORD 'manPrd4892#'
 
 # Copy Initialize file
-COPY ./init.sh /docker-entrypoint-initdb.d/
+COPY ./init.sh /docker-entrypoint-initdb.d/init.sh
 
 EXPOSE 27017

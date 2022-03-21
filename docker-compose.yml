@@ -2,12 +2,12 @@ version: "3.7"
 services:
   nginx:
     container_name: debate_server
-    image: nginx:1.15
-    volumes:
-      - ./:/var/www
-      - ./server_config/debate_nginx.conf:/etc/nginx/conf.d/default.conf
+    build:
+      context: ./server_config
+      dockerfile: Dockerfile
     ports:
       - 15101:80
+      - 443:443
     networks:
       - debate-network
     depends_on:
@@ -21,12 +21,8 @@ services:
       dockerfile: Dockerfile
     command: "npm run start"
     tty: true
-    volumes:
-      - appdata:/app
     networks:
       debate-network:
-        aliases:
-          - frontend
 
   backend:
     container_name: debate_backend
@@ -39,37 +35,27 @@ services:
       MONGODB_HOST: mongodb
       MONGODB_USERNAME: "debate_manager"
       MONGODB_PASSWORD: "manPrd4892#"
-    volumes:
-      - appdata:/var/www/
+      DEBATE_INIT_USER_PWD: "debateAdmin"
     depends_on:
       - mongodb
     networks:
       debate-network:
-        aliases:
-          - backend
 
   mongodb:
     container_name: debate_db
-    image: mongo
+    build:
+      context: ./db
+      dockerfile: Dockerfile
     restart: unless-stopped
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: "prd_debate_admin"
-      MONGO_INITDB_ROOT_PASSWORD: "debate2140"
-      TARGET_DATABASE: "debate_web"
-      TARGET_USERNAME: "debate_manager"
-      TARGET_PASSWORD: "manPrd4892#"
-      MONGODB_DATA_DIR: mongodbdata
     volumes:
-      - ./db/init.sh:/docker-entrypoint-initdb.d/init.sh:ro
+      - mongodbdata:/docker-entrypoint-initdb.d/
+      - mongodbdata:/data/configdb/
+      - mongodbdata:/data/db/
     networks:
       debate-network:
-        aliases:
-          - mongodb
 
 networks:
   debate-network:
 volumes:
   mongodbdata:
-    driver: local
-  appdata:
     driver: local
