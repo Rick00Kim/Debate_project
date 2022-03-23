@@ -6,7 +6,7 @@ services:
       context: ./server_config
       dockerfile: Dockerfile
     ports:
-      - 15101:80
+      - 80:80
       - 443:443
     networks:
       - debate-network
