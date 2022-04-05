@@ -3,9 +3,6 @@ services:
   nginx:
     container_name: debate_server
     image: dreamx119/debate_server
-    build:
-      context: ../server_config
-      dockerfile: Dockerfile
     ports:
       - 80:80
       - 443:443
@@ -18,10 +15,6 @@ services:
   frontend:
     container_name: debate_frontend
     image: dreamx119/debate_frontend
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
-    command: "npm run start"
     tty: true
     networks:
       debate-network:
@@ -29,10 +22,6 @@ services:
   backend:
     container_name: debate_backend
     image: dreamx119/debate_backend
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
-    command: gunicorn --bind 0.0.0.0:5500 wsgi:app
     environment:
       SECRET_KEY: prdDebateSecret
       MONGODB_HOST: mongodb
@@ -47,9 +36,6 @@ services:
   mongodb:
     container_name: debate_db
     image: dreamx119/debate_db
-    build:
-      context: ./db
-      dockerfile: Dockerfile
     restart: unless-stopped
     volumes:
       - mongodbdata:/docker-entrypoint-initdb.d/
