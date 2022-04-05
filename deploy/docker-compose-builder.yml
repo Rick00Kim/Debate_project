@@ -1,0 +1,30 @@
+version: "3.7"
+services:
+  nginx:
+    container_name: debate_server
+    image: dreamx119/debate_server
+    build:
+      context: ../server_config
+      dockerfile: Dockerfile
+
+  frontend:
+    container_name: debate_frontend
+    image: dreamx119/debate_frontend
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+
+  backend:
+    container_name: debate_backend
+    image: dreamx119/debate_backend
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+
+  mongodb:
+    container_name: debate_db
+    image: dreamx119/debate_db
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    restart: unless-stopped
