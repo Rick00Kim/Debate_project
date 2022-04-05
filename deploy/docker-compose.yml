@@ -4,7 +4,7 @@ services:
     container_name: debate_server
     image: dreamx119/debate_server
     build:
-      context: ./server_config
+      context: ../server_config
       dockerfile: Dockerfile
     ports:
       - 80:80
@@ -19,7 +19,7 @@ services:
     container_name: debate_frontend
     image: dreamx119/debate_frontend
     build:
-      context: ./frontend
+      context: ../frontend
       dockerfile: Dockerfile
     command: "npm run start"
     tty: true
@@ -30,7 +30,7 @@ services:
     container_name: debate_backend
     image: dreamx119/debate_backend
     build:
-      context: ./backend
+      context: ../backend
       dockerfile: Dockerfile
     command: gunicorn --bind 0.0.0.0:5500 wsgi:app
     environment:
