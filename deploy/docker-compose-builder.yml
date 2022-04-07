@@ -1,0 +1,25 @@
+version: "3.7"
+services:
+  nginx:
+    image: dreamx119/debate_server
+    build:
+      context: ../server_config
+      dockerfile: Dockerfile
+
+  frontend:
+    image: dreamx119/debate_frontend
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+
+  backend:
+    image: dreamx119/debate_backend
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+
+  mongodb:
+    image: dreamx119/debate_db
+    build:
+      context: ./db
+      dockerfile: Dockerfile
