@@ -22,6 +22,7 @@ services:
   backend:
     container_name: debate_backend
     image: dreamx119/debate_backend
+    command: gunicorn --bind 0.0.0.0:5500 wsgi:app
     environment:
       SECRET_KEY: prdDebateSecret
       MONGODB_HOST: mongodb
