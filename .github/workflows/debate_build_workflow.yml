@@ -1,5 +1,6 @@
 name: debate_app
 
+# Trigger settings
 on:
   push:
     branches: [develop, main]
@@ -11,42 +12,19 @@ env:
   DOCKER_USER: ${{secrets.DOCKER_USER}}
   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
 
+# Jobs
 jobs:
-  frontend_buildAndTest:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12.x, 14.x, 15.x]
-
+  build-and-push-image-to-docker-hub: # job name
+    runs-on: ubuntu-latest # runner name : (ubuntu latest version)
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: npm ci, build and test
-        run: |
-          cd frontend
-          npm ci
-          npm run build --if-present
-
-  backend_buildAndTest:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [3.7, 3.8, 3.9]
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: python app build
-        uses: actions/setup-python@v1
-        with:
-          python-version: ${{ matrix.node-version }}
-      - name: Install dependencies
-        run: |
-          cd backend
-          python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt
-          pip install setuptools wheel twine
-          python setup.py build
-          python setup.py install
+      - uses: actions/checkout@v2 # first action : checkout source code
+      - name: docker login
+        run: | # log into docker hub account
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+      - name: Get current date # get the date of the build
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d--%M-%S')"
+      - name: Build the Docker image # push The image to the docker hub
+        run: docker build . --file Dockerfile --tag $DOCKER_USER/$REPO_NAME:${{ steps.date.outputs.date }}
+      - name: Docker Push
+        run: docker push $DOCKER_USER/$REPO_NAME:${{ steps.date.outputs.date }}
