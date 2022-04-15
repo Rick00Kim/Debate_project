@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [main]
 
+# Env variable
+env:
+  DOCKER_USER: ${{secrets.DOCKER_USER}}
+  DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+
 jobs:
   frontend_buildAndTest:
     runs-on: ubuntu-latest
