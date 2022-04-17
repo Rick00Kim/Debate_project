@@ -30,4 +30,5 @@ jobs:
           docker-compose -f docker-compose-builder.yml build
       - name: Docker Push
         run: |
+          cd deploy
           docker-compose -f docker-compose-builder.yml push
