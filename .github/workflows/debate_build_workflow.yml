@@ -9,7 +9,7 @@ on:
 
 # Env variable
 env:
-  DOCKER_USER: ${{secrets.DOCKER_USER}}
+  DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
 
 # Jobs
@@ -20,11 +20,11 @@ jobs:
       - uses: actions/checkout@v2 # first action : checkout source code
       - name: docker login
         run: | # log into docker hub account
-          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - name: Get current date # get the date of the build
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d--%M-%S')"
       - name: Build the Docker image # push The image to the docker hub
-        run: docker build . --file Dockerfile --tag $DOCKER_USER/$REPO_NAME:${{ steps.date.outputs.date }}
+        run: docker build . --file Dockerfile --tag $DOCKER_USERNAME/$REPO_NAME:${{ steps.date.outputs.date }}
       - name: Docker Push
-        run: docker push $DOCKER_USER/$REPO_NAME:${{ steps.date.outputs.date }}
+        run: docker push $DOCKER_USERNAME/$REPO_NAME:${{ steps.date.outputs.date }}
