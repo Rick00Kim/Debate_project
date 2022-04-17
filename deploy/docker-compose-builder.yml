@@ -21,5 +21,5 @@ services:
   mongodb:
     image: dreamx119/debate_db
     build:
-      context: ./db
+      context: ../db
       dockerfile: Dockerfile
