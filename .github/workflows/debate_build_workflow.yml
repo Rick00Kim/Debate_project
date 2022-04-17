@@ -26,6 +26,8 @@ jobs:
         run: echo "::set-output name=date::$(date +'%Y-%m-%d--%M-%S')"
       - name: Build the Docker image # push The image to the docker hub
         run: |
+          pwd
+          ls -al
           cd deploy
           docker-compose -f docker-compose-builder.yml build
       - name: Docker Push
