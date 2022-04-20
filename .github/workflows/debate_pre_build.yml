@@ -11,11 +11,7 @@ jobs:
     runs-on: ubuntu-latest # runner name : (ubuntu latest version)
     steps:
       - uses: actions/checkout@v2 # first action : checkout source code
-      - name: Build the Docker image # push The image to the docker hub
+      - name: Build the Docker images # push The image to the docker hub
         working-direcotry: ./deploy
         run: |
           docker-compose -f docker-compose-builder.yml build
-      - name: Docker Push
-        working-direcotry: ./deploy
-        run: |
-          docker-compose -f docker-compose-builder.yml push
