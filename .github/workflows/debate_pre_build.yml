@@ -12,6 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2 # first action : checkout source code
       - name: Build the Docker images # push The image to the docker hub
-        working-direcotry: ./deploy
+        working-directory: ./deploy
         run: |
           docker-compose -f docker-compose-builder.yml build
