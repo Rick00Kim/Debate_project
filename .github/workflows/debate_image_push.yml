@@ -3,7 +3,7 @@ name: debate_app
 # Trigger settings
 on:
   push:
-    branches: [develop, main]
+    branches: [main]
 
 # Env variable
 env:
