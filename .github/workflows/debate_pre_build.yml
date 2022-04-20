@@ -2,30 +2,20 @@ name: debate_app
 
 # Trigger settings
 on:
-  push:
-    branches: [develop, main]
   pull_request:
     branches: [main]
 
-# Env variable
-env:
-  DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
-  DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-
 # Jobs
 jobs:
-  build-and-push-image-to-docker-hub: # job name
+  build-in-local: # job name
     runs-on: ubuntu-latest # runner name : (ubuntu latest version)
     steps:
       - uses: actions/checkout@v2 # first action : checkout source code
-      - name: docker login
-        run: | # log into docker hub account
-          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - name: Build the Docker image # push The image to the docker hub
+        working-direcotry: ./deploy
         run: |
-          cd deploy
           docker-compose -f docker-compose-builder.yml build
       - name: Docker Push
+        working-direcotry: ./deploy
         run: |
-          cd deploy
           docker-compose -f docker-compose-builder.yml push
