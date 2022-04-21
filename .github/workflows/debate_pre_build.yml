@@ -1,0 +1,17 @@
+name: debate_pre_builder
+
+# Trigger settings
+on:
+  pull_request:
+    branches: [develop, main]
+
+# Jobs
+jobs:
+  build-in-local: # job name
+    runs-on: ubuntu-latest # runner name : (ubuntu latest version)
+    steps:
+      - uses: actions/checkout@v2 # first action : checkout source code
+      - name: Build the Docker images # push The image to the docker hub
+        working-directory: ./deploy
+        run: |
+          docker-compose -f docker-compose-builder.yml build

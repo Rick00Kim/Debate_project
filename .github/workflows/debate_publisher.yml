@@ -1,0 +1,48 @@
+### For TEST
+name: debate_publisher
+
+# Trigger settings
+on:
+  push:
+    branches: [develop]
+
+# Jobs
+jobs:
+  publish-to-oci: # job name
+    runs-on: ubuntu-latest # runner name : (ubuntu latest version)
+    steps:
+      - name: "Write Config & Key Files"
+        run: |
+          mkdir ~/.oci
+          echo "[DEFAULT]" >> ~/.oci/config
+          echo "user=${{secrets.OCI_USER_OCID}}" >> ~/.oci/config
+          echo "fingerprint=${{secrets.OCI_FINGERPRINT}}" >> ~/.oci/config
+          echo "region=${{secrets.OCI_REGION}}" >> ~/.oci/config
+          echo "tenancy=${{secrets.OCI_TENANCY_OCID}}" >> ~/.oci/config
+          echo "key_file=~/.oci/key.pem" >> ~/.oci/config
+          echo "${{secrets.OCI_KEY_FILE}}" >> ~/.oci/key.pem
+      - name: "Install OCI CLI"
+        run: |
+          curl -L -O https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh
+          chmod +x install.sh
+          ./install.sh --accept-all-defaults
+          echo "::add-path::/home/runner/bin"
+          exec -l $SHELL
+      - name: "Fix Config File Permissions"
+        run: |
+          oci setup repair-file-permissions --file /home/runner/.oci/config
+          oci setup repair-file-permissions --file /home/runner/.oci/key.pem
+      - name: "Get Instance IP"
+        run: |
+          echo "::set-env name=INSTANCE_IP::$( \
+            oci compute instance list-vnics \
+            --instance-id ${{env.INSTANCE_OCID}} \
+            --query 'data [0]."public-ip"' \
+            --raw-output \
+          )"
+      - name: "Wait for SSH"
+        run: |
+          while ! nc -w5 -z ${{ env.INSTANCE_IP }} 22; do
+                  sleep 5
+                  echo "SSH not available..."
+          done; echo "SSH ready!"

@@ -1,10 +1,8 @@
-name: debate_app
+name: debate_image_pusher
 
 # Trigger settings
 on:
   push:
-    branches: [develop, main]
-  pull_request:
     branches: [main]
 
 # Env variable
@@ -14,21 +12,18 @@ env:
 
 # Jobs
 jobs:
-  build-and-push-image-to-docker-hub: # job name
+  build-and-push-to-docker-hub: # job name
     runs-on: ubuntu-latest # runner name : (ubuntu latest version)
     steps:
       - uses: actions/checkout@v2 # first action : checkout source code
       - name: docker login
         run: | # log into docker hub account
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-      - name: Get current date # get the date of the build
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d--%M-%S')"
       - name: Build the Docker image # push The image to the docker hub
+        working-directory: ./deploy
         run: |
-          cd deploy
           docker-compose -f docker-compose-builder.yml build
       - name: Docker Push
+        working-directory: ./deploy
         run: |
-          cd deploy
           docker-compose -f docker-compose-builder.yml push
