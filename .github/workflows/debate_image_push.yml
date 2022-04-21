@@ -1,4 +1,4 @@
-name: debate_app
+name: debate_image_pusher
 
 # Trigger settings
 on:
