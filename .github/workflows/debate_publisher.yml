@@ -1,9 +1,10 @@
+### For TEST
 name: debate_publisher
 
 # Trigger settings
 on:
   push:
-    branches: [main]
+    branches: [develop]
 
 # Jobs
 jobs:
