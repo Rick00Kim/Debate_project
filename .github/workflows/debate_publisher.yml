@@ -55,3 +55,11 @@ jobs:
           source: "deploy/docker-compose-runner.yml"
           target: "run_app"
           strip_components: 2
+      - name: "Start App"
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.INSTANCE_IP }}
+          username: ubuntu
+          key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+          script: |
+            sudo docker-compose -d -f /run_app/docker-compose-runner.yml up
