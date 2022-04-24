@@ -52,7 +52,7 @@ jobs:
           host: ${{ env.INSTANCE_IP }}
           username: ubuntu
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
-          source: "deploy/docker-compose-runner.yml"
+          source: "Debate_project/deploy/docker-compose-runner.yml"
           target: "run_app"
           strip_components: 2
       - name: "Stop App"
