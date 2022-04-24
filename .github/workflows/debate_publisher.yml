@@ -4,7 +4,7 @@ name: debate_publisher
 # Trigger settings
 on:
   push:
-    branches: [develop]
+    branches: [feature/build-workflow-for-auto-deploy]
 
 # Jobs
 jobs:
