@@ -10,6 +10,7 @@ on:
 jobs:
   publish-to-oci: # job name
     runs-on: ubuntu-latest # runner name : (ubuntu latest version)
+    # needs: build-and-push-to-docker-hub
     steps:
       - name: "Write Config & Key Files"
         run: |
@@ -52,8 +53,7 @@ jobs:
           host: ${{ env.INSTANCE_IP }}
           username: ubuntu
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
-          source: "deploy/docker-compose-builder.yml, deploy/docker-compose-runner.yml"
-          strip_components: 2
+          source: "deploy/docker-compose-runner.yml"
       - name: "Stop App"
         uses: appleboy/ssh-action@master
         with:
