@@ -15,6 +15,7 @@ services:
   frontend:
     container_name: debate_frontend
     image: dreamx119/debate_frontend
+    command: "npm run start"
     tty: true
     networks:
       debate-network:
