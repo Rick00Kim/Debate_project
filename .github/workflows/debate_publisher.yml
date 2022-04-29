@@ -53,7 +53,8 @@ jobs:
           host: ${{ env.INSTANCE_IP }}
           username: ubuntu
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
-          source: "deploy/*"
+          source: "deploy/docker-compose-runner.yml"
+          target: "deploy_test"
       - name: "Stop App"
         uses: appleboy/ssh-action@master
         with:
