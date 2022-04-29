@@ -47,6 +47,10 @@ jobs:
                   sleep 5
                   echo "SSH not available..."
           done; echo "SSH ready!"
+      - name: "Check current folder"
+        run: |
+          pwd
+          ls -al
       - name: "Push docker-compose file for running"
         uses: appleboy/scp-action@master
         with:
