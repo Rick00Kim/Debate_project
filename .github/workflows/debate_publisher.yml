@@ -1,16 +1,17 @@
-### For TEST
 name: debate_publisher
 
 # Trigger settings
 on:
   push:
-    branches: [develop]
+    branches: [main]
 
 # Jobs
 jobs:
   publish-to-oci: # job name
     runs-on: ubuntu-latest # runner name : (ubuntu latest version)
+    # needs: build-and-push-to-docker-hub
     steps:
+      - uses: actions/checkout@v2 # first action : checkout source code
       - name: "Write Config & Key Files"
         run: |
           mkdir ~/.oci
@@ -26,7 +27,7 @@ jobs:
           curl -L -O https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh
           chmod +x install.sh
           ./install.sh --accept-all-defaults
-          echo "::add-path::/home/runner/bin"
+          echo "/home/runner/bin" >> $GITHUB_PATH
           exec -l $SHELL
       - name: "Fix Config File Permissions"
         run: |
@@ -34,15 +35,39 @@ jobs:
           oci setup repair-file-permissions --file /home/runner/.oci/key.pem
       - name: "Get Instance IP"
         run: |
-          echo "::set-env name=INSTANCE_IP::$( \
+          echo "INSTANCE_IP=$( \
             oci compute instance list-vnics \
-            --instance-id ${{env.INSTANCE_OCID}} \
+            --instance-id ${{secrets.INSTANCE_OCID}} \
             --query 'data [0]."public-ip"' \
             --raw-output \
-          )"
+          )" >> $GITHUB_ENV
       - name: "Wait for SSH"
         run: |
           while ! nc -w5 -z ${{ env.INSTANCE_IP }} 22; do
                   sleep 5
                   echo "SSH not available..."
           done; echo "SSH ready!"
+      - name: "Push docker-compose file for running"
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ env.INSTANCE_IP }}
+          username: ubuntu
+          key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+          source: "deploy/docker-compose-runner.yml"
+          target: "debate_app"
+      - name: "Stop App"
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.INSTANCE_IP }}
+          username: ubuntu
+          key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+          script: |
+            sudo docker-compose -f debate_app/deploy/docker-compose-runner.yml down
+      - name: "Start App"
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.INSTANCE_IP }}
+          username: ubuntu
+          key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+          script: |
+            sudo docker-compose -f debate_app/deploy/docker-compose-runner.yml up -d
