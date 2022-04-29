@@ -63,7 +63,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
           script: |
-            sudo docker-compose -f deploy/docker-compose-runner.yml down
+            sudo docker-compose -f debate_app/deploy/docker-compose-runner.yml down
       - name: "Start App"
         uses: appleboy/ssh-action@master
         with:
@@ -71,4 +71,4 @@ jobs:
           username: ubuntu
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
           script: |
-            sudo docker-compose -d -f deploy/docker-compose-runner.yml up
+            sudo docker-compose -d -f debate_app/deploy/docker-compose-runner.yml up
