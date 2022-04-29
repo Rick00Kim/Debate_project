@@ -55,6 +55,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
           source: "deploy/docker-compose-runner.yml"
+          target: "debate_app"
       - name: "Stop App"
         uses: appleboy/ssh-action@master
         with:
