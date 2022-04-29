@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest # runner name : (ubuntu latest version)
     # needs: build-and-push-to-docker-hub
     steps:
+      - uses: actions/checkout@v2 # first action : checkout source code
       - name: "Write Config & Key Files"
         run: |
           mkdir ~/.oci
@@ -47,23 +48,23 @@ jobs:
                   sleep 5
                   echo "SSH not available..."
           done; echo "SSH ready!"
-      - name: "Check current folder"
-        run: |
-          echo "First folder"
-          pwd
-          ls -al
-          cd ..
-          echo "Second before folder"
-          pwd
-          ls -al
-          cd ..
-          echo "Last before folder"
-          pwd
-          ls -al
-          cd
-          echo "Home directory"
-          pwd
-          ls -al
+      # - name: "Check current folder"
+      #   run: |
+      #     echo "First folder"
+      #     pwd
+      #     ls -al
+      #     cd ..
+      #     echo "Second before folder"
+      #     pwd
+      #     ls -al
+      #     cd ..
+      #     echo "Last before folder"
+      #     pwd
+      #     ls -al
+      #     cd
+      #     echo "Home directory"
+      #     pwd
+      #     ls -al
       - name: "Push docker-compose file for running"
         uses: appleboy/scp-action@master
         with:
