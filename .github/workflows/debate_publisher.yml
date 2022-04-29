@@ -48,23 +48,6 @@ jobs:
                   sleep 5
                   echo "SSH not available..."
           done; echo "SSH ready!"
-      # - name: "Check current folder"
-      #   run: |
-      #     echo "First folder"
-      #     pwd
-      #     ls -al
-      #     cd ..
-      #     echo "Second before folder"
-      #     pwd
-      #     ls -al
-      #     cd ..
-      #     echo "Last before folder"
-      #     pwd
-      #     ls -al
-      #     cd
-      #     echo "Home directory"
-      #     pwd
-      #     ls -al
       - name: "Push docker-compose file for running"
         uses: appleboy/scp-action@master
         with:
@@ -72,7 +55,6 @@ jobs:
           username: ubuntu
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
           source: "deploy/docker-compose-runner.yml"
-          target: "deploy_test"
       - name: "Stop App"
         uses: appleboy/ssh-action@master
         with:
@@ -80,7 +62,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
           script: |
-            sudo docker-compose -f /run_app/docker-compose-runner.yml down
+            sudo docker-compose -f deploy/docker-compose-runner.yml down
       - name: "Start App"
         uses: appleboy/ssh-action@master
         with:
@@ -88,4 +70,4 @@ jobs:
           username: ubuntu
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
           script: |
-            sudo docker-compose -d -f /run_app/docker-compose-runner.yml up
+            sudo docker-compose -d -f deploy/docker-compose-runner.yml up
