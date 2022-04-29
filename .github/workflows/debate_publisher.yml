@@ -49,6 +49,19 @@ jobs:
           done; echo "SSH ready!"
       - name: "Check current folder"
         run: |
+          echo "First folder"
+          pwd
+          ls -al
+          cd ..
+          echo "Second before folder"
+          pwd
+          ls -al
+          cd ..
+          echo "Last before folder"
+          pwd
+          ls -al
+          cd
+          echo "Home directory"
           pwd
           ls -al
       - name: "Push docker-compose file for running"
