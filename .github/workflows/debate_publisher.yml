@@ -9,7 +9,7 @@ on:
 jobs:
   publish-to-oci: # job name
     runs-on: ubuntu-latest # runner name : (ubuntu latest version)
-    needs: debate_image_pusher
+    needs: build-and-push-to-docker-hub
     steps:
       - uses: actions/checkout@v2 # first action : checkout source code
       - name: "Write Config & Key Files"
