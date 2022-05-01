@@ -5,7 +5,7 @@ on:
   push:
     branches: [main]
 
-# Env variable
+# Environment variables
 env:
   DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
@@ -13,16 +13,20 @@ env:
 # Jobs
 jobs:
   build-and-push-to-docker-hub: # job name
-    runs-on: ubuntu-latest # runner name : (ubuntu latest version)
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2 # first action : checkout source code
+      # Before action : checkout source code
+      - uses: actions/checkout@v2
+      # 1. Docker login using username and password
       - name: docker login
-        run: | # log into docker hub account
+        run: |
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-      - name: Build the Docker image # push The image to the docker hub
+      # 2. Build using docker-compose file
+      - name: Build the Docker image
         working-directory: ./deploy
         run: |
           docker-compose -f docker-compose-builder.yml build
+      # 3. Push to dockerhub
       - name: Docker Push
         working-directory: ./deploy
         run: |

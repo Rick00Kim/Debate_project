@@ -8,10 +8,12 @@ on:
 # Jobs
 jobs:
   build-in-local: # job name
-    runs-on: ubuntu-latest # runner name : (ubuntu latest version)
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2 # first action : checkout source code
-      - name: Build the Docker images # push The image to the docker hub
+      # Before action : checkout source code
+      - uses: actions/checkout@v2
+      # Build using docker-compose file
+      - name: Build the Docker images
         working-directory: ./deploy
         run: |
           docker-compose -f docker-compose-builder.yml build

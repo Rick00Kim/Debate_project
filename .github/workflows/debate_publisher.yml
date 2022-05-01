@@ -2,7 +2,9 @@ name: debate_publisher
 
 # Trigger settings
 on:
+  # Depends on workflow
   workflow_run:
+    # Details
     workflows: ["debate_image_pusher"]
     branches: [main]
     types:
