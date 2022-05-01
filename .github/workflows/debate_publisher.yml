@@ -7,8 +7,8 @@ on:
 
 # Jobs
 jobs:
-  needs: build-and-push-to-docker-hub
   publish-to-oci: # job name
+    needs: build-and-push-to-docker-hub
     runs-on: ubuntu-latest # runner name : (ubuntu latest version)
     steps:
       - uses: actions/checkout@v2 # first action : checkout source code
