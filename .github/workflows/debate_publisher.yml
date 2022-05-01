@@ -2,8 +2,11 @@ name: debate_publisher
 
 # Trigger settings
 on:
-  push:
+  workflow_run:
+    workflows: ["debate_image_pusher"]
     branches: [main]
+    types:
+      - completed
 
 # Jobs
 jobs:
