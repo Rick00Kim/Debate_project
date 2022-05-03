@@ -67,20 +67,20 @@ jobs:
           source: "deploy/docker-compose-runner.yml"
           target: "debate_app"
       # 7. Stop container
-      - name: "Stop App"
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ env.INSTANCE_IP }}
-          username: ubuntu
-          key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
-          script: |
-            sudo docker-compose -f debate_app/deploy/docker-compose-runner.yml down
+      # - name: "Stop App"
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ env.INSTANCE_IP }}
+      #     username: ubuntu
+      #     key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+      #     script: |
+      #       sudo docker-compose -f debate_app/deploy/docker-compose-runner.yml down
       # 8. Start container
-      - name: "Start App"
+      - name: "Restart App (only frontend, backend)"
         uses: appleboy/ssh-action@master
         with:
           host: ${{ env.INSTANCE_IP }}
           username: ubuntu
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
           script: |
-            sudo docker-compose -f debate_app/deploy/docker-compose-runner.yml up -d
+            sudo docker-compose -f debate_app/deploy/docker-compose-runner.yml up -d --no-deps frontend backend
