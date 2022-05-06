@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debate_backend-deployment
+spec:
+  selector:
+    matchLabels:
+      app: debate_backend
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: debate_backend
+    spec:
+      containers:
+        - name: debate_backend
+          image: dreamx119/debate_backend
+          ports:
+            - containerPort: 80
