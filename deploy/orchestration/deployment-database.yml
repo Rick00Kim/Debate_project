@@ -15,5 +15,3 @@ spec:
       containers:
         - name: debate_db
           image: dreamx119/debate_db
-          ports:
-            - containerPort: 80

@@ -15,5 +15,3 @@ spec:
       containers:
         - name: debate_frontend
           image: dreamx119/debate_frontend
-          ports:
-            - containerPort: 80
