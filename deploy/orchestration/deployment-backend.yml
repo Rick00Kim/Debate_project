@@ -6,7 +6,6 @@ spec:
   selector:
     matchLabels:
       app: debate_backend
-  replicas: 2
   template:
     metadata:
       labels:
