@@ -1,23 +1,27 @@
 version: "3.7"
 services:
+  # Server build setting
   nginx:
     image: dreamx119/debate_server
     build:
       context: ../server_config
       dockerfile: Dockerfile
 
+  # Frontend build setting
   frontend:
     image: dreamx119/debate_frontend
     build:
       context: ../frontend
       dockerfile: Dockerfile
 
+  # Backend build setting
   backend:
     image: dreamx119/debate_backend
     build:
       context: ../backend
       dockerfile: Dockerfile
 
+  # Database build setting
   mongodb:
     image: dreamx119/debate_db
     build:
