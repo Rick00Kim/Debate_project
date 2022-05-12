@@ -64,7 +64,7 @@ jobs:
           host: ${{ env.INSTANCE_IP }}
           username: ubuntu
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
-          source: "deploy/docker-compose-runner.yml"
+          source: "deploy/docker-compose-deploy.yml"
           target: "debate_app"
       # 7. Pull latest images
       - name: "Pull Images"
@@ -74,7 +74,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
           script: |
-            sudo docker-compose -f debate_app/deploy/docker-compose-runner.yml pull
+            sudo docker-compose -f debate_app/deploy/docker-compose-deploy.yml pull
       # 8. Start container
       - name: "Restart App (only frontend, backend)"
         uses: appleboy/ssh-action@master
@@ -83,4 +83,4 @@ jobs:
           username: ubuntu
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
           script: |
-            sudo docker-compose -f debate_app/deploy/docker-compose-runner.yml up -d --no-deps frontend backend
+            sudo docker-compose -f debate_app/deploy/docker-compose-deploy.yml up -d --no-deps frontend backend
