@@ -30,9 +30,9 @@ services:
     environment:
       SECRET_KEY: prdDebateSecret
       MONGODB_HOST: mongodb
-      MONGODB_USERNAME: "debate_manager"
-      MONGODB_PASSWORD: "manPrd4892#"
-      DEBATE_INIT_USER_PWD: "debateAdmin"
+      MONGODB_USERNAME: ${MONGODB_USERNAME}
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
+      DEBATE_INIT_USER_PWD: ${INI_USER_PWD}
     depends_on:
       - mongodb
     networks:
