@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debate_db-deployment
+spec:
+  selector:
+    matchLabels:
+      app: debate_db
+  template:
+    metadata:
+      labels:
+        app: debate_db
+    spec:
+      containers:
+        - name: debate_db
+          image: dreamx119/debate_db

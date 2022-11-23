@@ -1,0 +1,58 @@
+version: "3.7"
+services:
+  # Server run setting
+  nginx:
+    container_name: debate_server
+    image: dreamx119/debate_server
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - debate-network
+    depends_on:
+      - frontend
+      - backend
+
+  # Frontend run setting
+  frontend:
+    container_name: debate_frontend
+    image: dreamx119/debate_frontend
+    command: "npm run start"
+    tty: true
+    networks:
+      debate-network:
+
+  # Backend run setting
+  backend:
+    container_name: debate_backend
+    image: dreamx119/debate_backend
+    command: gunicorn --bind 0.0.0.0:5500 wsgi:app
+    environment:
+      SECRET_KEY: prdDebateSecret
+      MONGODB_HOST: mongodb
+      MONGODB_USERNAME: "debate_manager"
+      MONGODB_PASSWORD: "manPrd4892#"
+      DEBATE_INIT_USER_PWD: "debateAdmin"
+    depends_on:
+      - mongodb
+    networks:
+      debate-network:
+
+  # Database run setting
+  mongodb:
+    container_name: debate_db
+    image: dreamx119/debate_db
+    restart: unless-stopped
+    volumes:
+      - mongodbdata:/docker-entrypoint-initdb.d/
+      - mongodbdata:/data/configdb/
+      - mongodbdata:/data/db/
+    networks:
+      debate-network:
+
+# Network setting
+networks:
+  debate-network:
+volumes:
+  mongodbdata:
+    driver: local

@@ -1,5 +1,6 @@
 version: "3.7"
 services:
+  # Server run setting
   nginx:
     container_name: debate_server
     image: dreamx119/debate_server
@@ -12,6 +13,7 @@ services:
       - frontend
       - backend
 
+  # Frontend run setting
   frontend:
     container_name: debate_frontend
     image: dreamx119/debate_frontend
@@ -20,6 +22,7 @@ services:
     networks:
       debate-network:
 
+  # Backend run setting
   backend:
     container_name: debate_backend
     image: dreamx119/debate_backend
@@ -27,25 +30,15 @@ services:
     environment:
       SECRET_KEY: prdDebateSecret
       MONGODB_HOST: mongodb
-      MONGODB_USERNAME: "debate_manager"
-      MONGODB_PASSWORD: "manPrd4892#"
-      DEBATE_INIT_USER_PWD: "debateAdmin"
+      MONGODB_USERNAME: ${MONGODB_USERNAME}
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
+      DEBATE_INIT_USER_PWD: ${INI_USER_PWD}
     depends_on:
       - mongodb
     networks:
       debate-network:
 
-  mongodb:
-    container_name: debate_db
-    image: dreamx119/debate_db
-    restart: unless-stopped
-    volumes:
-      - mongodbdata:/docker-entrypoint-initdb.d/
-      - mongodbdata:/data/configdb/
-      - mongodbdata:/data/db/
-    networks:
-      debate-network:
-
+# Network setting
 networks:
   debate-network:
 volumes:
