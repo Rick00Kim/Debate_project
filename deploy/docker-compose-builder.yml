@@ -20,10 +20,3 @@ services:
     build:
       context: ../backend
       dockerfile: Dockerfile
-
-  # Database build setting
-  mongodb:
-    image: dreamx119/debate_db
-    build:
-      context: ../db
-      dockerfile: Dockerfile
