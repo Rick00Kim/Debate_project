@@ -77,7 +77,7 @@ function IndexPage(props) {
         </>
       )}
     </div>
-  );
+  )
 }
 
 export default IndexPage

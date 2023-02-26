@@ -1,9 +1,9 @@
-import React from "react";
-import "bootstrap/dist/css/bootstrap.css";
-import { Form, Button, Col } from "react-bootstrap";
-import axios from "axios";
-import { backendPointList, emptyDebateForm } from "../common/Constants";
-import { getAuthHeader } from "../authenticated/AuthService";
+import React from "react"
+import "bootstrap/dist/css/bootstrap.css"
+import { Form, Button, Col } from "react-bootstrap"
+import axios from "axios"
+import { backendPointList, emptyDebateForm } from "../common/Constants"
+import { getAuthHeader } from "../authenticated/AuthService"
 
 export default function InputForm(props) {
   const {
@@ -13,23 +13,23 @@ export default function InputForm(props) {
     inputMode,
     setInputMode,
     mobileFlg,
-  } = props;
+  } = props
 
   const setField = (field, value) => {
     setCurrentDebate({
       ...currentDebate,
       [field]: value,
-    });
-  };
+    })
+  }
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (!currentDebate.content) {
-      return;
+      return
     }
 
-    currentDebate["topicNum"] = props.targetTopic._id;
+    currentDebate["topicNum"] = props.targetTopic._id
 
     if (inputMode === "C") {
       axios
@@ -37,26 +37,26 @@ export default function InputForm(props) {
           headers: getAuthHeader(),
         })
         .then((res) => {
-          updateRow();
-          setField("content", "");
+          updateRow()
+          setField("content", "")
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
     } else {
       axios
         .put(backendPointList.debates, currentDebate, {
           headers: getAuthHeader(),
         })
         .then((res) => {
-          updateRow();
-          setInputMode("C");
-          setCurrentDebate(emptyDebateForm);
+          updateRow()
+          setInputMode("C")
+          setCurrentDebate(emptyDebateForm)
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
     }
-  };
+  }
   const handleReset = (e) => {
-    setField("content", "");
-  };
+    setField("content", "")
+  }
 
   return (
     <Form>
@@ -89,5 +89,5 @@ export default function InputForm(props) {
         </Col>
       </Form.Row>
     </Form>
-  );
+  )
 }

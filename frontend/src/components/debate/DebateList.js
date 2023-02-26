@@ -1,15 +1,15 @@
-import React, { useState, forwardRef, useEffect } from "react";
-import { ListGroup, Card, Image, Dropdown } from "react-bootstrap";
-import axios from "axios";
-import { backendPointList, contentStyle } from "../common/Constants";
-import { useAuth } from "../authenticated/auth";
-import thumbUp from "../../assets/images/thumbs-up-regular.svg";
-import thumbUpSolid from "../../assets/images/thumbs-up-solid.svg";
-import thumbDown from "../../assets/images/thumbs-down-regular.svg";
-import thumbDownSolid from "../../assets/images/thumbs-down-solid.svg";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
-import { getAuthHeader } from "../authenticated/AuthService";
+import React, { useState, forwardRef, useEffect } from "react"
+import { ListGroup, Card, Image, Dropdown } from "react-bootstrap"
+import axios from "axios"
+import { backendPointList, contentStyle } from "../common/Constants"
+import { useAuth } from "../authenticated/auth"
+import thumbUp from "../../assets/images/thumbs-up-regular.svg"
+import thumbUpSolid from "../../assets/images/thumbs-up-solid.svg"
+import thumbDown from "../../assets/images/thumbs-down-regular.svg"
+import thumbDownSolid from "../../assets/images/thumbs-down-solid.svg"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faEllipsisV } from "@fortawesome/free-solid-svg-icons"
+import { getAuthHeader } from "../authenticated/AuthService"
 
 const componentStyle = {
   root: contentStyle.root,
@@ -68,15 +68,15 @@ const componentStyle = {
     right: "3%",
     top: "3%",
   },
-};
+}
 
 const CustomToggle = forwardRef(({ children, onClick }, ref) => (
   <a
     href="#!"
     ref={ref}
     onClick={(e) => {
-      e.preventDefault();
-      onClick(e);
+      e.preventDefault()
+      onClick(e)
     }}
     style={{
       color: "#212529",
@@ -89,24 +89,24 @@ const CustomToggle = forwardRef(({ children, onClick }, ref) => (
     <FontAwesomeIcon icon={faEllipsisV} />
     {children}
   </a>
-));
+))
 
 function DebateList(props) {
-  const [logged] = useAuth();
-  const { item, changeInputMode, deleteDebate } = props;
+  const [logged] = useAuth()
+  const { item, changeInputMode, deleteDebate } = props
   const [likeList, setLikeList] = useState({
     like_cnt: 0,
     unlike_cnt: 0,
     liked: false,
     unliked: false,
-  });
+  })
 
   useEffect(() => {
     if (logged) {
-      reloadLikeList();
+      reloadLikeList()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   const reloadLikeList = () => {
     axios
@@ -115,11 +115,11 @@ function DebateList(props) {
       })
       .then((res) => res.data)
       .then((result) => setLikeList(result))
-      .catch((err) => console.log(err));
-  };
+      .catch((err) => console.log(err))
+  }
 
   const handleLikeBtn = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     axios
       .post(
         backendPointList.like,
@@ -129,13 +129,13 @@ function DebateList(props) {
         }
       )
       .then((res) => {
-        reloadLikeList();
+        reloadLikeList()
       })
-      .catch((err) => console.log(err));
-  };
+      .catch((err) => console.log(err))
+  }
 
   const handleUnLikeBtn = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     axios
       .post(
         backendPointList.unlike,
@@ -145,10 +145,10 @@ function DebateList(props) {
         }
       )
       .then((res) => {
-        reloadLikeList();
+        reloadLikeList()
       })
-      .catch((err) => console.log(err));
-  };
+      .catch((err) => console.log(err))
+  }
 
   return (
     <ListGroup.Item
@@ -219,7 +219,7 @@ function DebateList(props) {
         )}
       </Card>
     </ListGroup.Item>
-  );
+  )
 }
 
-export default DebateList;
+export default DebateList

@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Form, Button, Alert } from "react-bootstrap";
-import { passwordValidation } from "../common/Validators";
-import { backendPointList } from "../common/Constants";
-import { getAuthHeader } from "../authenticated/AuthService";
-import axios from "axios";
-import "bootstrap/dist/css/bootstrap.css";
+import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { Form, Button, Alert } from "react-bootstrap"
+import { passwordValidation } from "../common/Validators"
+import { backendPointList } from "../common/Constants"
+import { getAuthHeader } from "../authenticated/AuthService"
+import axios from "axios"
+import "bootstrap/dist/css/bootstrap.css"
 
 const componentStyle = {
   root: {
@@ -20,52 +20,52 @@ const componentStyle = {
   dangerMsgStyle: {
     fontSize: "20px",
   },
-};
+}
 
 const validate = {
   password: (v) => passwordValidation(v),
   confirmPassword: (v) => passwordValidation(v),
-};
+}
 
 function InitializePasswordForm(props) {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const [form, setForm] = useState({
     password: "",
     confirmPassword: "",
-  });
-  const [touched, setTouched] = useState({});
-  const [errors, setErrors] = useState({});
-  const [serverError, setServerError] = useState(false);
+  })
+  const [touched, setTouched] = useState({})
+  const [errors, setErrors] = useState({})
+  const [serverError, setServerError] = useState(false)
 
   const handleInput = (props) => {
-    const { name, value } = props.target;
+    const { name, value } = props.target
     setForm({
       ...form,
       [name]: value,
-    });
+    })
     setTouched({
       ...touched,
       [name]: true,
-    });
-  };
+    })
+  }
 
   const handleBlur = (props) => {
-    const { name, value } = props.target;
-    const { [name]: removedError, ...rest } = errors;
-    const error = validate[name](value);
+    const { name, value } = props.target
+    const { [name]: removedError, ...rest } = errors
+    const error = validate[name](value)
     setErrors({
       ...rest,
       ...(error && { [name]: touched[name] && error }),
-    });
-  };
+    })
+  }
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     const formValidation = Object.keys(form).reduce(
       (acc, key) => {
-        const newError = validate[key](form[key]);
-        const newTouched = { [key]: true };
+        const newError = validate[key](form[key])
+        const newTouched = { [key]: true }
         return {
           errors: {
             ...acc.errors,
@@ -75,16 +75,16 @@ function InitializePasswordForm(props) {
             ...acc.touched,
             ...newTouched,
           },
-        };
+        }
       },
       {
         errors: { ...errors },
         touched: { ...touched },
       }
-    );
+    )
 
-    setErrors(formValidation.errors);
-    setTouched(formValidation.touched);
+    setErrors(formValidation.errors)
+    setTouched(formValidation.touched)
 
     if (
       !Object.values(formValidation.errors).length &&
@@ -99,18 +99,18 @@ function InitializePasswordForm(props) {
         .then((response) => response.data)
         .then((result) => {
           if (result.result === "SUCCESS") {
-            navigate("/");
+            navigate("/")
           } else {
-            setServerError(true);
+            setServerError(true)
             setForm({
               password: "",
               confirmPassword: "",
-            });
+            })
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
     }
-  };
+  }
 
   return (
     <div>
@@ -173,7 +173,7 @@ function InitializePasswordForm(props) {
         </Button>
       </Form>
     </div>
-  );
+  )
 }
 
-export default InitializePasswordForm;
+export default InitializePasswordForm

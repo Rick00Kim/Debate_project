@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useParams, Navigate, Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react"
+import { useParams, Navigate, Link, useLocation } from "react-router-dom"
 import {
   Container,
   Jumbotron,
@@ -7,21 +7,21 @@ import {
   Button,
   Row,
   Col,
-} from "react-bootstrap";
-import axios from "axios";
+} from "react-bootstrap"
+import axios from "axios"
 import {
   routerEndPoint,
   backendPointList,
   contentStyle,
   emptyDebateForm,
-} from "../common/Constants";
-import InputForm from "./InputForm";
-import { useAuth } from "../authenticated/auth";
-import DebateList from "./DebateList";
-import "bootstrap/dist/css/bootstrap.css";
-import DeleteTopicBtn from "../topic/DeleteTopicBtn";
-import ManagerComponent from "../management/ManagerComponent";
-import { getAuthHeader } from "../authenticated/AuthService";
+} from "../common/Constants"
+import InputForm from "./InputForm"
+import { useAuth } from "../authenticated/auth"
+import DebateList from "./DebateList"
+import "bootstrap/dist/css/bootstrap.css"
+import DeleteTopicBtn from "../topic/DeleteTopicBtn"
+import ManagerComponent from "../management/ManagerComponent"
+import { getAuthHeader } from "../authenticated/AuthService"
 
 const componentStyle = {
   root: contentStyle.root,
@@ -78,41 +78,41 @@ const componentStyle = {
     paddingRight: 10,
     paddingBottom: 10,
   },
-};
+}
 
 function TopicContent(props) {
-  const [logged] = useAuth();
-  const location = useLocation();
-  const { topicId } = useParams();
-  const { freshList, mobileFlg } = props;
-  const [inputMode, setInputMode] = useState("C");
-  const [currentDebate, setCurrentDebate] = useState(emptyDebateForm);
-  const [targetTopic, setTargetTopic] = useState({});
-  const [debateList, setDebateList] = useState([]);
+  const [logged] = useAuth()
+  const location = useLocation()
+  const { topicId } = useParams()
+  const { freshList, mobileFlg } = props
+  const [inputMode, setInputMode] = useState("C")
+  const [currentDebate, setCurrentDebate] = useState(emptyDebateForm)
+  const [targetTopic, setTargetTopic] = useState({})
+  const [debateList, setDebateList] = useState([])
 
   useEffect(() => {
     axios
       .get(backendPointList.topic + "/" + topicId)
       .then((res) => setTargetTopic(res.data))
-      .catch((err) => console.log(err));
-    reloadDebateList();
+      .catch((err) => console.log(err))
+    reloadDebateList()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [topicId]);
+  }, [topicId])
 
   const reloadDebateList = () => {
-    const headerContents = logged ? getAuthHeader() : "";
+    const headerContents = logged ? getAuthHeader() : ""
     axios
       .get(backendPointList.debates + "/" + topicId, {
         headers: headerContents,
       })
       .then((res) => setDebateList(res.data))
-      .catch((err) => console.log(err));
-  };
+      .catch((err) => console.log(err))
+  }
 
   const changeInputMode = (item) => {
-    setInputMode("U");
-    setCurrentDebate(item);
-  };
+    setInputMode("U")
+    setCurrentDebate(item)
+  }
 
   const deleteDebate = (item) => {
     axios
@@ -120,12 +120,12 @@ function TopicContent(props) {
         headers: getAuthHeader(),
       })
       .then((res) => reloadDebateList())
-      .catch((err) => console.log(err));
-  };
+      .catch((err) => console.log(err))
+  }
 
   const responsiveHeight = {
     height: mobileFlg ? `87vh` : `95vh`,
-  };
+  }
 
   return targetTopic ? (
     <div style={{ ...componentStyle.root, ...responsiveHeight }}>
@@ -198,7 +198,7 @@ function TopicContent(props) {
     </div>
   ) : (
     <Navigate to={routerEndPoint.errors.notFound} />
-  );
+  )
 }
 
-export default TopicContent;
+export default TopicContent

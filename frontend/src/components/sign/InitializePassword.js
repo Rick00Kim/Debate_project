@@ -1,6 +1,6 @@
-import React from "react";
-import { Card } from "react-bootstrap";
-import InitializePasswordForm from "./InitializePasswordForm";
+import React from "react"
+import { Card } from "react-bootstrap"
+import InitializePasswordForm from "./InitializePasswordForm"
 
 const componentStyle = {
   root: {
@@ -19,19 +19,19 @@ const componentStyle = {
     display: "flex",
     flexDirection: "column",
   },
-};
+}
 
 function InitializePassword(props) {
-  const { mobileFlg } = props;
+  const { mobileFlg } = props
 
   const responsiveHeight = {
     height: mobileFlg ? `70vh` : `95vh`,
-  };
+  }
 
   const responsiveAuthCard = {
     marginLeft: mobileFlg ? "0%" : "10%",
     marginRight: mobileFlg ? "0%" : "10%",
-  };
+  }
 
   return (
     <div style={{ ...componentStyle.root, ...responsiveHeight }}>
@@ -42,7 +42,7 @@ function InitializePassword(props) {
         </Card.Body>
       </Card>
     </div>
-  );
+  )
 }
 
-export default InitializePassword;
+export default InitializePassword

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Table } from "react-bootstrap";
-import { backendPointList } from "../common/Constants";
-import axios from "axios";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { getAuthHeader } from "../authenticated/AuthService";
+import React, { useState, useEffect } from "react"
+import { Table } from "react-bootstrap"
+import { backendPointList } from "../common/Constants"
+import axios from "axios"
+import "bootstrap/dist/css/bootstrap.min.css"
+import { getAuthHeader } from "../authenticated/AuthService"
 
 const componentStyle = {
   root: {
@@ -16,15 +16,15 @@ const componentStyle = {
     overflowY: "auto",
     position: "relative",
   },
-};
+}
 
 function Users(props) {
-  const [userList, setUserList] = useState([]);
-  const { mobileFlg } = props;
+  const [userList, setUserList] = useState([])
+  const { mobileFlg } = props
 
   const responsiveHeight = {
     height: mobileFlg ? `87vh` : `95vh`,
-  };
+  }
 
   useEffect(() => {
     axios
@@ -32,8 +32,8 @@ function Users(props) {
         headers: getAuthHeader(),
       })
       .then((res) => setUserList(res.data))
-      .catch((err) => console.log(err));
-  }, []);
+      .catch((err) => console.log(err))
+  }, [])
 
   return (
     <div style={{ ...componentStyle.root, ...responsiveHeight }}>
@@ -54,12 +54,12 @@ function Users(props) {
                 <td>{e.name}</td>
                 <td>{e.role}</td>
               </tr>
-            );
+            )
           })}
         </tbody>
       </Table>
     </div>
-  );
+  )
 }
 
-export default Users;
+export default Users

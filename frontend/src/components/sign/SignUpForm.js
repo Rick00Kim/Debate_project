@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { Form, Button } from "react-bootstrap";
-import { backendPointList, routerEndPoint } from "../common/Constants";
+import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import axios from "axios"
+import { Form, Button } from "react-bootstrap"
+import { backendPointList, routerEndPoint } from "../common/Constants"
 import {
   emailValidation,
   nameValidation,
   passwordValidation,
-} from "../common/Validators";
-import "bootstrap/dist/css/bootstrap.css";
+} from "../common/Validators"
+import "bootstrap/dist/css/bootstrap.css"
 
 const componentStyle = {
   root: {
@@ -20,53 +20,53 @@ const componentStyle = {
     alignItems: "center",
     fontSize: "20px",
   },
-};
+}
 
 const validate = {
   email: (v) => emailValidation(v),
   password: (v) => passwordValidation(v),
   name: (v) => nameValidation(v),
-};
+}
 
 function SignUpForm() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const [form, setForm] = useState({
     email: "",
     password: "",
     name: "",
-  });
-  const [touched, setTouched] = useState({});
-  const [errors, setErrors] = useState({});
+  })
+  const [touched, setTouched] = useState({})
+  const [errors, setErrors] = useState({})
 
   const handleInput = (props) => {
-    const { name, value } = props.target;
+    const { name, value } = props.target
     setForm({
       ...form,
       [name]: value,
-    });
+    })
     setTouched({
       ...touched,
       [name]: true,
-    });
-  };
+    })
+  }
 
   const handleBlur = (props) => {
-    const { name, value } = props.target;
-    const { [name]: removedError, ...rest } = errors;
-    const error = validate[name](value);
+    const { name, value } = props.target
+    const { [name]: removedError, ...rest } = errors
+    const error = validate[name](value)
     setErrors({
       ...rest,
       ...(error && { [name]: touched[name] && error }),
-    });
-  };
+    })
+  }
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     const formValidation = Object.keys(form).reduce(
       (acc, key) => {
-        const newError = validate[key](form[key]);
-        const newTouched = { [key]: true };
+        const newError = validate[key](form[key])
+        const newTouched = { [key]: true }
         return {
           errors: {
             ...acc.errors,
@@ -76,16 +76,16 @@ function SignUpForm() {
             ...acc.touched,
             ...newTouched,
           },
-        };
+        }
       },
       {
         errors: { ...errors },
         touched: { ...touched },
       }
-    );
+    )
 
-    setErrors(formValidation.errors);
-    setTouched(formValidation.touched);
+    setErrors(formValidation.errors)
+    setTouched(formValidation.touched)
 
     if (
       !Object.values(formValidation.errors).length &&
@@ -96,11 +96,11 @@ function SignUpForm() {
       axios
         .post(backendPointList.signup, form)
         .then((res) => {
-          navigate(routerEndPoint.root);
+          navigate(routerEndPoint.root)
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
     }
-  };
+  }
 
   return (
     <Form style={componentStyle.root} autoComplete="off">
@@ -164,7 +164,7 @@ function SignUpForm() {
         Sign up
       </Button>
     </Form>
-  );
+  )
 }
 
-export default SignUpForm;
+export default SignUpForm

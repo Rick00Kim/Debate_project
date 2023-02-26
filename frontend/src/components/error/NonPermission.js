@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 
 const NonPermission = () => {
   return (
@@ -13,7 +13,7 @@ const NonPermission = () => {
       <h1>🤲 Non permission page</h1>
       <h2>You don't have permission of management.</h2>
     </div>
-  );
-};
+  )
+}
 
-export default NonPermission;
+export default NonPermission

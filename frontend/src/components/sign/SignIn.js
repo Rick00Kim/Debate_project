@@ -1,7 +1,7 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Card } from "react-bootstrap";
-import SignInForm from "./SignInForm";
+import React from "react"
+import { Link, useLocation } from "react-router-dom"
+import { Card } from "react-bootstrap"
+import SignInForm from "./SignInForm"
 
 const componentStyle = {
   root: {
@@ -20,21 +20,21 @@ const componentStyle = {
     display: "flex",
     flexDirection: "column",
   },
-};
+}
 
 function SignIn(props) {
-  const search = useLocation().search;
-  const { mobileFlg } = props;
-  const redirectUrl = new URLSearchParams(search).get("redirectUrl");
+  const search = useLocation().search
+  const { mobileFlg } = props
+  const redirectUrl = new URLSearchParams(search).get("redirectUrl")
 
   const responsiveHeight = {
     height: mobileFlg ? `70vh` : `95vh`,
-  };
+  }
 
   const responsiveAuthCard = {
     marginLeft: mobileFlg ? "0%" : "10%",
     marginRight: mobileFlg ? "0%" : "10%",
-  };
+  }
 
   return (
     <div style={{ ...componentStyle.root, ...responsiveHeight }}>
@@ -52,7 +52,7 @@ function SignIn(props) {
         </Card.Body>
       </Card>
     </div>
-  );
+  )
 }
 
-export default SignIn;
+export default SignIn

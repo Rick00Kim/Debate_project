@@ -1,10 +1,10 @@
-import React, { Fragment } from "react";
-import { useAuth } from "../authenticated/auth";
-import { getCurrentUser } from "../authenticated/AuthService";
+import React, { Fragment } from "react"
+import { useAuth } from "../authenticated/auth"
+import { getCurrentUser } from "../authenticated/AuthService"
 
 function ManagerComponent({ component: Component, render, props }) {
-  const [logged] = useAuth();
-  const loggedUser = getCurrentUser();
+  const [logged] = useAuth()
+  const loggedUser = getCurrentUser()
 
   return (
     <Fragment>
@@ -18,7 +18,7 @@ function ManagerComponent({ component: Component, render, props }) {
         ""
       )}
     </Fragment>
-  );
+  )
 }
 
-export default ManagerComponent;
+export default ManagerComponent

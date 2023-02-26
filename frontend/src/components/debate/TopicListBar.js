@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from "react"
+import { Link } from "react-router-dom"
 import {
   Jumbotron,
   Container,
@@ -7,13 +7,13 @@ import {
   Col,
   ListGroup,
   Button,
-} from "react-bootstrap";
-import { contentStyle, routerEndPoint } from "../common/Constants";
-import { useAuth, logout } from "../authenticated/auth";
-import { getCurrentUser, isManager } from "../authenticated/AuthService";
-import LogoutButton from "../sign/LogoutButton";
-import ManagerComponent from "../management/ManagerComponent";
-import "bootstrap/dist/css/bootstrap.css";
+} from "react-bootstrap"
+import { contentStyle, routerEndPoint } from "../common/Constants"
+import { useAuth, logout } from "../authenticated/auth"
+import { getCurrentUser, isManager } from "../authenticated/AuthService"
+import LogoutButton from "../sign/LogoutButton"
+import ManagerComponent from "../management/ManagerComponent"
+import "bootstrap/dist/css/bootstrap.css"
 
 const componentStyle = {
   root: contentStyle.root,
@@ -58,11 +58,11 @@ const componentStyle = {
     textAlign: `left`,
     backgroundColor: "inherit",
   },
-};
+}
 
 const TopicListBar = (props) => {
-  const [logged] = useAuth();
-  const { topicList, currentTopic, setCurrentTopic } = props;
+  const [logged] = useAuth()
+  const { topicList, currentTopic, setCurrentTopic } = props
 
   const UserInfo = () => {
     return (
@@ -84,8 +84,8 @@ const TopicListBar = (props) => {
           />
         </Container>
       )
-    );
-  };
+    )
+  }
 
   return (
     <div style={componentStyle.root}>
@@ -130,7 +130,7 @@ const TopicListBar = (props) => {
         <UserInfo />
       </Jumbotron>
     </div>
-  );
-};
+  )
+}
 
-export default TopicListBar;
+export default TopicListBar

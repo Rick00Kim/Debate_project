@@ -1,7 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Card } from "react-bootstrap";
-import SignUpForm from "./SignUpForm";
+import React from "react"
+import { Link } from "react-router-dom"
+import { Card } from "react-bootstrap"
+import SignUpForm from "./SignUpForm"
 
 const componentStyle = {
   root: {
@@ -20,19 +20,19 @@ const componentStyle = {
     display: "flex",
     flexDirection: "column",
   },
-};
+}
 
 function SignUp(props) {
-  const { mobileFlg } = props;
+  const { mobileFlg } = props
 
   const responsiveHeight = {
     height: mobileFlg ? `70vh` : `95vh`,
-  };
+  }
 
   const responsiveAuthCard = {
     marginLeft: mobileFlg ? "0%" : "10%",
     marginRight: mobileFlg ? "0%" : "10%",
-  };
+  }
 
   return (
     <div style={{ ...componentStyle.root, ...responsiveHeight }}>
@@ -50,7 +50,7 @@ function SignUp(props) {
         </Card.Body>
       </Card>
     </div>
-  );
+  )
 }
 
-export default SignUp;
+export default SignUp

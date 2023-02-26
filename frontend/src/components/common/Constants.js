@@ -10,7 +10,7 @@ export const routerEndPoint = {
     notFound: "/not-exists-topic",
     nonPermission: "/non-permission",
   },
-};
+}
 
 export const backendPointList = {
   auth: "/api/auth",
@@ -22,12 +22,12 @@ export const backendPointList = {
   debates: "/api/debates",
   like: "/api/like",
   unlike: "/api/unlike",
-};
+}
 
 export const emptyDebateForm = {
   topicNum: "",
   content: "",
-};
+}
 
 export const contentStyle = {
   root: {
@@ -36,4 +36,4 @@ export const contentStyle = {
     justifyContent: `space-between`,
     height: `93vh`,
   },
-};
+}

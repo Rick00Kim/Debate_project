@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Form, Button, Alert } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { emailValidation, passwordValidation } from "../common/Validators";
-import { routerEndPoint, backendPointList } from "../common/Constants";
-import { login } from "../authenticated/auth";
-import axios from "axios";
-import "bootstrap/dist/css/bootstrap.css";
+import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { Form, Button, Alert } from "react-bootstrap"
+import { Link } from "react-router-dom"
+import { emailValidation, passwordValidation } from "../common/Validators"
+import { routerEndPoint, backendPointList } from "../common/Constants"
+import { login } from "../authenticated/auth"
+import axios from "axios"
+import "bootstrap/dist/css/bootstrap.css"
 
 const componentStyle = {
   root: {
@@ -21,53 +21,53 @@ const componentStyle = {
   dangerMsgStyle: {
     fontSize: "20px",
   },
-};
+}
 
 const validate = {
   email: (v) => emailValidation(v),
   password: (v) => passwordValidation(v),
-};
+}
 
 function SignInForm(props) {
-  const navigate = useNavigate();
-  const { redirectUrl } = props;
+  const navigate = useNavigate()
+  const { redirectUrl } = props
   const [form, setForm] = useState({
     email: "",
     password: "",
-  });
-  const [touched, setTouched] = useState({});
-  const [errors, setErrors] = useState({});
-  const [serverError, setServerError] = useState(false);
+  })
+  const [touched, setTouched] = useState({})
+  const [errors, setErrors] = useState({})
+  const [serverError, setServerError] = useState(false)
 
   const handleInput = (props) => {
-    const { name, value } = props.target;
+    const { name, value } = props.target
     setForm({
       ...form,
       [name]: value,
-    });
+    })
     setTouched({
       ...touched,
       [name]: true,
-    });
-  };
+    })
+  }
 
   const handleBlur = (props) => {
-    const { name, value } = props.target;
-    const { [name]: removedError, ...rest } = errors;
-    const error = validate[name](value);
+    const { name, value } = props.target
+    const { [name]: removedError, ...rest } = errors
+    const error = validate[name](value)
     setErrors({
       ...rest,
       ...(error && { [name]: touched[name] && error }),
-    });
-  };
+    })
+  }
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     const formValidation = Object.keys(form).reduce(
       (acc, key) => {
-        const newError = validate[key](form[key]);
-        const newTouched = { [key]: true };
+        const newError = validate[key](form[key])
+        const newTouched = { [key]: true }
         return {
           errors: {
             ...acc.errors,
@@ -77,16 +77,16 @@ function SignInForm(props) {
             ...acc.touched,
             ...newTouched,
           },
-        };
+        }
       },
       {
         errors: { ...errors },
         touched: { ...touched },
       }
-    );
+    )
 
-    setErrors(formValidation.errors);
-    setTouched(formValidation.touched);
+    setErrors(formValidation.errors)
+    setTouched(formValidation.touched)
 
     if (
       !Object.values(formValidation.errors).length &&
@@ -99,23 +99,23 @@ function SignInForm(props) {
         .then((response) => response.data)
         .then((result) => {
           if (result.status === "SUCCESS") {
-            login(result.access_token);
+            login(result.access_token)
             if (result.requreInitPassword === true) {
-              navigate(routerEndPoint.initPassword);
+              navigate(routerEndPoint.initPassword)
             } else {
-              navigate(redirectUrl == null ? "/" : redirectUrl);
+              navigate(redirectUrl == null ? "/" : redirectUrl)
             }
           } else {
-            setServerError(true);
+            setServerError(true)
             setForm({
               email: "",
               password: "",
-            });
+            })
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
     }
-  };
+  }
 
   return (
     <div>
@@ -180,7 +180,7 @@ function SignInForm(props) {
         </Button>
       </Form>
     </div>
-  );
+  )
 }
 
-export default SignInForm;
+export default SignInForm

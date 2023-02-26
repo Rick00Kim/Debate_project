@@ -1,22 +1,22 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
-import { Nav, Navbar, NavDropdown } from "react-bootstrap";
-import { routerEndPoint } from "../common/Constants";
-import { useAuth, logout } from "../authenticated/auth";
-import { getCurrentUser } from "../authenticated/AuthService";
-import LogoutButton from "../sign/LogoutButton";
-import ManagerComponent from "../management/ManagerComponent";
-import "bootstrap/dist/css/bootstrap.css";
+import React, { useState } from "react"
+import { NavLink } from "react-router-dom"
+import { Nav, Navbar, NavDropdown } from "react-bootstrap"
+import { routerEndPoint } from "../common/Constants"
+import { useAuth, logout } from "../authenticated/auth"
+import { getCurrentUser } from "../authenticated/AuthService"
+import LogoutButton from "../sign/LogoutButton"
+import ManagerComponent from "../management/ManagerComponent"
+import "bootstrap/dist/css/bootstrap.css"
 
 const TopicListNavBar = (props) => {
-  const [logged] = useAuth();
-  const { topicList, setCurrentTopic } = props;
-  const [expanded, setExpanded] = useState(false);
+  const [logged] = useAuth()
+  const { topicList, setCurrentTopic } = props
+  const [expanded, setExpanded] = useState(false)
 
   const dropdownClickHandler = (e) => {
-    setCurrentTopic(e);
-    setExpanded(!expanded);
-  };
+    setCurrentTopic(e)
+    setExpanded(!expanded)
+  }
 
   return (
     <div>
@@ -83,7 +83,7 @@ const TopicListNavBar = (props) => {
         </Navbar.Collapse>
       </Navbar>
     </div>
-  );
-};
+  )
+}
 
-export default TopicListNavBar;
+export default TopicListNavBar

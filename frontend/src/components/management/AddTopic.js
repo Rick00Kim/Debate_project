@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { Col, Row } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import { backendPointList } from "../common/Constants";
-import { topicValidation } from "../common/Validators";
-import "bootstrap/dist/css/bootstrap.css";
-import axios from "axios";
+import React, { useState, useEffect } from "react"
+import { useParams } from "react-router-dom"
+import { Col, Row } from "react-bootstrap"
+import Form from "react-bootstrap/Form"
+import Button from "react-bootstrap/Button"
+import { backendPointList } from "../common/Constants"
+import { topicValidation } from "../common/Validators"
+import "bootstrap/dist/css/bootstrap.css"
+import axios from "axios"
 
 const componentStyle = {
   root: {
@@ -16,34 +16,34 @@ const componentStyle = {
     marginLeft: `10%`,
     marginRight: `10%`,
   },
-};
+}
 
 const validate = {
   title: (v) => topicValidation(v, "title"),
   header: (v) => topicValidation(v, "header"),
   content: (v) => topicValidation(v, "content"),
-};
+}
 
 function AddTopic(props) {
-  const { topicId } = useParams();
-  const { mobileFlg } = props;
-  const [manageMode, setManageMode] = useState("CREATE");
+  const { topicId } = useParams()
+  const { mobileFlg } = props
+  const [manageMode, setManageMode] = useState("CREATE")
   const [form, setForm] = useState({
     title: "",
     header: "",
     content: "",
-  });
-  const { freshList } = props;
-  const [touched, setTouched] = useState({});
-  const [errors, setErrors] = useState({});
+  })
+  const { freshList } = props
+  const [touched, setTouched] = useState({})
+  const [errors, setErrors] = useState({})
 
   const responsiveHeight = {
     height: mobileFlg ? `87vh` : `95vh`,
-  };
+  }
 
   useEffect(() => {
     if (topicId !== undefined) {
-      setManageMode("MODIFY");
+      setManageMode("MODIFY")
       axios
         .get(backendPointList.topic + "/" + topicId)
         .then((res) => {
@@ -51,48 +51,48 @@ function AddTopic(props) {
             title: res.data.title,
             header: res.data.header,
             content: res.data.content,
-          });
+          })
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
     } else {
-      setManageMode("CREATE");
+      setManageMode("CREATE")
       setForm({
         title: "",
         header: "",
         content: "",
-      });
+      })
     }
-  }, [topicId]);
+  }, [topicId])
 
   const handleInput = (props) => {
-    const { name, value } = props.target;
+    const { name, value } = props.target
     setForm({
       ...form,
       [name]: value,
-    });
+    })
     setTouched({
       ...touched,
       [name]: true,
-    });
-  };
+    })
+  }
 
   const handleBlur = (props) => {
-    const { name, value } = props.target;
-    const { [name]: removedError, ...rest } = errors;
-    const error = validate[name](value);
+    const { name, value } = props.target
+    const { [name]: removedError, ...rest } = errors
+    const error = validate[name](value)
     setErrors({
       ...rest,
       ...(error && { [name]: touched[name] && error }),
-    });
-  };
+    })
+  }
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     const formValidation = Object.keys(form).reduce(
       (acc, key) => {
-        const newError = validate[key](form[key]);
-        const newTouched = { [key]: true };
+        const newError = validate[key](form[key])
+        const newTouched = { [key]: true }
         return {
           errors: {
             ...acc.errors,
@@ -102,16 +102,16 @@ function AddTopic(props) {
             ...acc.touched,
             ...newTouched,
           },
-        };
+        }
       },
       {
         errors: { ...errors },
         touched: { ...touched },
       }
-    );
+    )
 
-    setErrors(formValidation.errors);
-    setTouched(formValidation.touched);
+    setErrors(formValidation.errors)
+    setTouched(formValidation.touched)
 
     if (
       !Object.values(formValidation.errors).length &&
@@ -123,26 +123,26 @@ function AddTopic(props) {
         axios
           .post(backendPointList.topic, form)
           .then((res) => {
-            freshList();
+            freshList()
             setForm({
               title: "",
               header: "",
               content: "",
-            });
+            })
           })
-          .catch((err) => console.log(err));
+          .catch((err) => console.log(err))
       } else {
-        form["_id"] = topicId;
-        console.log(form);
+        form["_id"] = topicId
+        console.log(form)
         axios
           .put(backendPointList.topic, form)
           .then((res) => {
-            freshList();
+            freshList()
           })
-          .catch((err) => console.log(err));
+          .catch((err) => console.log(err))
       }
     }
-  };
+  }
 
   return (
     <div style={{ ...componentStyle.root, ...responsiveHeight }}>
@@ -219,7 +219,7 @@ function AddTopic(props) {
         </Form.Group>
       </Form>
     </div>
-  );
+  )
 }
 
-export default AddTopic;
+export default AddTopic
